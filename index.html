@@ -1153,39 +1153,105 @@
             </div>
 
             <!-- API -->
-            <div id="tab-api" class="tab-content hidden">
-              <div class="two-col">
+<!-- API -->
+<div id="tab-api" class="tab-content hidden">
+  <div class="two-col">
 
-                <div class="card">
-                  <div class="section-title">Model API</div>
-                  <div class="section-description">Connect this model to your own API endpoint.</div>
+    <div class="card">
+      <div class="section-title">Model API</div>
+      <div class="section-description">
+        Use this model from your own website or application.
+      </div>
 
-                  <div id="apiStatus" class="api-status">
-                    <span class="status-dot" aria-hidden="true"></span>
-                    <span>Checking API configuration...</span>
-                  </div>
+      <div id="apiStatus" class="api-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Checking API...</span>
+      </div>
 
-                  <div class="field">
-                    <label for="apiEndpoint">Endpoint URL</label>
-                    <input id="apiEndpoint" type="url" placeholder="https://your-api.example.com/v1/chat/completions" />
-                  </div>
+      <div class="field">
+        <label for="apiEndpoint">API endpoint</label>
+        <div style="display:flex;gap:8px;">
+          <input
+            id="apiEndpoint"
+            type="text"
+            readonly
+            placeholder="Generating endpoint..."
+          />
 
-                  <div class="field" style="margin-bottom:0;">
-                    <label for="apiKey">API key</label>
-                    <input id="apiKey" type="password" placeholder="8io_..." />
-                  </div>
+          <button
+            class="btn btn-secondary"
+            id="copyEndpointBtn"
+            type="button"
+          >
+            Copy
+          </button>
+        </div>
+      </div>
 
-                  <div style="height:18px;"></div>
-                  <button class="btn btn-primary" id="saveApiBtn">Save API configuration</button>
-                </div>
+      <div class="field">
+        <label for="apiKeyDisplay">API key</label>
 
-                <div class="card">
-                  <div class="section-title">API format</div>
-                  <div class="section-description">Your endpoint should accept an OpenAI-compatible chat request.</div>
+        <div style="display:flex;gap:8px;">
+          <input
+            id="apiKeyDisplay"
+            type="password"
+            readonly
+            placeholder="8io_..."
+            autocomplete="off"
+          />
 
-                  <div class="data-item">
-                    <div class="data-item-title">Request</div>
-                    <div class="data-item-content code-block">POST /v1/chat/completions
+          <button
+            class="btn btn-secondary"
+            id="toggleApiKeyBtn"
+            type="button"
+          >
+            Show
+          </button>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:18px;">
+        <button
+          class="btn btn-primary"
+          id="copyApiKeyBtn"
+          type="button"
+        >
+          Copy API key
+        </button>
+
+        <button
+          class="btn btn-secondary"
+          id="regenerateApiKeyBtn"
+          type="button"
+        >
+          Regenerate
+        </button>
+      </div>
+
+      <div class="inset" style="margin-top:18px;">
+        <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">
+          Keep your API key private
+        </div>
+
+        <div class="small">
+          This key gives access to this model through its API.
+          Never put it directly into public client-side JavaScript.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="section-title">API usage</div>
+
+      <div class="section-description">
+        Your website can send OpenAI-compatible chat requests to this model.
+      </div>
+
+      <div class="data-item">
+        <div class="data-item-title">Request</div>
+
+        <div class="data-item-content code-block" id="apiRequestExample">POST /v1/chat/completions
 
 Authorization: Bearer 8io_xxxxxxxxx
 
@@ -1198,13 +1264,14 @@ Authorization: Bearer 8io_xxxxxxxxx
     }
   ]
 }</div>
-                  </div>
+      </div>
 
-                  <div style="height:10px;"></div>
+      <div style="height:10px;"></div>
 
-                  <div class="data-item">
-                    <div class="data-item-title">Response</div>
-                    <div class="data-item-content code-block">{
+      <div class="data-item">
+        <div class="data-item-title">Response</div>
+
+        <div class="data-item-content code-block">{
   "id": "chat_...",
   "model": "nova",
   "choices": [
@@ -1216,13 +1283,27 @@ Authorization: Bearer 8io_xxxxxxxxx
     }
   ]
 }</div>
-                  </div>
+      </div>
 
-                </div>
+      <div style="height:10px;"></div>
 
-              </div>
-            </div>
+      <div class="inset">
+        <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">
+          Model
+        </div>
 
+        <div
+          class="small"
+          id="apiModelId"
+          style="font-family:var(--font-mono);"
+        >
+          —
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
             <!-- MODEL SETTINGS -->
             <div id="tab-modelSettings" class="tab-content hidden">
               <div class="card">
