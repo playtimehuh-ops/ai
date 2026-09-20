@@ -3670,7 +3670,7 @@ async function createModel(){
 
   const {data,error} =
     await supabaseClient.rpc(
-      "create_model",
+      "nova_create_model",
       {
         p_name:name,
         p_description:description,
