@@ -2,37 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova — AI Model Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Nova Studio</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root{
-  --bg:#090a0c;
-  --panel:#0f1115;
-  --panel2:#14171c;
-  --panel3:#191c22;
-  --line:#242832;
-  --text:#f4f6f8;
-  --muted:#8d95a3;
-  --accent:#8b7cff;
-  --accent2:#a99eff;
-  --good:#42d392;
-  --danger:#ff6677;
-  --shadow:0 18px 60px rgba(0,0,0,.35);
-  --radius:16px;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-*{box-sizing:border-box}
+:root{
+  --bg:#08090c;
+  --panel:#0e1014;
+  --panel2:#12151b;
+  --panel3:#171a21;
+  --border:rgba(255,255,255,.08);
+  --border2:rgba(255,255,255,.15);
+  --text:#f5f7fa;
+  --muted:#858b98;
+  --muted2:#5f6570;
+  --danger:#ff5c69;
+  --success:#45d483;
+}
 
 html,body{
-  margin:0;
   width:100%;
   height:100%;
+}
+
+body{
   background:var(--bg);
   color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 button,input,textarea,select{
@@ -47,162 +59,235 @@ button{
   display:none!important;
 }
 
-/* AUTH */
+
+/* ============================================================
+   AUTH
+============================================================ */
 
 .auth{
   min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(139,124,255,.13),transparent 35%),
-    var(--bg);
-}
-
-.auth-card{
-  width:min(430px,100%);
-  background:rgba(15,17,21,.92);
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:34px;
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(20px);
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  font-size:20px;
-  font-weight:800;
-}
-
-.logo-mark{
-  width:36px;
-  height:36px;
-  border-radius:11px;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#9a8cff,#6758ed);
-  box-shadow:0 8px 30px rgba(139,124,255,.28);
+  padding:20px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255,255,255,.08),
+      transparent 35%
+    ),
+    #08090c;
 }
 
-.auth-title{
-  margin:34px 0 8px;
-  font-size:31px;
-  letter-spacing:-1px;
-}
-
-.auth-sub{
-  color:var(--muted);
-  line-height:1.6;
-  margin-bottom:26px;
-}
-
-.field{
-  margin-bottom:16px;
-}
-
-.field label{
-  display:block;
-  margin-bottom:8px;
-  color:#b9bfca;
-  font-size:13px;
-  font-weight:650;
-}
-
-input,textarea,select{
+.auth-box{
   width:100%;
-  background:#0b0d10;
-  color:var(--text);
-  border:1px solid var(--line);
-  border-radius:11px;
-  padding:12px 13px;
-  outline:none;
-  transition:.18s;
+  max-width:410px;
+
+  border:1px solid var(--border);
+  background:#0d0f13;
+  border-radius:18px;
+
+  padding:30px;
+
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.45);
 }
 
-input:focus,textarea:focus,select:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(139,124,255,.1);
-}
-
-textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.primary{
-  width:100%;
-  border:0;
-  border-radius:11px;
-  padding:13px 16px;
-  color:white;
-  font-weight:750;
-  background:linear-gradient(135deg,#8d7fff,#6759e9);
-  box-shadow:0 8px 24px rgba(115,98,239,.22);
-}
-
-.secondary{
-  border:1px solid var(--line);
-  background:var(--panel2);
-  color:var(--text);
-  border-radius:10px;
-  padding:10px 14px;
-}
-
-.danger{
-  border:1px solid rgba(255,102,119,.25);
-  background:rgba(255,102,119,.08);
-  color:#ff8794;
-  border-radius:10px;
-  padding:10px 14px;
-}
-
-.auth-switch{
+.auth-brand{
   text-align:center;
-  margin-top:18px;
+  margin-bottom:28px;
+}
+
+.auth-logo{
+  width:52px;
+  height:52px;
+
+  display:grid;
+  place-items:center;
+
+  margin:0 auto 13px;
+
+  background:#fff;
+  color:#08090c;
+
+  border-radius:15px;
+
+  font-size:24px;
+  font-weight:900;
+}
+
+.auth-brand h1{
+  font-size:21px;
+  letter-spacing:-.5px;
+}
+
+.auth-brand p{
   color:var(--muted);
-  font-size:13px;
+  font-size:11px;
+  margin-top:5px;
 }
 
-.auth-switch button{
+.auth-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:3px;
+
+  background:#090b0e;
+  border:1px solid var(--border);
+
+  padding:3px;
+
+  border-radius:9px;
+
+  margin-bottom:20px;
+}
+
+.auth-tabs button{
   border:0;
-  background:none;
-  color:var(--accent2);
+  background:transparent;
+  color:#747a85;
+  padding:9px;
+  border-radius:7px;
+  font-size:11px;
 }
 
-/* APP */
+.auth-tabs button.active{
+  color:#fff;
+  background:#191c21;
+}
+
+.auth-field{
+  margin-bottom:13px;
+}
+
+.auth-field label{
+  display:block;
+  color:#9da3ad;
+  font-size:10px;
+  margin-bottom:7px;
+}
+
+.auth-input{
+  width:100%;
+
+  background:#090b0e;
+
+  color:#fff;
+
+  border:1px solid var(--border);
+
+  border-radius:8px;
+
+  padding:11px;
+
+  outline:none;
+
+  font-size:12px;
+}
+
+.auth-input:focus{
+  border-color:var(--border2);
+}
+
+.auth-submit{
+  width:100%;
+
+  border:0;
+
+  background:#fff;
+  color:#08090c;
+
+  border-radius:8px;
+
+  padding:11px;
+
+  margin-top:5px;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+.auth-error{
+  color:#ff7680;
+  font-size:10px;
+  margin-top:10px;
+  line-height:1.5;
+}
+
+
+/* ============================================================
+   APP
+============================================================ */
 
 .app{
-  width:100%;
   height:100vh;
   display:flex;
   overflow:hidden;
 }
 
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
 .sidebar{
-  width:248px;
-  flex:none;
-  background:#0c0e11;
-  border-right:1px solid var(--line);
+  width:250px;
+  flex-shrink:0;
+
+  border-right:1px solid var(--border);
+
+  background:#0a0b0e;
+
   display:flex;
   flex-direction:column;
-  padding:17px 13px;
+
+  padding:18px 12px;
 }
 
-.sidebar-brand{
-  padding:4px 9px 22px;
+.brand{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px 10px 24px;
 }
 
-.nav-section{
-  margin:14px 9px 8px;
+.brand-icon{
+  width:35px;
+  height:35px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:11px;
+
+  background:#fff;
+  color:#08090c;
+
+  font-weight:900;
+}
+
+.brand-name{
+  font-size:14px;
+  font-weight:700;
+}
+
+.brand-sub{
+  color:#626873;
   font-size:10px;
-  color:#606875;
-  font-weight:800;
-  letter-spacing:1.2px;
+  margin-top:2px;
+}
+
+.section-label{
+  color:#555b66;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.12em;
   text-transform:uppercase;
+
+  padding:14px 12px 8px;
 }
 
 .nav{
@@ -213,32 +298,41 @@ textarea{
 
 .nav button{
   width:100%;
-  border:0;
-  background:transparent;
-  color:#8e96a4;
-  border-radius:10px;
-  padding:10px 11px;
+
   display:flex;
   align-items:center;
   gap:11px;
+
+  background:transparent;
+  border:1px solid transparent;
+
+  color:#8f959f;
+
+  padding:10px 11px;
+
+  border-radius:9px;
+
   text-align:left;
+
+  font-size:12px;
+
   transition:.15s;
 }
 
 .nav button:hover{
-  background:#15181d;
-  color:#e9ebef;
+  background:#111318;
+  color:#fff;
 }
 
 .nav button.active{
-  background:#191722;
-  color:white;
+  background:#17191e;
+  border-color:var(--border);
+  color:#fff;
 }
 
 .nav-icon{
-  width:20px;
+  width:17px;
   text-align:center;
-  opacity:.9;
 }
 
 .sidebar-bottom{
@@ -246,513 +340,1029 @@ textarea{
 }
 
 .user-card{
-  border:1px solid var(--line);
-  background:#111318;
-  border-radius:13px;
-  padding:11px;
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:9px;
+
+  padding:10px;
+
+  background:#101216;
+
+  border:1px solid var(--border);
+
+  border-radius:10px;
 }
 
 .user-avatar{
-  width:32px;
-  height:32px;
-  border-radius:10px;
+  width:31px;
+  height:31px;
+
   display:grid;
   place-items:center;
-  background:#292d37;
-  font-size:14px;
+
+  border-radius:9px;
+
+  background:#22252c;
+
+  font-size:12px;
 }
 
-.user-info{
-  min-width:0;
-  flex:1;
+.user-name{
+  font-size:11px;
+  font-weight:650;
 }
 
 .user-email{
-  white-space:nowrap;
+  color:#626873;
+  font-size:9px;
+  margin-top:2px;
+
+  max-width:160px;
+
   overflow:hidden;
   text-overflow:ellipsis;
-  font-size:12px;
-  color:#d7dbe2;
 }
 
-.user-status{
-  color:#69717e;
-  font-size:10px;
-  margin-top:2px;
-}
+
+/* ============================================================
+   MAIN
+============================================================ */
 
 .main{
-  min-width:0;
   flex:1;
+  min-width:0;
+
   display:flex;
   flex-direction:column;
-  background:
-    radial-gradient(circle at 75% 0%,rgba(139,124,255,.035),transparent 30%),
-    var(--bg);
 }
 
 .topbar{
-  height:64px;
-  border-bottom:1px solid var(--line);
+  height:63px;
+  flex-shrink:0;
+
   display:flex;
   align-items:center;
+  justify-content:space-between;
+
   padding:0 25px;
-  gap:14px;
+
+  border-bottom:1px solid var(--border);
+
+  background:rgba(8,9,12,.94);
 }
 
-.mobile-menu{
-  display:none;
+.page-title{
+  font-size:13px;
+  font-weight:650;
 }
 
-.top-title{
-  font-size:15px;
-  font-weight:750;
-}
-
-.top-spacer{
-  flex:1;
-}
-
-.status-pill{
+.top-actions{
   display:flex;
   align-items:center;
   gap:7px;
-  font-size:11px;
-  color:#929aa7;
 }
 
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--good);
-  box-shadow:0 0 12px rgba(66,211,146,.55);
+.icon-btn{
+  width:34px;
+  height:34px;
+
+  border:1px solid var(--border);
+
+  border-radius:8px;
+
+  background:#101216;
+
+  color:#a3a8b1;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  background:#17191e;
+}
+
+.primary{
+  border:0;
+
+  background:#fff;
+  color:#08090c;
+
+  border-radius:8px;
+
+  padding:9px 14px;
+
+  font-size:11px;
+  font-weight:700;
+}
+
+.primary:hover{
+  background:#e8e8e8;
 }
 
 .content{
   flex:1;
   overflow:auto;
-  padding:30px;
+
+  padding:28px;
 }
 
-/* PAGES */
-
 .page{
-  max-width:1180px;
-  margin:0 auto;
+  display:none;
+  max-width:1300px;
+  margin:auto;
+}
+
+.page.active{
+  display:block;
 }
 
 .page-head{
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
+  align-items:flex-end;
+
   gap:20px;
-  margin-bottom:26px;
+
+  margin-bottom:24px;
 }
 
-.page-title{
-  margin:0;
-  font-size:28px;
+.eyebrow{
+  color:#6f7580;
+
+  font-size:9px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  font-weight:700;
+
+  margin-bottom:7px;
+}
+
+h1{
+  font-size:26px;
   letter-spacing:-.8px;
 }
 
-.page-sub{
-  color:var(--muted);
-  margin:7px 0 0;
-  font-size:13px;
+.subtitle{
+  color:#808691;
+  font-size:12px;
+  margin-top:6px;
 }
 
-.grid{
+
+/* ============================================================
+   PANELS
+============================================================ */
+
+.panel{
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
+  border-radius:13px;
+
+  overflow:hidden;
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:15px 17px;
+
+  border-bottom:1px solid var(--border);
+}
+
+.panel-title{
+  font-size:12px;
+  font-weight:650;
+}
+
+.panel-link{
+  border:0;
+  background:none;
+  color:#8d939d;
+  font-size:10px;
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  padding:28px;
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  margin-bottom:15px;
+
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(255,255,255,.08),
+      transparent 28%
+    ),
+    linear-gradient(135deg,#111318,#0b0d11);
+}
+
+.hero h2{
+  font-size:24px;
+  letter-spacing:-.7px;
+}
+
+.hero p{
+  color:#878d98;
+
+  max-width:610px;
+
+  font-size:12px;
+
+  line-height:1.65;
+
+  margin-top:8px;
+}
+
+.stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
 
-.card{
-  background:rgba(15,17,21,.9);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:18px;
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:11px;
+
+  margin-bottom:15px;
 }
 
 .stat{
-  min-height:130px;
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
+  border-radius:12px;
+
+  padding:17px;
 }
 
 .stat-label{
-  color:#818997;
-  font-size:12px;
+  color:#777d88;
+  font-size:10px;
 }
 
 .stat-value{
-  font-size:29px;
-  font-weight:800;
-  margin-top:14px;
-  letter-spacing:-1px;
+  margin-top:9px;
+
+  font-size:21px;
+
+  font-weight:700;
 }
 
-.stat-small{
-  margin-top:7px;
-  color:#69717d;
-  font-size:11px;
+.stat-detail{
+  color:#555b65;
+  font-size:9px;
+  margin-top:3px;
 }
 
-.section{
-  margin-top:18px;
+.dashboard-grid{
+  display:grid;
+
+  grid-template-columns:
+    1.2fr .8fr;
+
+  gap:13px;
 }
 
-.section-title{
-  font-size:15px;
-  font-weight:750;
-  margin-bottom:12px;
-}
-
-.model-card{
+.model-row{
   display:flex;
+
   align-items:center;
-  gap:14px;
+
+  gap:11px;
+
+  padding:14px 17px;
+
+  border-bottom:1px solid var(--border);
 }
 
-.model-avatar{
-  width:48px;
-  height:48px;
-  border-radius:14px;
+.model-row:last-child{
+  border-bottom:0;
+}
+
+.model-icon{
+  width:38px;
+  height:38px;
+
   display:grid;
   place-items:center;
-  background:#191b22;
-  font-size:23px;
+
+  background:#191c22;
+
+  border-radius:10px;
+
+  font-size:18px;
 }
 
-.model-info{
+.model-main{
   flex:1;
   min-width:0;
 }
 
 .model-name{
-  font-weight:750;
+  font-size:11px;
+  font-weight:650;
 }
 
 .model-desc{
-  color:#737b88;
-  font-size:12px;
-  margin-top:4px;
+  color:#717782;
+  font-size:9px;
+  margin-top:3px;
 }
 
-.badge{
-  display:inline-flex;
+.status{
+  display:flex;
   align-items:center;
-  border-radius:999px;
-  padding:4px 8px;
+  gap:5px;
+
+  color:#858b95;
+
+  font-size:9px;
+}
+
+.status-dot{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:var(--success);
+}
+
+.activity{
+  padding:0 17px;
+}
+
+.activity-item{
+  padding:13px 0;
+
+  border-bottom:1px solid var(--border);
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-title{
   font-size:10px;
-  font-weight:700;
 }
 
-.badge-green{
-  color:#63e0a3;
-  background:rgba(66,211,146,.1);
+.activity-time{
+  color:#555b65;
+  font-size:9px;
+  margin-top:3px;
 }
 
-.badge-purple{
-  color:#b0a5ff;
-  background:rgba(139,124,255,.1);
-}
 
-.badge-gray{
-  color:#939ba7;
-  background:#191c22;
-}
+/* ============================================================
+   MODELS
+============================================================ */
 
-/* CHAT */
+.models-grid{
+  display:grid;
 
-.chat-page{
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  max-width:1000px;
-  margin:auto;
-}
+  grid-template-columns:
+    repeat(3,1fr);
 
-.chat-header{
-  display:flex;
-  align-items:center;
   gap:12px;
-  padding:0 0 20px;
 }
 
-.chat-avatar{
-  width:42px;
-  height:42px;
+.model-card{
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
   border-radius:13px;
+
+  padding:17px;
+
+  transition:.15s;
+}
+
+.model-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-1px);
+}
+
+.model-card-top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.big-icon{
+  width:45px;
+  height:45px;
+
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#292332,#171923);
+
+  background:#191c22;
+
+  border-radius:12px;
+
   font-size:21px;
 }
 
-.chat-name{
-  font-weight:800;
+.more{
+  border:0;
+  background:none;
+  color:#707681;
 }
 
-.chat-model{
-  color:#707886;
+.model-card h3{
+  font-size:13px;
+  margin-top:15px;
+}
+
+.model-card p{
+  color:#747a85;
+
+  font-size:10px;
+
+  line-height:1.5;
+
+  margin-top:5px;
+
+  min-height:31px;
+}
+
+.card-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-top:16px;
+
+  padding-top:11px;
+
+  border-top:1px solid var(--border);
+}
+
+.tag{
+  background:#14161b;
+
+  border:1px solid var(--border);
+
+  border-radius:6px;
+
+  padding:4px 7px;
+
+  color:#858b95;
+
+  font-size:8px;
+}
+
+.open-btn{
+  border:0;
+  background:none;
+
+  color:#fff;
+
+  font-size:9px;
+  font-weight:650;
+}
+
+
+/* ============================================================
+   FORMS
+============================================================ */
+
+.form-shell{
+  max-width:760px;
+  margin:auto;
+}
+
+.form-panel{
+  padding:23px;
+
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
+  border-radius:14px;
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+.field label{
+  display:block;
+
+  color:#b0b5be;
+
+  font-size:10px;
+
+  font-weight:650;
+
+  margin-bottom:7px;
+}
+
+.field-help{
+  color:#555b65;
+  font-size:9px;
+  margin-top:5px;
+}
+
+.input,
+.textarea,
+.select{
+  width:100%;
+
+  border:1px solid var(--border);
+
+  background:#090b0e;
+
+  color:#fff;
+
+  border-radius:8px;
+
+  padding:10px 11px;
+
+  outline:none;
+
   font-size:11px;
-  margin-top:2px;
 }
 
-.chat-messages{
+.input:focus,
+.textarea:focus{
+  border-color:var(--border2);
+}
+
+.textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.avatar-picker{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.avatar-option{
+  width:41px;
+  height:41px;
+
+  border:1px solid var(--border);
+
+  background:#101217;
+
+  border-radius:9px;
+
+  font-size:17px;
+}
+
+.avatar-option.selected{
+  border-color:#fff;
+  background:#1b1e24;
+}
+
+.visibility{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+
+.visibility-option{
+  text-align:left;
+
+  border:1px solid var(--border);
+
+  background:#0b0d10;
+
+  border-radius:9px;
+
+  padding:12px;
+}
+
+.visibility-option.selected{
+  border-color:#fff;
+}
+
+.visibility-title{
+  font-size:10px;
+  font-weight:650;
+}
+
+.visibility-desc{
+  color:#626873;
+
+  font-size:8px;
+
+  line-height:1.45;
+
+  margin-top:4px;
+}
+
+.form-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:7px;
+
+  padding-top:18px;
+
+  border-top:1px solid var(--border);
+}
+
+
+/* ============================================================
+   WORKSPACE
+============================================================ */
+
+.workspace-header{
+  display:flex;
+  align-items:center;
+
+  gap:13px;
+
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
+  border-radius:13px;
+
+  padding:17px;
+
+  margin-bottom:12px;
+}
+
+.workspace-icon{
+  width:50px;
+  height:50px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:13px;
+
+  background:#191c22;
+
+  font-size:23px;
+}
+
+.workspace-info{
+  flex:1;
+}
+
+.workspace-info h2{
+  font-size:16px;
+}
+
+.workspace-info p{
+  color:#6f7580;
+
+  font-size:9px;
+
+  margin-top:3px;
+}
+
+.workspace-status{
+  color:#7d838d;
+
+  font-size:9px;
+
+  display:flex;
+  gap:5px;
+  align-items:center;
+}
+
+.workspace-tabs{
+  display:flex;
+
+  overflow:auto;
+
+  border-bottom:1px solid var(--border);
+
+  margin-bottom:14px;
+}
+
+.workspace-tab{
+  white-space:nowrap;
+
+  border:0;
+
+  background:none;
+
+  color:#6e7480;
+
+  padding:10px 12px;
+
+  font-size:10px;
+
+  border-bottom:2px solid transparent;
+}
+
+.workspace-tab.active{
+  color:#fff;
+  border-bottom-color:#fff;
+}
+
+
+/* ============================================================
+   CHAT
+============================================================ */
+
+.chat{
+  height:550px;
+
+  display:flex;
+  flex-direction:column;
+
+  background:#0b0d11;
+
+  border:1px solid var(--border);
+
+  border-radius:14px;
+}
+
+.chat-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:13px 15px;
+
+  border-bottom:1px solid var(--border);
+}
+
+.chat-head strong{
+  font-size:10px;
+}
+
+.chat-head span{
+  color:#626873;
+  font-size:9px;
+}
+
+.chat-body{
   flex:1;
   overflow:auto;
-  padding:15px 4px 25px;
-}
-
-.empty-chat{
-  height:100%;
-  display:grid;
-  place-items:center;
-  text-align:center;
-}
-
-.empty-inner{
-  max-width:510px;
-}
-
-.empty-icon{
-  width:58px;
-  height:58px;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  border-radius:18px;
-  background:#17151f;
-  font-size:27px;
-}
-
-.empty-chat h2{
-  margin:20px 0 8px;
-  font-size:27px;
-}
-
-.empty-chat p{
-  color:#777f8d;
-  line-height:1.6;
+  padding:19px;
 }
 
 .message{
   display:flex;
-  gap:12px;
-  margin-bottom:22px;
+  margin-bottom:16px;
 }
 
 .message.user{
-  flex-direction:row-reverse;
+  justify-content:flex-end;
 }
 
-.message-avatar{
-  flex:none;
-  width:30px;
-  height:30px;
-  border-radius:9px;
-  display:grid;
-  place-items:center;
-  background:#181b21;
-  font-size:13px;
+.bubble{
+  max-width:75%;
+
+  padding:10px 12px;
+
+  border-radius:10px;
+
+  font-size:11px;
+
+  line-height:1.55;
 }
 
-.message.user .message-avatar{
-  background:#272232;
+.message.ai .bubble{
+  background:#15181e;
+
+  border:1px solid var(--border);
 }
 
-.message-body{
-  max-width:min(720px,78%);
+.message.user .bubble{
+  color:#08090c;
+  background:#fff;
 }
 
-.message.user .message-body{
-  text-align:right;
-}
-
-.message-content{
-  display:inline-block;
-  text-align:left;
-  line-height:1.65;
-  font-size:14px;
-  color:#dfe2e7;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-.message.user .message-content{
-  background:#171a20;
-  border:1px solid #242832;
-  border-radius:15px 15px 4px 15px;
-  padding:10px 13px;
-}
-
-.message.ai .message-content{
-  padding-top:2px;
-}
-
-.composer{
-  border:1px solid #292d36;
-  background:#101216;
-  border-radius:17px;
-  padding:9px;
+.chat-input{
   display:flex;
-  align-items:flex-end;
-  gap:8px;
-  box-shadow:0 14px 40px rgba(0,0,0,.25);
+  gap:7px;
+
+  padding:11px;
+
+  border-top:1px solid var(--border);
 }
 
-.composer textarea{
-  border:0;
-  background:transparent;
-  min-height:44px;
-  max-height:160px;
-  padding:10px 9px;
-  resize:none;
-  box-shadow:none;
+.chat-input input{
+  flex:1;
+
+  background:#101217;
+
+  border:1px solid var(--border);
+
+  color:#fff;
+
+  border-radius:8px;
+
+  padding:10px;
+
+  outline:none;
+
+  font-size:10px;
 }
 
 .send{
-  width:42px;
-  height:42px;
+  width:39px;
+
   border:0;
-  border-radius:12px;
-  background:#806ff2;
-  color:white;
-  font-size:17px;
-}
 
-.composer-hint{
-  text-align:center;
-  color:#4f5661;
-  font-size:10px;
-  margin-top:9px;
-}
+  border-radius:8px;
 
-/* TRAINING */
+  background:#fff;
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
+  color:#000;
 
-.full{
-  grid-column:1/-1;
-}
-
-.training-row{
-  display:grid;
-  grid-template-columns:1fr 1fr auto;
-  gap:14px;
-  align-items:start;
-  border-top:1px solid var(--line);
-  padding:16px 0;
-}
-
-.training-question{
-  font-size:13px;
   font-weight:700;
 }
 
-.training-answer{
-  font-size:12px;
-  color:#89919e;
-  line-height:1.5;
-}
 
-.meta{
-  color:#59616e;
-  font-size:10px;
-  margin-top:6px;
-}
+/* ============================================================
+   TRAINING
+============================================================ */
 
-/* SETTINGS */
-
-.settings-grid{
+.training-layout{
   display:grid;
-  grid-template-columns:250px 1fr;
-  gap:18px;
+
+  grid-template-columns:370px 1fr;
+
+  gap:13px;
 }
 
-.settings-nav{
-  height:max-content;
+.training-form,
+.training-list{
+  background:#0e1014;
+
+  border:1px solid var(--border);
+
+  border-radius:13px;
+
+  overflow:hidden;
 }
 
-.settings-nav button{
-  width:100%;
-  border:0;
-  background:none;
-  color:#7e8794;
-  padding:11px;
-  text-align:left;
-  border-radius:9px;
+.training-form{
+  padding:18px;
 }
 
-.settings-nav button.active{
-  background:#191b21;
-  color:white;
-}
-
-/* TOAST */
-
-.toast{
-  position:fixed;
-  right:22px;
-  bottom:22px;
-  z-index:100;
-  background:#171a20;
-  border:1px solid #2a2e37;
-  border-radius:12px;
-  padding:12px 15px;
-  box-shadow:var(--shadow);
-  color:#e6e9ed;
+.training-form h3{
   font-size:12px;
-  transform:translateY(20px);
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
+  margin-bottom:16px;
 }
 
-.toast.show{
-  transform:translateY(0);
-  opacity:1;
+.training-example{
+  padding:14px 17px;
+
+  border-bottom:1px solid var(--border);
 }
 
-/* LOADING */
+.training-example:last-child{
+  border-bottom:0;
+}
 
-.loading{
-  display:inline-flex;
+.training-q{
+  font-size:10px;
+  font-weight:650;
+}
+
+.training-a{
+  color:#808691;
+
+  font-size:9px;
+
+  line-height:1.5;
+
+  margin-top:5px;
+}
+
+.training-meta{
+  display:flex;
+  gap:5px;
+  margin-top:8px;
+}
+
+.empty{
+  padding:45px 20px;
+
+  text-align:center;
+
+  color:#626873;
+}
+
+.empty-icon{
+  font-size:23px;
+  margin-bottom:8px;
+}
+
+.empty h3{
+  color:#9da3ad;
+  font-size:11px;
+}
+
+.empty p{
+  color:#5e646f;
+  font-size:9px;
+  margin-top:4px;
+}
+
+
+/* ============================================================
+   TOGGLES
+============================================================ */
+
+.toggle-row{
+  display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:8px;
-  color:#858d9a;
+
+  padding:13px;
+
+  background:#0d0f13;
+
+  border:1px solid var(--border);
+
+  border-radius:9px;
+
+  margin-bottom:9px;
 }
 
-.spinner{
-  width:14px;
-  height:14px;
-  border:2px solid #333844;
-  border-top-color:#978aff;
+.toggle-title{
+  font-size:10px;
+  font-weight:650;
+}
+
+.toggle-desc{
+  color:#626873;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.toggle{
+  width:38px;
+  height:21px;
+
+  border:0;
+
+  background:#282c34;
+
+  border-radius:20px;
+
+  padding:2px;
+}
+
+.toggle span{
+  display:block;
+
+  width:17px;
+  height:17px;
+
+  background:#777d87;
+
   border-radius:50%;
-  animation:spin .7s linear infinite;
+
+  transition:.15s;
 }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
+.toggle.on{
+  background:#fff;
 }
 
-/* RESPONSIVE */
+.toggle.on span{
+  background:#000;
+  transform:translateX(17px);
+}
 
-@media(max-width:800px){
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+.mobile-menu{
+  display:none;
+}
+
+@media(max-width:950px){
+
   .sidebar{
     position:fixed;
-    left:-260px;
+    z-index:100;
+
+    left:-270px;
     top:0;
     bottom:0;
-    z-index:50;
+
     transition:.2s;
   }
 
@@ -762,2291 +1372,3603 @@ textarea{
 
   .mobile-menu{
     display:block;
-    border:0;
-    background:none;
-    color:white;
-    font-size:20px;
   }
 
-  .grid{
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .dashboard-grid{
     grid-template-columns:1fr;
   }
+
+  .models-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .training-layout{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:600px){
 
   .content{
-    padding:20px;
+    padding:16px;
   }
 
-  .form-grid{
+  .topbar{
+    padding:0 14px;
+  }
+
+  .topbar .primary{
+    display:none;
+  }
+
+  .models-grid{
     grid-template-columns:1fr;
   }
 
-  .full{
-    grid-column:auto;
-  }
-
-  .training-row{
+  .visibility{
     grid-template-columns:1fr;
   }
 
-  .settings-grid{
-    grid-template-columns:1fr;
+  h1{
+    font-size:22px;
   }
+
 }
 </style>
 </head>
 
+
 <body>
 
-<!-- AUTH -->
-<div id="authScreen" class="auth">
-  <div class="auth-card">
 
-    <div class="logo">
-      <div class="logo-mark">N</div>
-      Nova Studio
+<!-- ==========================================================
+     AUTH
+=========================================================== -->
+
+<div class="auth" id="authScreen">
+
+  <div class="auth-box">
+
+    <div class="auth-brand">
+
+      <div class="auth-logo">
+        N
+      </div>
+
+      <h1>Nova Studio</h1>
+
+      <p>
+        Build and train your own AI models.
+      </p>
+
     </div>
 
-    <h1 id="authTitle" class="auth-title">Welcome back.</h1>
 
-    <div id="authSub" class="auth-sub">
-      Sign in to build, train and use your AI models.
+    <div class="auth-tabs">
+
+      <button
+        id="loginTab"
+        class="active"
+        onclick="switchAuth('login')">
+        Sign in
+      </button>
+
+      <button
+        id="signupTab"
+        onclick="switchAuth('signup')">
+        Create account
+      </button>
+
     </div>
 
-    <form id="authForm">
 
-      <div class="field" id="nameField" style="display:none">
-        <label>Name</label>
-        <input id="authName" placeholder="Your name">
-      </div>
+    <div class="auth-field">
 
-      <div class="field">
-        <label>Email</label>
-        <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
-      </div>
+      <label>Email</label>
 
-      <div class="field">
-        <label>Password</label>
-        <input id="authPassword" type="password" autocomplete="current-password" required placeholder="••••••••">
-      </div>
+      <input
+        id="authEmail"
+        class="auth-input"
+        type="email"
+        placeholder="you@example.com">
 
-      <button class="primary" id="authSubmit">Sign in</button>
+    </div>
 
-    </form>
 
-    <div class="auth-switch">
-      <span id="authSwitchText">Don't have an account?</span>
-      <button id="authSwitch">Create one</button>
+    <div class="auth-field">
+
+      <label>Password</label>
+
+      <input
+        id="authPassword"
+        class="auth-input"
+        type="password"
+        placeholder="••••••••">
+
+    </div>
+
+
+    <button
+      class="auth-submit"
+      onclick="submitAuth()"
+      id="authSubmit">
+      Sign in
+    </button>
+
+
+    <div
+      class="auth-error hidden"
+      id="authError">
     </div>
 
   </div>
+
 </div>
 
-<!-- APP -->
-<div id="app" class="app hidden">
 
-  <aside id="sidebar" class="sidebar">
 
-    <div class="sidebar-brand">
-      <div class="logo">
-        <div class="logo-mark">N</div>
-        Nova
+<!-- ==========================================================
+     APP
+=========================================================== -->
+
+<div class="app hidden" id="app">
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+      <div class="brand-icon">
+        N
       </div>
+
+      <div>
+
+        <div class="brand-name">
+          Nova Studio
+        </div>
+
+        <div class="brand-sub">
+          AI model workspace
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="nav-section">Workspace</div>
+
+    <div class="section-label">
+      Workspace
+    </div>
+
 
     <nav class="nav">
 
-      <button data-page="dashboard" class="active">
+      <button
+        class="active"
+        onclick="showPage('dashboard',this)">
+
         <span class="nav-icon">⌂</span>
-        Dashboard
+
+        Overview
+
       </button>
 
-      <button data-page="chat">
-        <span class="nav-icon">✦</span>
-        Playground
-      </button>
 
-      <button data-page="models">
+      <button
+        onclick="showPage('models',this)">
+
         <span class="nav-icon">◈</span>
+
         My Models
+
       </button>
 
-      <button data-page="training">
-        <span class="nav-icon">⌁</span>
-        Training
-      </button>
 
-      <button data-page="knowledge">
-        <span class="nav-icon">◇</span>
-        Knowledge
-      </button>
+      <button
+        onclick="showPage('create',this)">
 
-      <button data-page="memory">
-        <span class="nav-icon">♢</span>
-        Memory
+        <span class="nav-icon">＋</span>
+
+        Create Model
+
       </button>
 
     </nav>
 
-    <div class="nav-section">System</div>
+
+    <div class="section-label">
+      System
+    </div>
+
 
     <nav class="nav">
-      <button data-page="settings">
+
+      <button
+        onclick="showPage('settings',this)">
+
         <span class="nav-icon">⚙</span>
+
         Settings
+
       </button>
 
-      <button data-page="diagnostics">
-        <span class="nav-icon">⌘</span>
+
+      <button
+        onclick="showPage('diagnostics',this)">
+
+        <span class="nav-icon">⌁</span>
+
         Diagnostics
+
       </button>
+
     </nav>
+
 
     <div class="sidebar-bottom">
+
       <div class="user-card">
-        <div class="user-avatar">●</div>
-        <div class="user-info">
-          <div id="userEmail" class="user-email">Loading...</div>
-          <div class="user-status">Connected</div>
+
+        <div
+          class="user-avatar"
+          id="userAvatar">
+          P
         </div>
-        <button id="logoutBtn" class="secondary" style="padding:6px 8px">↪</button>
+
+        <div>
+
+          <div
+            class="user-name"
+            id="userName">
+            User
+          </div>
+
+          <div
+            class="user-email"
+            id="userEmail">
+            —
+          </div>
+
+        </div>
+
       </div>
+
     </div>
 
   </aside>
 
+
+
+  <!-- MAIN -->
+
   <main class="main">
 
-    <header class="topbar">
-      <button id="mobileMenu" class="mobile-menu">☰</button>
-      <div id="topTitle" class="top-title">Dashboard</div>
-      <div class="top-spacer"></div>
 
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        Nova system online
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:9px;">
+
+        <button
+          class="icon-btn mobile-menu"
+          onclick="toggleSidebar()">
+          ☰
+        </button>
+
+        <div
+          class="page-title"
+          id="pageTitle">
+          Overview
+        </div>
+
       </div>
+
+
+      <div class="top-actions">
+
+        <button
+          class="icon-btn"
+          onclick="refreshCurrent()">
+          ↻
+        </button>
+
+        <button
+          class="icon-btn"
+          onclick="signOut()">
+          ⇥
+        </button>
+
+        <button
+          class="primary"
+          onclick="showPage('create')">
+          + Create model
+        </button>
+
+      </div>
+
     </header>
 
-    <div id="content" class="content"></div>
+
+    <div class="content">
+
+
+      <!-- =====================================================
+           DASHBOARD
+      ====================================================== -->
+
+      <section
+        class="page active"
+        id="dashboard">
+
+        <div class="page-head">
+
+          <div>
+
+            <div class="eyebrow">
+              Workspace
+            </div>
+
+            <h1>
+              Welcome back.
+            </h1>
+
+            <p class="subtitle">
+              Build, train and deploy your AI models.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="hero">
+
+          <h2>
+            Your AI workspace.
+          </h2>
+
+          <p>
+            Create models, teach them with shared training
+            examples, connect knowledge and memory, and
+            communicate with your own model API.
+          </p>
+
+        </div>
+
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Models
+            </div>
+
+            <div
+              class="stat-value"
+              id="statModels">
+              0
+            </div>
+
+            <div class="stat-detail">
+              Accessible models
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Training
+            </div>
+
+            <div
+              class="stat-value"
+              id="statTraining">
+              0
+            </div>
+
+            <div class="stat-detail">
+              Training examples
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Knowledge
+            </div>
+
+            <div
+              class="stat-value"
+              id="statKnowledge">
+              0
+            </div>
+
+            <div class="stat-detail">
+              Knowledge records
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              API
+            </div>
+
+            <div
+              class="stat-value"
+              id="statApi">
+              Ready
+            </div>
+
+            <div class="stat-detail">
+              Model API system
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <div class="panel-title">
+                Your models
+              </div>
+
+              <button
+                class="panel-link"
+                onclick="showPage('models')">
+                View all →
+              </button>
+
+            </div>
+
+            <div id="dashboardModels">
+            </div>
+
+          </div>
+
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <div class="panel-title">
+                System
+              </div>
+
+            </div>
+
+            <div class="activity">
+
+              <div class="activity-item">
+
+                <div class="activity-title">
+                  Supabase
+                </div>
+
+                <div class="activity-time">
+                  Connected
+                </div>
+
+              </div>
+
+
+              <div class="activity-item">
+
+                <div class="activity-title">
+                  Training engine
+                </div>
+
+                <div class="activity-time">
+                  Active
+                </div>
+
+              </div>
+
+
+              <div class="activity-item">
+
+                <div class="activity-title">
+                  8io API
+                </div>
+
+                <div class="activity-time">
+                  Server-side integration
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           MODELS
+      ====================================================== -->
+
+      <section
+        class="page"
+        id="models">
+
+        <div class="page-head">
+
+          <div>
+
+            <div class="eyebrow">
+              Models
+            </div>
+
+            <h1>
+              My Models
+            </h1>
+
+            <p class="subtitle">
+              Manage your AI models.
+            </p>
+
+          </div>
+
+
+          <button
+            class="primary"
+            onclick="showPage('create')">
+            + Create model
+          </button>
+
+        </div>
+
+
+        <div
+          class="models-grid"
+          id="modelsGrid">
+
+          <div class="empty">
+            Loading models...
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           CREATE MODEL
+      ====================================================== -->
+
+      <section
+        class="page"
+        id="create">
+
+        <div class="page-head">
+
+          <div>
+
+            <div class="eyebrow">
+              New model
+            </div>
+
+            <h1>
+              Create a model
+            </h1>
+
+            <p class="subtitle">
+              Configure your AI before teaching it.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-shell">
+
+          <div class="form-panel">
+
+
+            <div class="field">
+
+              <label>
+                Model avatar
+              </label>
+
+              <div class="avatar-picker">
+
+                <button
+                  class="avatar-option selected"
+                  data-avatar="✦">
+                  ✦
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🤖">
+                  🤖
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🧠">
+                  🧠
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🚀">
+                  🚀
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="⚡">
+                  ⚡
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🛰️">
+                  🛰️
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🧬">
+                  🧬
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🦊">
+                  🦊
+                </button>
+
+                <button
+                  class="avatar-option"
+                  data-avatar="🐉">
+                  🐉
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Model name
+              </label>
+
+              <input
+                id="createName"
+                class="input"
+                placeholder="e.g. Nova">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Description
+              </label>
+
+              <textarea
+                id="createDescription"
+                class="textarea"
+                placeholder="What is this model designed to do?"></textarea>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Personality & behavior
+              </label>
+
+              <textarea
+                id="createInstructions"
+                class="textarea"
+                placeholder="Describe how the model should communicate and behave."></textarea>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Model visibility
+              </label>
+
+              <div class="visibility">
+
+                <button
+                  class="visibility-option selected"
+                  data-visibility="private">
+
+                  <div class="visibility-title">
+                    Private
+                  </div>
+
+                  <div class="visibility-desc">
+                    Only you and explicitly authorized
+                    trainers can access it.
+                  </div>
+
+                </button>
+
+
+                <button
+                  class="visibility-option"
+                  data-visibility="public">
+
+                  <div class="visibility-title">
+                    Public
+                  </div>
+
+                  <div class="visibility-desc">
+                    Other authenticated users can discover
+                    and use the model.
+                  </div>
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Training access
+              </label>
+
+              <div class="visibility">
+
+                <button
+                  class="visibility-option selected"
+                  data-training="everyone">
+
+                  <div class="visibility-title">
+                    Everyone
+                  </div>
+
+                  <div class="visibility-desc">
+                    Users allowed to access the model can
+                    contribute training examples.
+                  </div>
+
+                </button>
+
+
+                <button
+                  class="visibility-option"
+                  data-training="owner">
+
+                  <div class="visibility-title">
+                    Owner only
+                  </div>
+
+                  <div class="visibility-desc">
+                    Only the model owner can train it.
+                  </div>
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                class="icon-btn"
+                onclick="showPage('models')">
+                Cancel
+              </button>
+
+              <button
+                class="primary"
+                onclick="createModel()">
+                Create model
+              </button>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           MODEL WORKSPACE
+      ====================================================== -->
+
+      <section
+        class="page"
+        id="workspace">
+
+
+        <div class="workspace-header">
+
+          <div
+            class="workspace-icon"
+            id="workspaceAvatar">
+            ✦
+          </div>
+
+          <div class="workspace-info">
+
+            <h2 id="workspaceName">
+              Model
+            </h2>
+
+            <p>
+              <span id="workspaceDescription">
+                —
+              </span>
+
+              ·
+
+              <span id="workspaceId">
+                —
+              </span>
+            </p>
+
+          </div>
+
+
+          <div class="workspace-status">
+
+            <span class="status-dot"></span>
+
+            <span id="workspaceStatus">
+              Active
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="workspace-tabs">
+
+          <button
+            class="workspace-tab active"
+            data-tab="playground"
+            onclick="openWorkspaceTab('playground',this)">
+            Playground
+          </button>
+
+          <button
+            class="workspace-tab"
+            data-tab="training"
+            onclick="openWorkspaceTab('training',this)">
+            Training
+          </button>
+
+          <button
+            class="workspace-tab"
+            data-tab="knowledge"
+            onclick="openWorkspaceTab('knowledge',this)">
+            Knowledge
+          </button>
+
+          <button
+            class="workspace-tab"
+            data-tab="memory"
+            onclick="openWorkspaceTab('memory',this)">
+            Memory
+          </button>
+
+          <button
+            class="workspace-tab"
+            data-tab="api"
+            onclick="openWorkspaceTab('api',this)">
+            API
+          </button>
+
+          <button
+            class="workspace-tab"
+            data-tab="modelSettings"
+            onclick="openWorkspaceTab('modelSettings',this)">
+            Settings
+          </button>
+
+        </div>
+
+
+
+        <!-- PLAYGROUND -->
+
+        <div
+          id="workspace-playground"
+          class="workspace-tab-content">
+
+          <div class="chat">
+
+            <div class="chat-head">
+
+              <strong>
+                Playground
+              </strong>
+
+              <span id="chatStatus">
+                Ready
+              </span>
+
+            </div>
+
+
+            <div
+              class="chat-body"
+              id="chatBody">
+
+            </div>
+
+
+            <div class="chat-input">
+
+              <input
+                id="chatInput"
+                placeholder="Message the model..."
+                onkeydown="
+                  if(event.key==='Enter' && !event.shiftKey){
+                    event.preventDefault();
+                    sendMessage();
+                  }
+                ">
+
+              <button
+                class="send"
+                onclick="sendMessage()">
+                ↑
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TRAINING -->
+
+        <div
+          id="workspace-training"
+          class="workspace-tab-content hidden">
+
+          <div class="training-layout">
+
+
+            <div class="training-form">
+
+              <h3>
+                Teach this model
+              </h3>
+
+
+              <div class="field">
+
+                <label>
+                  User input
+                </label>
+
+                <textarea
+                  id="trainingQuestion"
+                  class="textarea"
+                  placeholder="Example: Explain AI simply."></textarea>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Ideal answer
+                </label>
+
+                <textarea
+                  id="trainingAnswer"
+                  class="textarea"
+                  placeholder="Example: AI is technology that allows computers to perform tasks that normally require human intelligence."></textarea>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Category
+                </label>
+
+                <input
+                  id="trainingCategory"
+                  class="input"
+                  value="General">
+
+              </div>
+
+
+              <button
+                class="primary"
+                style="width:100%;"
+                onclick="addTraining()">
+                Add training
+              </button>
+
+            </div>
+
+
+            <div class="training-list">
+
+              <div class="panel-head">
+
+                <div class="panel-title">
+                  Shared training data
+                </div>
+
+                <span
+                  class="tag"
+                  id="trainingCount">
+                  0
+                </span>
+
+              </div>
+
+
+              <div id="trainingList">
+
+                <div class="empty">
+                  No training data yet.
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- KNOWLEDGE -->
+
+        <div
+          id="workspace-knowledge"
+          class="workspace-tab-content hidden">
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <div class="panel-title">
+                Knowledge base
+              </div>
+
+              <button
+                class="primary"
+                onclick="showKnowledgeForm()">
+                + Add knowledge
+              </button>
+
+            </div>
+
+
+            <div
+              id="knowledgeForm"
+              class="hidden"
+              style="padding:18px;border-bottom:1px solid var(--border);">
+
+              <div class="field">
+
+                <label>
+                  Title
+                </label>
+
+                <input
+                  id="knowledgeTitle"
+                  class="input"
+                  placeholder="Knowledge title">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Content
+                </label>
+
+                <textarea
+                  id="knowledgeContent"
+                  class="textarea"
+                  placeholder="Paste the knowledge this model should use."></textarea>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Source URL (optional)
+                </label>
+
+                <input
+                  id="knowledgeUrl"
+                  class="input"
+                  placeholder="https://...">
+
+              </div>
+
+
+              <button
+                class="primary"
+                onclick="addKnowledge()">
+                Save knowledge
+              </button>
+
+            </div>
+
+
+            <div id="knowledgeList">
+
+              <div class="empty">
+                No knowledge added yet.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- MEMORY -->
+
+        <div
+          id="workspace-memory"
+          class="workspace-tab-content hidden">
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <div class="panel-title">
+                Personal memory
+              </div>
+
+              <button
+                class="primary"
+                onclick="showMemoryForm()">
+                + Add memory
+              </button>
+
+            </div>
+
+
+            <div
+              id="memoryForm"
+              class="hidden"
+              style="padding:18px;border-bottom:1px solid var(--border);">
+
+              <div class="field">
+
+                <label>
+                  Memory key
+                </label>
+
+                <input
+                  id="memoryKey"
+                  class="input"
+                  placeholder="Example: preferred_language">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Memory value
+                </label>
+
+                <input
+                  id="memoryValue"
+                  class="input"
+                  placeholder="Example: English">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Importance
+                </label>
+
+                <input
+                  id="memoryImportance"
+                  class="input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value="50">
+
+              </div>
+
+
+              <button
+                class="primary"
+                onclick="addMemory()">
+                Save memory
+              </button>
+
+            </div>
+
+
+            <div id="memoryList">
+
+              <div class="empty">
+                No memories saved.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- API -->
+
+        <div
+          id="workspace-api"
+          class="workspace-tab-content hidden">
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <div class="panel-title">
+                Model API
+              </div>
+
+              <span class="tag">
+                Server-side key
+              </span>
+
+            </div>
+
+
+            <div style="padding:18px;">
+
+              <div class="field">
+
+                <label>
+                  Endpoint
+                </label>
+
+                <input
+                  class="input"
+                  value="/v1/chat/completions"
+                  readonly>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Authentication
+                </label>
+
+                <input
+                  class="input"
+                  value="Authorization: Bearer 8io_••••••••"
+                  readonly>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Model identifier
+                </label>
+
+                <input
+                  id="apiModelIdentifier"
+                  class="input"
+                  value="nova"
+                  readonly>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Request format
+                </label>
+
+                <pre style="
+background:#08090c;
+border:1px solid var(--border);
+border-radius:9px;
+padding:15px;
+overflow:auto;
+color:#9fa5af;
+font-size:9px;
+line-height:1.6;
+">{
+  "model": "nova",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ]
+}</pre>
+
+              </div>
+
+
+              <div style="
+                color:#626873;
+                font-size:9px;
+                line-height:1.6;
+              ">
+                The actual API secret is never sent to this
+                browser. Supabase calls your 8io API server-side.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- MODEL SETTINGS -->
+
+        <div
+          id="workspace-modelSettings"
+          class="workspace-tab-content hidden">
+
+          <div class="panel">
+
+            <div style="padding:18px;">
+
+              <div class="toggle-row">
+
+                <div>
+
+                  <div class="toggle-title">
+                    Everyone can train
+                  </div>
+
+                  <div class="toggle-desc">
+                    Allow users with access to submit
+                    training examples.
+                  </div>
+
+                </div>
+
+
+                <button
+                  id="everyoneTrainingToggle"
+                  class="toggle on"
+                  onclick="toggleTrainingMode()">
+
+                  <span></span>
+
+                </button>
+
+              </div>
+
+
+              <div class="toggle-row">
+
+                <div>
+
+                  <div class="toggle-title">
+                    Public model
+                  </div>
+
+                  <div class="toggle-desc">
+                    Allow authenticated users to discover
+                    this model.
+                  </div>
+
+                </div>
+
+
+                <button
+                  id="publicToggle"
+                  class="toggle"
+                  onclick="togglePublic()">
+
+                  <span></span>
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           SETTINGS
+      ====================================================== -->
+
+      <section
+        class="page"
+        id="settings">
+
+        <div class="page-head">
+
+          <div>
+
+            <div class="eyebrow">
+              System
+            </div>
+
+            <h1>
+              Settings
+            </h1>
+
+            <p class="subtitle">
+              Account and workspace settings.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div style="padding:20px;">
+
+            <div class="field">
+
+              <label>
+                Display name
+              </label>
+
+              <input
+                id="profileName"
+                class="input"
+                placeholder="Your name">
+
+            </div>
+
+
+            <button
+              class="primary"
+              onclick="saveProfile()">
+              Save profile
+            </button>
+
+
+            <div style="
+              margin-top:25px;
+              padding-top:20px;
+              border-top:1px solid var(--border);
+            ">
+
+              <button
+                class="icon-btn"
+                onclick="signOut()">
+                Sign out
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           DIAGNOSTICS
+      ====================================================== -->
+
+      <section
+        class="page"
+        id="diagnostics">
+
+        <div class="page-head">
+
+          <div>
+
+            <div class="eyebrow">
+              System
+            </div>
+
+            <h1>
+              Diagnostics
+            </h1>
+
+            <p class="subtitle">
+              Check the current infrastructure.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="model-row">
+
+            <div class="model-icon">
+              ✓
+            </div>
+
+            <div class="model-main">
+
+              <div class="model-name">
+                Frontend
+              </div>
+
+              <div class="model-desc">
+                Nova Studio client loaded.
+              </div>
+
+            </div>
+
+            <div class="status">
+
+              <span class="status-dot"></span>
+
+              Ready
+
+            </div>
+
+          </div>
+
+
+          <div class="model-row">
+
+            <div class="model-icon">
+              ◈
+            </div>
+
+            <div class="model-main">
+
+              <div class="model-name">
+                Supabase
+              </div>
+
+              <div
+                class="model-desc"
+                id="diagSupabase">
+                Checking...
+              </div>
+
+            </div>
+
+            <div
+              class="status"
+              id="diagSupabaseStatus">
+              Checking
+            </div>
+
+          </div>
+
+
+          <div class="model-row">
+
+            <div class="model-icon">
+              ⚡
+            </div>
+
+            <div class="model-main">
+
+              <div class="model-name">
+                8io API
+              </div>
+
+              <div class="model-desc">
+                Server-side model API integration.
+              </div>
+
+            </div>
+
+            <div class="status">
+              Configured per model
+            </div>
+
+          </div>
+
+
+          <div class="model-row">
+
+            <div class="model-icon">
+              ◇
+            </div>
+
+            <div class="model-main">
+
+              <div class="model-name">
+                Training
+              </div>
+
+              <div class="model-desc">
+                Shared training-data engine.
+              </div>
+
+            </div>
+
+            <div class="status">
+              Active
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
 
   </main>
 
 </div>
 
-<div id="toast" class="toast"></div>
+
 
 <script>
+
 /* ============================================================
-   CONFIG
-   ============================================================ */
+   SUPABASE CONFIG
+============================================================ */
 
-const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+/*
+  REPLACE THESE TWO VALUES.
 
-const { createClient } = window.supabase;
+  Do NOT put your 8io secret here.
+*/
 
-const db = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const SUPABASE_URL =
+  "https://jtstdajaaasucialvsfs.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1O9wO2dY_ZFFfdPFGaLeMA_3oaW2Hs-";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
 
 /* ============================================================
    STATE
-   ============================================================ */
+============================================================ */
 
-const state = {
-  user: null,
-  profile: null,
-  models: [],
-  selectedModel: null,
-  currentPage: "dashboard",
-  currentConversation: null,
-  messages: [],
-  training: [],
-  knowledge: [],
-  memory: [],
-  authMode: "login",
-  logs: []
-};
+let currentUser = null;
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
+let currentModel = null;
 
-function $(id){
-  return document.getElementById(id);
-}
+let currentConversation = null;
 
-function escapeHTML(value){
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
+let currentAuthMode = "login";
 
-function toast(message){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.add("show");
+let selectedAvatar = "✦";
 
-  setTimeout(()=>{
-    el.classList.remove("show");
-  },2800);
-}
+let selectedVisibility = "private";
 
-function log(message){
-  const time = new Date().toLocaleTimeString();
+let selectedTrainingMode = "everyone";
 
-  state.logs.unshift({
-    time,
-    message
-  });
+let modelsCache = [];
 
-  if(state.logs.length > 100){
-    state.logs.length = 100;
-  }
-
-  console.log("[Nova]",message);
-}
-
-function formatDate(value){
-  if(!value) return "";
-  return new Date(value).toLocaleString();
-}
-
-function requireModel(){
-  if(!state.selectedModel){
-    toast("Create or select a model first.");
-    showPage("models");
-    return false;
-  }
-
-  return true;
-}
 
 /* ============================================================
    AUTH
-   ============================================================ */
+============================================================ */
 
-function renderAuthMode(){
-  const login = state.authMode === "login";
+function switchAuth(mode){
 
-  $("authTitle").textContent = login
-    ? "Welcome back."
-    : "Create your workspace.";
+  currentAuthMode = mode;
 
-  $("authSub").textContent = login
-    ? "Sign in to build, train and use your AI models."
-    : "Create an account and start training your own AI.";
+  document
+    .getElementById("loginTab")
+    .classList.toggle("active",mode === "login");
 
-  $("nameField").style.display = login ? "none" : "block";
+  document
+    .getElementById("signupTab")
+    .classList.toggle("active",mode === "signup");
 
-  $("authSubmit").textContent = login
-    ? "Sign in"
-    : "Create account";
+  document
+    .getElementById("authSubmit")
+    .textContent =
+      mode === "login"
+      ? "Sign in"
+      : "Create account";
 
-  $("authSwitchText").textContent = login
-    ? "Don't have an account?"
-    : "Already have an account?";
-
-  $("authSwitch").textContent = login
-    ? "Create one"
-    : "Sign in";
+  clearAuthError();
 }
 
-$("authSwitch").onclick = ()=>{
-  state.authMode = state.authMode === "login"
-    ? "signup"
-    : "login";
 
-  renderAuthMode();
-};
+async function submitAuth(){
 
-$("authForm").addEventListener("submit",async e=>{
-  e.preventDefault();
+  const email =
+    document
+      .getElementById("authEmail")
+      .value
+      .trim();
 
-  const email = $("authEmail").value.trim();
-  const password = $("authPassword").value;
+  const password =
+    document
+      .getElementById("authPassword")
+      .value;
 
   if(!email || !password){
-    toast("Enter your email and password.");
+
+    showAuthError(
+      "Enter your email and password."
+    );
+
     return;
   }
 
+  clearAuthError();
+
+  const button =
+    document.getElementById("authSubmit");
+
+  button.disabled = true;
+
+  button.textContent = "Working...";
+
   try{
-    $("authSubmit").disabled = true;
 
-    if(state.authMode === "login"){
+    if(currentAuthMode === "login"){
 
-      const { error } = await db.auth.signInWithPassword({
-        email,
-        password
-      });
+      const {error} =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
 
-      if(error) throw error;
+      if(error)
+        throw error;
 
     }else{
 
-      const name = $("authName").value.trim();
-
-      const { error } = await db.auth.signUp({
-        email,
-        password,
-        options:{
-          data:{
-            name
+      const {error} =
+        await supabaseClient.auth.signUp({
+          email,
+          password,
+          options:{
+            data:{
+              display_name:
+                email.split("@")[0]
+            }
           }
-        }
-      });
+        });
 
-      if(error) throw error;
+      if(error)
+        throw error;
 
-      toast("Account created. Check your email if confirmation is enabled.");
+      alert(
+        "Account created. If email confirmation is enabled in Supabase, check your email."
+      );
+
     }
 
   }catch(error){
-    console.error(error);
-    toast(error.message || "Authentication failed.");
-  }finally{
-    $("authSubmit").disabled = false;
-  }
-});
 
-$("logoutBtn").onclick = async ()=>{
-  await db.auth.signOut();
-};
+    showAuthError(
+      error.message || "Authentication failed."
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      currentAuthMode === "login"
+      ? "Sign in"
+      : "Create account";
+
+  }
+
+}
+
+
+function showAuthError(message){
+
+  const el =
+    document.getElementById("authError");
+
+  el.textContent = message;
+
+  el.classList.remove("hidden");
+
+}
+
+
+function clearAuthError(){
+
+  document
+    .getElementById("authError")
+    .classList.add("hidden");
+
+}
+
+
+async function signOut(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  currentModel = null;
+
+  currentConversation = null;
+
+  showAuthScreen();
+
+}
+
+
+function showAuthScreen(){
+
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+}
+
+
+function showApp(){
+
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+}
+
 
 /* ============================================================
-   INITIALIZATION
-   ============================================================ */
+   INIT
+============================================================ */
 
 async function init(){
-
-  renderAuthMode();
 
   const {
     data:{
       session
     }
-  } = await db.auth.getSession();
+  } =
+    await supabaseClient.auth.getSession();
 
-  if(session){
-    await boot(session.user);
+
+  if(session?.user){
+
+    currentUser =
+      session.user;
+
+    showApp();
+
+    await loadProfile();
+
+    await loadModels();
+
+    runDiagnostics();
+
+  }else{
+
+    showAuthScreen();
+
   }
 
-  db.auth.onAuthStateChange(async(event,session)=>{
 
-    if(session?.user){
-      await boot(session.user);
-    }else{
-      state.user = null;
-      state.profile = null;
-      state.models = [];
-      $("app").classList.add("hidden");
-      $("authScreen").classList.remove("hidden");
+  supabaseClient.auth.onAuthStateChange(
+    async (_event,session)=>{
+
+      if(session?.user){
+
+        currentUser =
+          session.user;
+
+        showApp();
+
+        await loadProfile();
+
+        await loadModels();
+
+      }else{
+
+        showAuthScreen();
+
+      }
+
     }
+  );
 
-  });
 }
 
-async function boot(user){
 
-  state.user = user;
+init();
 
-  $("authScreen").classList.add("hidden");
-  $("app").classList.remove("hidden");
-
-  $("userEmail").textContent = user.email || "User";
-
-  await loadProfile();
-  await loadModels();
-
-  if(!state.selectedModel && state.models.length){
-    state.selectedModel = state.models[0];
-  }
-
-  showPage("dashboard");
-
-  log("Application initialized.");
-}
 
 /* ============================================================
    PROFILE
-   ============================================================ */
+============================================================ */
 
 async function loadProfile(){
 
-  const { data,error } = await db
-    .from("profiles")
-    .select("*")
-    .eq("id",state.user.id)
-    .maybeSingle();
+  if(!currentUser)
+    return;
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id",currentUser.id)
+      .maybeSingle();
+
+
+  if(error)
+    return;
+
+
+  const displayName =
+    data?.display_name ||
+    currentUser.email?.split("@")[0] ||
+    "User";
+
+
+  document
+    .getElementById("userName")
+    .textContent = displayName;
+
+  document
+    .getElementById("userEmail")
+    .textContent =
+      currentUser.email || "—";
+
+  document
+    .getElementById("userAvatar")
+    .textContent =
+      data?.avatar ||
+      displayName
+        .charAt(0)
+        .toUpperCase();
+
+  document
+    .getElementById("profileName")
+    .value =
+      data?.display_name || "";
+
+}
+
+
+async function saveProfile(){
+
+  const name =
+    document
+      .getElementById("profileName")
+      .value
+      .trim();
+
+  if(!name)
+    return;
+
+
+  const {error} =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        display_name:name,
+        updated_at:new Date().toISOString()
+      })
+      .eq("id",currentUser.id);
+
 
   if(error){
-    console.error(error);
+
+    alert(error.message);
+
     return;
   }
 
-  state.profile = data;
+
+  await loadProfile();
+
+  alert("Profile saved.");
+
 }
 
-/* ============================================================
-   MODELS
-   ============================================================ */
-
-async function loadModels(){
-
-  const { data,error } = await db
-    .from("models")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if(error){
-    console.error(error);
-    log("Could not load models: "+error.message);
-    state.models = [];
-    return;
-  }
-
-  state.models = data || [];
-
-  if(state.selectedModel){
-    const updated = state.models.find(
-      x=>x.id === state.selectedModel.id
-    );
-
-    if(updated){
-      state.selectedModel = updated;
-    }
-  }
-}
-
-async function createModel(){
-
-  const name = prompt("Model name:");
-
-  if(!name || !name.trim()) return;
-
-  const description = prompt(
-    "Description:",
-    "A custom Nova AI model."
-  );
-
-  const avatar = prompt(
-    "Avatar:",
-    "✦"
-  ) || "✦";
-
-  const trainingMode = confirm(
-    "Allow everyone to train this model?\n\nOK = Everyone\nCancel = Owner only"
-  )
-    ? "everyone"
-    : "owner";
-
-  const { data,error } = await db
-    .from("models")
-    .insert({
-      owner_id:state.user.id,
-      name:name.trim(),
-      description:description || "",
-      avatar,
-      visibility:"public",
-      training_mode:trainingMode,
-      status:"active"
-    })
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.models.unshift(data);
-  state.selectedModel = data;
-
-  toast("Model created.");
-  log("Created model "+data.name);
-
-  renderPage();
-}
-
-async function selectModel(id){
-
-  const model = state.models.find(x=>x.id === id);
-
-  if(!model) return;
-
-  state.selectedModel = model;
-  state.messages = [];
-  state.currentConversation = null;
-
-  toast("Using "+model.name);
-
-  showPage("chat");
-}
-
-async function deleteModel(){
-
-  if(!requireModel()) return;
-
-  const model = state.selectedModel;
-
-  if(model.owner_id !== state.user.id){
-    toast("Only the model owner can delete it.");
-    return;
-  }
-
-  if(!confirm(
-    `Delete "${model.name}"?\n\nThis can remove its training data too.`
-  )) return;
-
-  const { error } = await db
-    .from("models")
-    .delete()
-    .eq("id",model.id);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.models = state.models.filter(x=>x.id !== model.id);
-  state.selectedModel = state.models[0] || null;
-
-  toast("Model deleted.");
-
-  showPage("models");
-}
-
-/* ============================================================
-   PAGE SYSTEM
-   ============================================================ */
-
-const pageNames = {
-  dashboard:"Dashboard",
-  chat:"Playground",
-  models:"My Models",
-  training:"Training",
-  knowledge:"Knowledge",
-  memory:"Memory",
-  settings:"Settings",
-  diagnostics:"Diagnostics"
-};
-
-function showPage(page){
-
-  state.currentPage = page;
-
-  document.querySelectorAll(".nav button").forEach(button=>{
-    button.classList.toggle(
-      "active",
-      button.dataset.page === page
-    );
-  });
-
-  $("topTitle").textContent = pageNames[page] || "Nova";
-
-  renderPage();
-
-  $("sidebar").classList.remove("open");
-}
-
-function renderPage(){
-
-  const content = $("content");
-
-  if(state.currentPage === "dashboard"){
-    content.innerHTML = renderDashboard();
-    bindDashboard();
-  }
-
-  if(state.currentPage === "models"){
-    content.innerHTML = renderModels();
-    bindModels();
-  }
-
-  if(state.currentPage === "chat"){
-    content.innerHTML = renderChat();
-    bindChat();
-    scrollChat();
-  }
-
-  if(state.currentPage === "training"){
-    content.innerHTML = renderTraining();
-    bindTraining();
-  }
-
-  if(state.currentPage === "knowledge"){
-    content.innerHTML = renderKnowledge();
-    bindKnowledge();
-  }
-
-  if(state.currentPage === "memory"){
-    content.innerHTML = renderMemory();
-    bindMemory();
-  }
-
-  if(state.currentPage === "settings"){
-    content.innerHTML = renderSettings();
-    bindSettings();
-  }
-
-  if(state.currentPage === "diagnostics"){
-    content.innerHTML = renderDiagnostics();
-  }
-}
-
-/* ============================================================
-   DASHBOARD
-   ============================================================ */
-
-function renderDashboard(){
-
-  const modelCount = state.models.length;
-
-  const selected = state.selectedModel
-    ? state.selectedModel.name
-    : "None";
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-        <div>
-          <h1 class="page-title">Good to see you.</h1>
-          <p class="page-sub">
-            Build, train and test your AI models from one workspace.
-          </p>
-        </div>
-
-        <button id="dashCreate" class="primary" style="width:auto">
-          + Create model
-        </button>
-      </div>
-
-      <div class="grid">
-
-        <div class="card stat">
-          <div class="stat-label">Your models</div>
-          <div class="stat-value">${modelCount}</div>
-          <div class="stat-small">Custom models in your workspace</div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-label">Active model</div>
-          <div class="stat-value" style="font-size:22px">
-            ${escapeHTML(selected)}
-          </div>
-          <div class="stat-small">Currently selected</div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-label">Training mode</div>
-          <div class="stat-value" style="font-size:22px">
-            ${state.selectedModel
-              ? escapeHTML(state.selectedModel.training_mode || "owner")
-              : "—"}
-          </div>
-          <div class="stat-small">
-            Who can contribute training data
-          </div>
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-title">Your models</div>
-
-        ${
-          state.models.length
-          ? state.models.slice(0,5).map(model=>`
-            <div class="card model-card" style="margin-bottom:9px">
-
-              <div class="model-avatar">
-                ${escapeHTML(model.avatar || "✦")}
-              </div>
-
-              <div class="model-info">
-                <div class="model-name">
-                  ${escapeHTML(model.name)}
-                </div>
-
-                <div class="model-desc">
-                  ${escapeHTML(model.description || "No description")}
-                </div>
-              </div>
-
-              <span class="badge badge-green">
-                ${escapeHTML(model.status || "active")}
-              </span>
-
-              <button
-                class="secondary"
-                data-open-model="${model.id}"
-              >
-                Open
-              </button>
-
-            </div>
-          `).join("")
-          : `
-            <div class="card">
-              <div style="font-weight:700">No models yet.</div>
-              <div class="page-sub">
-                Create your first model to start training.
-              </div>
-            </div>
-          `
-        }
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindDashboard(){
-
-  $("dashCreate")?.addEventListener(
-    "click",
-    createModel
-  );
-
-  document.querySelectorAll("[data-open-model]").forEach(btn=>{
-    btn.onclick = ()=>{
-      selectModel(btn.dataset.openModel);
-    };
-  });
-}
-
-/* ============================================================
-   MODELS
-   ============================================================ */
-
-function renderModels(){
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-        <div>
-          <h1 class="page-title">My Models</h1>
-          <p class="page-sub">
-            Create models and decide who can train them.
-          </p>
-        </div>
-
-        <button id="createModelBtn" class="primary" style="width:auto">
-          + New model
-        </button>
-      </div>
-
-      ${
-        state.models.length
-        ? `
-          <div class="grid">
-            ${state.models.map(model=>`
-
-              <div class="card">
-
-                <div style="
-                  display:flex;
-                  align-items:center;
-                  gap:13px;
-                  margin-bottom:17px
-                ">
-
-                  <div class="model-avatar">
-                    ${escapeHTML(model.avatar || "✦")}
-                  </div>
-
-                  <div class="model-info">
-                    <div class="model-name">
-                      ${escapeHTML(model.name)}
-                    </div>
-
-                    <div class="model-desc">
-                      ${escapeHTML(model.description || "No description")}
-                    </div>
-                  </div>
-
-                </div>
-
-                <div style="
-                  display:flex;
-                  gap:7px;
-                  flex-wrap:wrap;
-                  margin-bottom:18px
-                ">
-
-                  <span class="badge badge-green">
-                    ${escapeHTML(model.status || "active")}
-                  </span>
-
-                  <span class="badge badge-purple">
-                    Train: ${escapeHTML(model.training_mode || "owner")}
-                  </span>
-
-                  <span class="badge badge-gray">
-                    ${escapeHTML(model.visibility || "private")}
-                  </span>
-
-                </div>
-
-                <div style="display:flex;gap:8px">
-
-                  <button
-                    class="primary open-model"
-                    data-id="${model.id}"
-                    style="width:auto;flex:1"
-                  >
-                    Open
-                  </button>
-
-                </div>
-
-              </div>
-
-            `).join("")}
-          </div>
-        `
-        : `
-          <div class="card">
-            <h3 style="margin-top:0">Build your first model</h3>
-            <p class="page-sub">
-              Your models can have their own training data,
-              knowledge and API configuration.
-            </p>
-
-            <button id="emptyCreate" class="primary" style="width:auto">
-              Create model
-            </button>
-          </div>
-        `
-      }
-
-    </div>
-  `;
-}
-
-function bindModels(){
-
-  $("createModelBtn")?.addEventListener(
-    "click",
-    createModel
-  );
-
-  $("emptyCreate")?.addEventListener(
-    "click",
-    createModel
-  );
-
-  document.querySelectorAll(".open-model").forEach(btn=>{
-    btn.onclick = ()=>{
-      selectModel(btn.dataset.id);
-    };
-  });
-}
-
-/* ============================================================
-   CHAT
-   ============================================================ */
-
-function renderChat(){
-
-  const model = state.selectedModel;
-
-  if(!model){
-
-    return `
-      <div class="chat-page">
-        <div class="empty-chat">
-          <div class="empty-inner">
-            <div class="empty-icon">✦</div>
-            <h2>Create a model first</h2>
-            <p>
-              Nova needs a model before you can start a conversation.
-            </p>
-            <button id="chatCreate" class="primary" style="width:auto">
-              Create model
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="chat-page">
-
-      <div class="chat-header">
-
-        <div class="chat-avatar">
-          ${escapeHTML(model.avatar || "✦")}
-        </div>
-
-        <div>
-          <div class="chat-name">
-            ${escapeHTML(model.name)}
-          </div>
-
-          <div class="chat-model">
-            Model ${escapeHTML(model.id)}
-          </div>
-        </div>
-
-        <div style="margin-left:auto">
-          <span class="badge badge-green">
-            System ready
-          </span>
-        </div>
-
-      </div>
-
-      <div id="chatMessages" class="chat-messages">
-
-        ${
-          state.messages.length
-          ? state.messages.map(renderMessage).join("")
-          : `
-            <div class="empty-chat">
-              <div class="empty-inner">
-
-                <div class="empty-icon">
-                  ${escapeHTML(model.avatar || "✦")}
-                </div>
-
-                <h2>
-                  Talk to ${escapeHTML(model.name)}
-                </h2>
-
-                <p>
-                  Ask anything. This model can use its shared
-                  training data, knowledge and conversation memory.
-                </p>
-
-              </div>
-            </div>
-          `
-        }
-
-      </div>
-
-      <div class="composer">
-
-        <textarea
-          id="chatInput"
-          placeholder="Message ${escapeHTML(model.name)}..."
-          rows="1"
-        ></textarea>
-
-        <button id="sendBtn" class="send">
-          ↑
-        </button>
-
-      </div>
-
-      <div class="composer-hint">
-        Enter to send · Shift + Enter for a new line
-      </div>
-
-    </div>
-  `;
-}
-
-function renderMessage(message){
-
-  const user = message.role === "user";
-
-  return `
-    <div class="message ${user ? "user" : "ai"}">
-
-      <div class="message-avatar">
-        ${user ? "You" : "N"}
-      </div>
-
-      <div class="message-body">
-
-        <div class="message-content">
-          ${escapeHTML(message.content)}
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindChat(){
-
-  $("chatCreate")?.addEventListener(
-    "click",
-    createModel
-  );
-
-  const input = $("chatInput");
-  const send = $("sendBtn");
-
-  if(!input || !send) return;
-
-  send.onclick = sendChat;
-
-  input.addEventListener("keydown",e=>{
-    if(e.key === "Enter" && !e.shiftKey){
-      e.preventDefault();
-      sendChat();
-    }
-  });
-
-  input.addEventListener("input",()=>{
-    input.style.height="auto";
-    input.style.height=Math.min(
-      input.scrollHeight,
-      160
-    )+"px";
-  });
-}
-
-async function sendChat(){
-
-  if(!requireModel()) return;
-
-  const input = $("chatInput");
-
-  const text = input.value.trim();
-
-  if(!text) return;
-
-  input.value="";
-  input.style.height="auto";
-
-  state.messages.push({
-    role:"user",
-    content:text
-  });
-
-  renderPage();
-  scrollChat();
-
-  log("Sending chat request.");
-
-  try{
-
-    const { data,error } = await db.rpc(
-      "nova_start_chat",
-      {
-        p_model_id:state.selectedModel.id,
-        p_conversation_id:
-          state.currentConversation?.id || null,
-        p_messages:state.messages.slice(-20)
-      }
-    );
-
-    if(error) throw error;
-
-    if(data?.conversation_id){
-      state.currentConversation = {
-        id:data.conversation_id
-      };
-    }
-
-    const requestId = data?.request_id;
-
-    if(!requestId){
-
-      state.messages.push({
-        role:"assistant",
-        content:
-          data?.content ||
-          "The model did not return a response."
-      });
-
-      renderPage();
-      scrollChat();
-      return;
-    }
-
-    state.messages.push({
-      role:"assistant",
-      content:""
-    });
-
-    renderPage();
-
-    await pollChatResult(requestId);
-
-  }catch(error){
-
-    console.error(error);
-
-    state.messages.push({
-      role:"assistant",
-      content:
-        "I couldn't reach the model API. Check the model API configuration and Diagnostics page."
-    });
-
-    log("Chat error: "+error.message);
-
-    renderPage();
-    scrollChat();
-  }
-}
-
-async function pollChatResult(requestId){
-
-  const maxAttempts = 45;
-
-  for(let attempt=0;attempt<maxAttempts;attempt++){
-
-    await new Promise(
-      resolve=>setTimeout(resolve,1000)
-    );
-
-    const { data,error } = await db.rpc(
-      "nova_get_chat_result",
-      {
-        p_request_id:requestId
-      }
-    );
-
-    if(error){
-      throw error;
-    }
-
-    if(!data) continue;
-
-    if(data.status === "completed"){
-
-      const answer =
-        data.content ||
-        "The model returned an empty response.";
-
-      const last =
-        state.messages[state.messages.length-1];
-
-      if(last?.role === "assistant"){
-        last.content = answer;
-      }else{
-        state.messages.push({
-          role:"assistant",
-          content:answer
-        });
-      }
-
-      renderPage();
-      scrollChat();
-
-      log("Chat request completed.");
-
-      return;
-    }
-
-    if(data.status === "failed"){
-
-      throw new Error(
-        data.error || "Model API request failed."
-      );
-    }
-
-    const last =
-      state.messages[state.messages.length-1];
-
-    if(last?.role === "assistant"){
-      last.content =
-        attempt % 2
-        ? "Thinking…"
-        : "Thinking...";
-    }
-
-    renderPage();
-    scrollChat();
-  }
-
-  throw new Error("Model API timed out.");
-}
-
-function scrollChat(){
-
-  requestAnimationFrame(()=>{
-    const el = $("chatMessages");
-
-    if(el){
-      el.scrollTop = el.scrollHeight;
-    }
-  });
-}
-
-/* ============================================================
-   TRAINING
-   ============================================================ */
-
-async function loadTraining(){
-
-  if(!requireModel()) return;
-
-  const { data,error } = await db
-    .from("training_data")
-    .select("*")
-    .eq("model_id",state.selectedModel.id)
-    .order("created_at",{ascending:false})
-    .limit(200);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.training = data || [];
-
-  renderPage();
-}
-
-function renderTraining(){
-
-  const model = state.selectedModel;
-
-  if(!model){
-
-    return `
-      <div class="page">
-        <h1 class="page-title">Training</h1>
-        <p class="page-sub">
-          Select a model first.
-        </p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-
-        <div>
-          <h1 class="page-title">Train ${escapeHTML(model.name)}</h1>
-
-          <p class="page-sub">
-            Add examples that teach the model how to respond.
-            ${
-              model.training_mode === "everyone"
-              ? " Anyone with access can contribute."
-              : " Only the owner can contribute."
-            }
-          </p>
-        </div>
-
-        <button id="refreshTraining" class="secondary">
-          Refresh
-        </button>
-
-      </div>
-
-      <div class="card">
-
-        <div class="section-title">
-          Add training example
-        </div>
-
-        <div class="form-grid">
-
-          <div class="field">
-            <label>User question</label>
-            <textarea
-              id="trainQuestion"
-              placeholder="Example: Explain AI simply."
-            ></textarea>
-          </div>
-
-          <div class="field">
-            <label>Ideal answer</label>
-            <textarea
-              id="trainAnswer"
-              placeholder="Example: AI is technology that lets computers perform tasks that normally require human intelligence."
-            ></textarea>
-          </div>
-
-          <div class="field">
-            <label>Category</label>
-            <input
-              id="trainCategory"
-              placeholder="general"
-            >
-          </div>
-
-          <div style="
-            display:flex;
-            align-items:end;
-            justify-content:flex-end
-          ">
-            <button
-              id="addTraining"
-              class="primary"
-              style="width:auto"
-            >
-              Add to training
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-title">
-          Training examples
-        </div>
-
-        <div class="card">
-
-          ${
-            state.training.length
-            ? state.training.map(item=>`
-
-              <div class="training-row">
-
-                <div>
-                  <div class="training-question">
-                    ${escapeHTML(item.question)}
-                  </div>
-
-                  <div class="meta">
-                    ${escapeHTML(item.category || "general")}
-                  </div>
-                </div>
-
-                <div class="training-answer">
-                  ${escapeHTML(item.answer)}
-                </div>
-
-                <div>
-                  ${
-                    item.user_id === state.user.id
-                    ? `
-                      <button
-                        class="danger delete-training"
-                        data-id="${item.id}"
-                      >
-                        Delete
-                      </button>
-                    `
-                    : ""
-                  }
-                </div>
-
-              </div>
-
-            `).join("")
-            : `
-              <div style="
-                color:#727a87;
-                font-size:13px;
-                padding:12px 0
-              ">
-                No training examples yet.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindTraining(){
-
-  $("refreshTraining")?.addEventListener(
-    "click",
-    loadTraining
-  );
-
-  $("addTraining")?.addEventListener(
-    "click",
-    addTraining
-  );
-
-  document.querySelectorAll(".delete-training").forEach(btn=>{
-    btn.onclick = ()=>{
-      deleteTraining(btn.dataset.id);
-    };
-  });
-
-  if(state.selectedModel && state.training.length === 0){
-    loadTraining();
-  }
-}
-
-async function addTraining(){
-
-  if(!requireModel()) return;
-
-  const question =
-    $("trainQuestion").value.trim();
-
-  const answer =
-    $("trainAnswer").value.trim();
-
-  const category =
-    $("trainCategory").value.trim() || "general";
-
-  if(!question || !answer){
-    toast("Enter both a question and answer.");
-    return;
-  }
-
-  const model = state.selectedModel;
-
-  if(
-    model.owner_id !== state.user.id &&
-    model.training_mode !== "everyone"
-  ){
-    toast("This model is not open for public training.");
-    return;
-  }
-
-  const { data,error } = await db
-    .from("training_data")
-    .insert({
-      model_id:model.id,
-      user_id:state.user.id,
-      question,
-      answer,
-      category
-    })
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.training.unshift(data);
-
-  $("trainQuestion").value="";
-  $("trainAnswer").value="";
-  $("trainCategory").value="";
-
-  toast("Training example added.");
-
-  log("Training example added.");
-  renderPage();
-}
-
-async function deleteTraining(id){
-
-  const { error } = await db
-    .from("training_data")
-    .delete()
-    .eq("id",id)
-    .eq("user_id",state.user.id);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.training =
-    state.training.filter(x=>x.id !== id);
-
-  toast("Training example deleted.");
-
-  renderPage();
-}
-
-/* ============================================================
-   KNOWLEDGE
-   ============================================================ */
-
-async function loadKnowledge(){
-
-  if(!requireModel()) return;
-
-  const { data,error } = await db
-    .from("knowledge")
-    .select("*")
-    .eq("model_id",state.selectedModel.id)
-    .order("created_at",{ascending:false})
-    .limit(200);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.knowledge = data || [];
-
-  renderPage();
-}
-
-function renderKnowledge(){
-
-  if(!state.selectedModel){
-
-    return `
-      <div class="page">
-        <h1 class="page-title">Knowledge</h1>
-        <p class="page-sub">Select a model first.</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-        <div>
-          <h1 class="page-title">Knowledge</h1>
-          <p class="page-sub">
-            Give ${escapeHTML(state.selectedModel.name)}
-            additional facts and reference material.
-          </p>
-        </div>
-      </div>
-
-      <div class="card">
-
-        <div class="form-grid">
-
-          <div class="field">
-            <label>Title</label>
-            <input
-              id="knowledgeTitle"
-              placeholder="Example: Product information"
-            >
-          </div>
-
-          <div class="field">
-            <label>Category</label>
-            <input
-              id="knowledgeCategory"
-              placeholder="general"
-            >
-          </div>
-
-          <div class="field full">
-            <label>Content</label>
-            <textarea
-              id="knowledgeContent"
-              placeholder="Paste the knowledge you want the model to use..."
-              style="min-height:170px"
-            ></textarea>
-          </div>
-
-        </div>
-
-        <button
-          id="addKnowledge"
-          class="primary"
-          style="width:auto"
-        >
-          Add knowledge
-        </button>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-title">
-          Knowledge base
-        </div>
-
-        <div class="card">
-
-          ${
-            state.knowledge.length
-            ? state.knowledge.map(item=>`
-
-              <div style="
-                border-bottom:1px solid var(--line);
-                padding:16px 0
-              ">
-
-                <div style="
-                  display:flex;
-                  justify-content:space-between;
-                  gap:15px
-                ">
-
-                  <div>
-                    <div style="font-weight:750">
-                      ${escapeHTML(item.title || "Untitled")}
-                    </div>
-
-                    <div class="meta">
-                      ${escapeHTML(item.category || "general")}
-                    </div>
-                  </div>
-
-                  <button
-                    class="danger delete-knowledge"
-                    data-id="${item.id}"
-                  >
-                    Delete
-                  </button>
-
-                </div>
-
-                <div style="
-                  margin-top:10px;
-                  color:#8b93a0;
-                  font-size:12px;
-                  line-height:1.6;
-                  white-space:pre-wrap
-                ">
-                  ${escapeHTML(item.content)}
-                </div>
-
-              </div>
-
-            `).join("")
-            : `
-              <div style="color:#737b88;font-size:13px">
-                No knowledge added yet.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindKnowledge(){
-
-  $("addKnowledge")?.addEventListener(
-    "click",
-    addKnowledge
-  );
-
-  document.querySelectorAll(".delete-knowledge").forEach(btn=>{
-    btn.onclick = ()=>{
-      deleteKnowledge(btn.dataset.id);
-    };
-  });
-
-  if(state.selectedModel && state.knowledge.length === 0){
-    loadKnowledge();
-  }
-}
-
-async function addKnowledge(){
-
-  if(!requireModel()) return;
-
-  const title =
-    $("knowledgeTitle").value.trim();
-
-  const category =
-    $("knowledgeCategory").value.trim() || "general";
-
-  const content =
-    $("knowledgeContent").value.trim();
-
-  if(!content){
-    toast("Enter some knowledge.");
-    return;
-  }
-
-  const { data,error } = await db
-    .from("knowledge")
-    .insert({
-      model_id:state.selectedModel.id,
-      user_id:state.user.id,
-      title:title || "Untitled",
-      category,
-      content
-    })
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.knowledge.unshift(data);
-
-  $("knowledgeTitle").value="";
-  $("knowledgeCategory").value="";
-  $("knowledgeContent").value="";
-
-  toast("Knowledge added.");
-
-  renderPage();
-}
-
-async function deleteKnowledge(id){
-
-  const { error } = await db
-    .from("knowledge")
-    .delete()
-    .eq("id",id)
-    .eq("user_id",state.user.id);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.knowledge =
-    state.knowledge.filter(x=>x.id !== id);
-
-  toast("Knowledge deleted.");
-
-  renderPage();
-}
-
-/* ============================================================
-   MEMORY
-   ============================================================ */
-
-async function loadMemory(){
-
-  const { data,error } = await db
-    .from("model_memory")
-    .select("*")
-    .eq("user_id",state.user.id)
-    .order("created_at",{ascending:false});
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.memory = data || [];
-
-  renderPage();
-}
-
-function renderMemory(){
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-
-        <div>
-          <h1 class="page-title">Memory</h1>
-
-          <p class="page-sub">
-            Personal information Nova can remember for your account.
-          </p>
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="field">
-          <label>Memory</label>
-
-          <textarea
-            id="memoryContent"
-            placeholder="Example: I prefer short answers."
-          ></textarea>
-        </div>
-
-        <button
-          id="addMemory"
-          class="primary"
-          style="width:auto"
-        >
-          Save memory
-        </button>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-title">
-          Saved memories
-        </div>
-
-        <div class="card">
-
-          ${
-            state.memory.length
-            ? state.memory.map(item=>`
-
-              <div style="
-                display:flex;
-                align-items:flex-start;
-                gap:12px;
-                border-bottom:1px solid var(--line);
-                padding:14px 0
-              ">
-
-                <div style="
-                  flex:1;
-                  font-size:13px;
-                  line-height:1.5
-                ">
-                  ${escapeHTML(item.content)}
-                </div>
-
-                <button
-                  class="danger delete-memory"
-                  data-id="${item.id}"
-                >
-                  Delete
-                </button>
-
-              </div>
-
-            `).join("")
-            : `
-              <div style="color:#737b88;font-size:13px">
-                No memories saved.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindMemory(){
-
-  $("addMemory")?.addEventListener(
-    "click",
-    addMemory
-  );
-
-  document.querySelectorAll(".delete-memory").forEach(btn=>{
-    btn.onclick = ()=>{
-      deleteMemory(btn.dataset.id);
-    };
-  });
-
-  if(state.memory.length === 0){
-    loadMemory();
-  }
-}
-
-async function addMemory(){
-
-  const content =
-    $("memoryContent").value.trim();
-
-  if(!content){
-    toast("Enter something to remember.");
-    return;
-  }
-
-  const { data,error } = await db
-    .from("model_memory")
-    .insert({
-      user_id:state.user.id,
-      content
-    })
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.memory.unshift(data);
-
-  $("memoryContent").value="";
-
-  toast("Memory saved.");
-
-  renderPage();
-}
-
-async function deleteMemory(id){
-
-  const { error } = await db
-    .from("model_memory")
-    .delete()
-    .eq("id",id)
-    .eq("user_id",state.user.id);
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.memory =
-    state.memory.filter(x=>x.id !== id);
-
-  renderPage();
-}
-
-/* ============================================================
-   SETTINGS
-   ============================================================ */
-
-function renderSettings(){
-
-  const model = state.selectedModel;
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-
-        <div>
-          <h1 class="page-title">Settings</h1>
-          <p class="page-sub">
-            Configure your workspace and model behavior.
-          </p>
-        </div>
-
-      </div>
-
-      <div class="settings-grid">
-
-        <div class="card settings-nav">
-
-          <button class="active">
-            Model
-          </button>
-
-          <button>
-            Account
-          </button>
-
-          <button>
-            API
-          </button>
-
-        </div>
-
-        <div>
-
-          <div class="card">
-
-            <div class="section-title">
-              Model configuration
-            </div>
-
-            ${
-              model
-              ? `
-                <div class="field">
-                  <label>Model name</label>
-                  <input
-                    id="settingName"
-                    value="${escapeHTML(model.name)}"
-                  >
-                </div>
-
-                <div class="field">
-                  <label>Description</label>
-                  <textarea id="settingDescription">${escapeHTML(model.description || "")}</textarea>
-                </div>
-
-                <div class="field">
-                  <label>Avatar</label>
-                  <input
-                    id="settingAvatar"
-                    value="${escapeHTML(model.avatar || "✦")}"
-                  >
-                </div>
-
-                <div class="field">
-                  <label>Training access</label>
-
-                  <select id="settingTraining">
-
-                    <option
-                      value="owner"
-                      ${model.training_mode === "owner" ? "selected" : ""}
-                    >
-                      Owner only
-                    </option>
-
-                    <option
-                      value="everyone"
-                      ${model.training_mode === "everyone" ? "selected" : ""}
-                    >
-                      Everyone
-                    </option>
-
-                  </select>
-                </div>
-
-                <button
-                  id="saveSettings"
-                  class="primary"
-                  style="width:auto"
-                >
-                  Save changes
-                </button>
-
-                <button
-                  id="deleteModel"
-                  class="danger"
-                  style="margin-left:7px"
-                >
-                  Delete model
-                </button>
-              `
-              : `
-                <div style="color:#777f8d">
-                  Select or create a model first.
-                </div>
-              `
-            }
-
-          </div>
-
-          <div class="card section">
-
-            <div class="section-title">
-              Your API
-            </div>
-
-            <p class="page-sub">
-              This application is designed to call your own
-              <b>8io_</b> model API through the secure server-side
-              SQL function.
-            </p>
-
-            <div style="
-              margin-top:14px;
-              padding:13px;
-              background:#0b0d10;
-              border:1px solid var(--line);
-              border-radius:10px;
-              font-family:monospace;
-              font-size:11px;
-              color:#a7aebb
-            ">
-              POST /v1/chat/completions<br><br>
-              Authorization: Bearer 8io_••••••••
-            </div>
-
-            <p class="meta">
-              API secrets should never be placed in this HTML file.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-function bindSettings(){
-
-  $("saveSettings")?.addEventListener(
-    "click",
-    saveSettings
-  );
-
-  $("deleteModel")?.addEventListener(
-    "click",
-    deleteModel
-  );
-}
-
-async function saveSettings(){
-
-  if(!requireModel()) return;
-
-  const updates = {
-    name:$("settingName").value.trim(),
-    description:$("settingDescription").value.trim(),
-    avatar:$("settingAvatar").value.trim() || "✦",
-    training_mode:$("settingTraining").value
-  };
-
-  if(!updates.name){
-    toast("Model name is required.");
-    return;
-  }
-
-  const { data,error } = await db
-    .from("models")
-    .update(updates)
-    .eq("id",state.selectedModel.id)
-    .eq("owner_id",state.user.id)
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  state.selectedModel = data;
-
-  const index =
-    state.models.findIndex(
-      x=>x.id === data.id
-    );
-
-  if(index >= 0){
-    state.models[index] = data;
-  }
-
-  toast("Settings saved.");
-
-  renderPage();
-}
-
-/* ============================================================
-   DIAGNOSTICS
-   ============================================================ */
-
-function renderDiagnostics(){
-
-  return `
-    <div class="page">
-
-      <div class="page-head">
-        <div>
-          <h1 class="page-title">Diagnostics</h1>
-          <p class="page-sub">
-            Connection and runtime information.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid">
-
-        <div class="card">
-
-          <div class="stat-label">
-            Authentication
-          </div>
-
-          <div style="
-            margin-top:12px;
-            color:#61dfa0;
-            font-weight:750
-          ">
-            Connected
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="stat-label">
-            Supabase
-          </div>
-
-          <div style="
-            margin-top:12px;
-            color:#61dfa0;
-            font-weight:750
-          ">
-            ${SUPABASE_URL.includes("YOUR_")
-              ? "Not configured"
-              : "Configured"}
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="stat-label">
-            Active model
-          </div>
-
-          <div style="
-            margin-top:12px;
-            font-weight:750
-          ">
-            ${
-              state.selectedModel
-              ? escapeHTML(state.selectedModel.name)
-              : "None"
-            }
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-title">
-          Runtime log
-        </div>
-
-        <div class="card">
-
-          ${
-            state.logs.length
-            ? state.logs.map(item=>`
-              <div style="
-                padding:9px 0;
-                border-bottom:1px solid var(--line);
-                font-family:monospace;
-                font-size:11px
-              ">
-                <span style="color:#59616d">
-                  ${escapeHTML(item.time)}
-                </span>
-                <span style="color:#aeb4be">
-                  ${escapeHTML(item.message)}
-                </span>
-              </div>
-            `).join("")
-            : `
-              <div style="color:#737b88">
-                No diagnostic events yet.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
 
 /* ============================================================
    NAVIGATION
-   ============================================================ */
+============================================================ */
 
-document.querySelectorAll(".nav button").forEach(button=>{
+const pageTitles = {
 
-  button.addEventListener("click",()=>{
+  dashboard:"Overview",
 
-    showPage(button.dataset.page);
+  models:"My Models",
+
+  create:"Create Model",
+
+  workspace:"Model Workspace",
+
+  settings:"Settings",
+
+  diagnostics:"Diagnostics"
+
+};
+
+
+function showPage(id,button=null){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+      page.classList.remove("active");
+    });
+
+
+  const target =
+    document.getElementById(id);
+
+  if(!target)
+    return;
+
+
+  target.classList.add("active");
+
+
+  document
+    .getElementById("pageTitle")
+    .textContent =
+      pageTitles[id] || "Nova";
+
+
+  if(button){
+
+    document
+      .querySelectorAll(".nav button")
+      .forEach(b=>{
+        b.classList.remove("active");
+      });
+
+    button.classList.add("active");
+
+  }
+
+
+  document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+async function refreshCurrent(){
+
+  if(
+    document
+      .getElementById("models")
+      .classList.contains("active")
+  ){
+
+    await loadModels();
+
+  }
+
+  if(currentModel){
+
+    await loadTraining();
+
+    await loadKnowledge();
+
+    await loadMemory();
+
+  }
+
+}
+
+
+/* ============================================================
+   AVATARS
+============================================================ */
+
+document
+  .querySelectorAll(".avatar-option")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(".avatar-option")
+          .forEach(x=>{
+            x.classList.remove("selected");
+          });
+
+        button.classList.add("selected");
+
+        selectedAvatar =
+          button.dataset.avatar;
+
+      }
+    );
 
   });
 
-});
-
-$("mobileMenu").onclick = ()=>{
-  $("sidebar").classList.toggle("open");
-};
 
 /* ============================================================
-   START
-   ============================================================ */
+   VISIBILITY
+============================================================ */
 
-init();
+document
+  .querySelectorAll(
+    "[data-visibility]"
+  )
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(
+            "[data-visibility]"
+          )
+          .forEach(x=>{
+            x.classList.remove("selected");
+          });
+
+        button.classList.add("selected");
+
+        selectedVisibility =
+          button.dataset.visibility;
+
+      }
+    );
+
+  });
+
+
+document
+  .querySelectorAll(
+    "[data-training]"
+  )
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(
+            "[data-training]"
+          )
+          .forEach(x=>{
+            x.classList.remove("selected");
+          });
+
+        button.classList.add("selected");
+
+        selectedTrainingMode =
+          button.dataset.training;
+
+      }
+    );
+
+  });
+
+
+/* ============================================================
+   CREATE MODEL
+============================================================ */
+
+async function createModel(){
+
+  const name =
+    document
+      .getElementById("createName")
+      .value
+      .trim();
+
+  const description =
+    document
+      .getElementById("createDescription")
+      .value
+      .trim();
+
+  const instructions =
+    document
+      .getElementById("createInstructions")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert("Enter a model name.");
+
+    return;
+
+  }
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "create_model",
+      {
+        p_name:name,
+        p_description:description,
+        p_avatar:selectedAvatar,
+        p_system_instructions:instructions,
+        p_visibility:selectedVisibility,
+        p_training_mode:selectedTrainingMode
+      }
+    );
+
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+
+  }
+
+
+  await loadModels();
+
+  const created =
+    modelsCache.find(
+      m=>m.id === data
+    );
+
+
+  if(created){
+
+    await openModel(created);
+
+  }else{
+
+    showPage("models");
+
+  }
+
+}
+
+
+/* ============================================================
+   LOAD MODELS
+============================================================ */
+
+async function loadModels(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.rpc(
+      "list_my_models"
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    document
+      .getElementById("modelsGrid")
+      .innerHTML = `
+        <div class="empty">
+          <h3>Could not load models</h3>
+          <p>${escapeHtml(error.message)}</p>
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  modelsCache =
+    data || [];
+
+
+  renderModels();
+
+  renderDashboard();
+
+}
+
+
+function renderModels(){
+
+  const grid =
+    document
+      .getElementById("modelsGrid");
+
+
+  if(!modelsCache.length){
+
+    grid.innerHTML = `
+      <div class="empty"
+        style="grid-column:1/-1;">
+        <div class="empty-icon">◈</div>
+        <h3>No models yet</h3>
+        <p>Create your first model.</p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML =
+    modelsCache.map(model=>`
+
+      <div
+        class="model-card"
+        data-model="${model.id}">
+
+        <div class="model-card-top">
+
+          <div class="big-icon">
+            ${escapeHtml(model.avatar || "✦")}
+          </div>
+
+          <button
+            class="more"
+            onclick="event.stopPropagation();">
+            •••
+          </button>
+
+        </div>
+
+        <h3>
+          ${escapeHtml(model.name)}
+        </h3>
+
+        <p>
+          ${escapeHtml(
+            model.description || "No description"
+          )}
+        </p>
+
+        <div class="card-footer">
+
+          <span class="tag">
+            ${escapeHtml(model.training_mode)}
+          </span>
+
+          <button
+            class="open-btn"
+            onclick="openModelById('${model.id}')">
+            Open →
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+function renderDashboard(){
+
+  const trainingCount =
+    modelsCache.reduce(
+      (sum,m)=>
+        sum + Number(m.training_count || 0),
+      0
+    );
+
+  const knowledgeCount =
+    modelsCache.reduce(
+      (sum,m)=>
+        sum + Number(m.knowledge_count || 0),
+      0
+    );
+
+
+  document
+    .getElementById("statModels")
+    .textContent =
+      modelsCache.length;
+
+
+  document
+    .getElementById("statTraining")
+    .textContent =
+      trainingCount;
+
+
+  document
+    .getElementById("statKnowledge")
+    .textContent =
+      knowledgeCount;
+
+
+  const container =
+    document
+      .getElementById("dashboardModels");
+
+
+  if(!modelsCache.length){
+
+    container.innerHTML = `
+      <div class="empty">
+        <h3>No models yet</h3>
+        <p>Create your first model.</p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    modelsCache
+      .slice(0,5)
+      .map(model=>`
+
+        <div class="model-row">
+
+          <div class="model-icon">
+            ${escapeHtml(model.avatar || "✦")}
+          </div>
+
+          <div class="model-main">
+
+            <div class="model-name">
+              ${escapeHtml(model.name)}
+            </div>
+
+            <div class="model-desc">
+              ${escapeHtml(
+                model.description || "No description"
+              )}
+            </div>
+
+          </div>
+
+          <button
+            class="open-btn"
+            onclick="openModelById('${model.id}')">
+            Open
+          </button>
+
+        </div>
+
+      `)
+      .join("");
+
+}
+
+
+/* ============================================================
+   OPEN MODEL
+============================================================ */
+
+async function openModelById(id){
+
+  const model =
+    modelsCache.find(
+      m=>m.id === id
+    );
+
+  if(model)
+    await openModel(model);
+
+}
+
+
+async function openModel(model){
+
+  currentModel =
+    model;
+
+  currentConversation =
+    null;
+
+
+  document
+    .getElementById("workspaceAvatar")
+    .textContent =
+      model.avatar || "✦";
+
+
+  document
+    .getElementById("workspaceName")
+    .textContent =
+      model.name;
+
+
+  document
+    .getElementById("workspaceDescription")
+    .textContent =
+      model.description || "No description";
+
+
+  document
+    .getElementById("workspaceId")
+    .textContent =
+      model.model_identifier || model.id;
+
+
+  document
+    .getElementById("apiModelIdentifier")
+    .value =
+      model.model_identifier || model.name;
+
+
+  document
+    .getElementById("workspaceStatus")
+    .textContent =
+      model.status || "Active";
+
+
+  showPage("workspace");
+
+
+  openWorkspaceTab(
+    "playground",
+    document.querySelector(
+      '[data-tab="playground"]'
+    )
+  );
+
+
+  clearChat();
+
+
+  await startConversation();
+
+}
+
+
+/* ============================================================
+   WORKSPACE TABS
+============================================================ */
+
+function openWorkspaceTab(id,button){
+
+  document
+    .querySelectorAll(
+      ".workspace-tab-content"
+    )
+    .forEach(el=>{
+      el.classList.add("hidden");
+    });
+
+
+  const target =
+    document.getElementById(
+      "workspace-" + id
+    );
+
+
+  if(target)
+    target.classList.remove("hidden");
+
+
+  document
+    .querySelectorAll(".workspace-tab")
+    .forEach(tab=>{
+      tab.classList.remove("active");
+    });
+
+
+  if(button)
+    button.classList.add("active");
+
+
+  if(id === "training")
+    loadTraining();
+
+  if(id === "knowledge")
+    loadKnowledge();
+
+  if(id === "memory")
+    loadMemory();
+
+}
+
+
+/* ============================================================
+   CONVERSATION
+============================================================ */
+
+async function startConversation(){
+
+  if(!currentModel)
+    return;
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "create_conversation",
+      {
+        p_model_id:currentModel.id,
+        p_title:
+          currentModel.name +
+          " conversation"
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+
+  currentConversation =
+    data;
+
+
+  clearChat();
+
+
+  addMessage(
+    "ai",
+    "Hello! I'm " +
+    currentModel.name +
+    "."
+  );
+
+}
+
+
+function clearChat(){
+
+  document
+    .getElementById("chatBody")
+    .innerHTML = "";
+
+}
+
+
+function addMessage(role,content){
+
+  const body =
+    document
+      .getElementById("chatBody");
+
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message " +
+    (role === "user"
+      ? "user"
+      : "ai");
+
+
+  const bubble =
+    document.createElement("div");
+
+  bubble.className =
+    "bubble";
+
+  bubble.textContent =
+    content;
+
+
+  wrapper.appendChild(bubble);
+
+  body.appendChild(wrapper);
+
+  body.scrollTop =
+    body.scrollHeight;
+
+}
+
+
+/* ============================================================
+   SEND MESSAGE
+============================================================ */
+
+async function sendMessage(){
+
+  const input =
+    document
+      .getElementById("chatInput");
+
+  const content =
+    input.value.trim();
+
+
+  if(!content)
+    return;
+
+
+  if(!currentModel){
+
+    addMessage(
+      "ai",
+      "Open a model first."
+    );
+
+    return;
+
+  }
+
+
+  if(!currentConversation){
+
+    await startConversation();
+
+  }
+
+
+  input.value = "";
+
+  addMessage(
+    "user",
+    content
+  );
+
+
+  const status =
+    document
+      .getElementById("chatStatus");
+
+  status.textContent =
+    "Thinking...";
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "nova_send_message",
+      {
+        p_model_id:currentModel.id,
+        p_conversation_id:
+          currentConversation,
+        p_content:content
+      }
+    );
+
+
+  if(error){
+
+    status.textContent =
+      "Error";
+
+    addMessage(
+      "ai",
+      "The model request failed: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  await pollAI(
+    data
+  );
+
+}
+
+
+async function pollAI(requestId){
+
+  const status =
+    document
+      .getElementById("chatStatus");
+
+
+  for(let i=0;i<60;i++){
+
+    await sleep(500);
+
+
+    const {data,error} =
+      await supabaseClient.rpc(
+        "nova_poll_response",
+        {
+          p_request_id:requestId
+        }
+      );
+
+
+    if(error){
+
+      status.textContent =
+        "Error";
+
+      addMessage(
+        "ai",
+        "Could not retrieve the AI response: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    if(data?.status === "pending"){
+
+      status.textContent =
+        "Thinking...";
+
+      continue;
+
+    }
+
+
+    if(data?.status === "completed"){
+
+      status.textContent =
+        "Ready";
+
+      addMessage(
+        "ai",
+        data.content
+      );
+
+      return;
+
+    }
+
+
+    if(data?.status === "error"){
+
+      status.textContent =
+        "Error";
+
+      addMessage(
+        "ai",
+        "AI API error: " +
+        (data.error || "Unknown error")
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  status.textContent =
+    "Timeout";
+
+  addMessage(
+    "ai",
+    "The AI request took too long to complete."
+  );
+
+}
+
+
+/* ============================================================
+   TRAINING
+============================================================ */
+
+async function addTraining(){
+
+  if(!currentModel)
+    return;
+
+
+  const question =
+    document
+      .getElementById("trainingQuestion")
+      .value
+      .trim();
+
+  const answer =
+    document
+      .getElementById("trainingAnswer")
+      .value
+      .trim();
+
+  const category =
+    document
+      .getElementById("trainingCategory")
+      .value
+      .trim();
+
+
+  if(!question || !answer){
+
+    alert(
+      "Enter both the input and ideal answer."
+    );
+
+    return;
+
+  }
+
+
+  const {error} =
+    await supabaseClient.rpc(
+      "add_training",
+      {
+        p_model_id:currentModel.id,
+        p_question:question,
+        p_answer:answer,
+        p_category:
+          category || "General",
+        p_tags:[]
+      }
+    );
+
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("trainingQuestion")
+    .value = "";
+
+  document
+    .getElementById("trainingAnswer")
+    .value = "";
+
+
+  await loadTraining();
+
+  await loadModels();
+
+}
+
+
+async function loadTraining(){
+
+  if(!currentModel)
+    return;
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "get_training",
+      {
+        p_model_id:currentModel.id
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+
+  const list =
+    document
+      .getElementById("trainingList");
+
+
+  document
+    .getElementById("trainingCount")
+    .textContent =
+      (data || []).length;
+
+
+  if(!data?.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">◌</div>
+        <h3>No training data yet</h3>
+        <p>
+          Add an example to teach this model.
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(item=>`
+
+      <div class="training-example">
+
+        <div class="training-q">
+          ${escapeHtml(item.question)}
+        </div>
+
+        <div class="training-a">
+          ${escapeHtml(item.answer)}
+        </div>
+
+        <div class="training-meta">
+
+          <span class="tag">
+            ${escapeHtml(item.category)}
+          </span>
+
+          <span class="tag">
+            Shared
+          </span>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ============================================================
+   KNOWLEDGE
+============================================================ */
+
+function showKnowledgeForm(){
+
+  document
+    .getElementById("knowledgeForm")
+    .classList.toggle("hidden");
+
+}
+
+
+async function addKnowledge(){
+
+  if(!currentModel)
+    return;
+
+
+  const title =
+    document
+      .getElementById("knowledgeTitle")
+      .value
+      .trim();
+
+  const content =
+    document
+      .getElementById("knowledgeContent")
+      .value
+      .trim();
+
+  const url =
+    document
+      .getElementById("knowledgeUrl")
+      .value
+      .trim();
+
+
+  if(!title || !content){
+
+    alert(
+      "Enter a title and content."
+    );
+
+    return;
+
+  }
+
+
+  const {error} =
+    await supabaseClient.rpc(
+      "add_knowledge",
+      {
+        p_model_id:currentModel.id,
+        p_title:title,
+        p_content:content,
+        p_source_url:url || null,
+        p_category:"General"
+      }
+    );
+
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("knowledgeTitle")
+    .value = "";
+
+  document
+    .getElementById("knowledgeContent")
+    .value = "";
+
+  document
+    .getElementById("knowledgeUrl")
+    .value = "";
+
+
+  document
+    .getElementById("knowledgeForm")
+    .classList.add("hidden");
+
+
+  await loadKnowledge();
+
+  await loadModels();
+
+}
+
+
+async function loadKnowledge(){
+
+  if(!currentModel)
+    return;
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "get_knowledge",
+      {
+        p_model_id:currentModel.id
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+
+  const list =
+    document
+      .getElementById("knowledgeList");
+
+
+  if(!data?.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">◇</div>
+        <h3>No knowledge yet</h3>
+        <p>
+          Add documents, facts or reference material.
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(item=>`
+
+      <div class="training-example">
+
+        <div class="training-q">
+          ${escapeHtml(item.title)}
+        </div>
+
+        <div class="training-a">
+          ${escapeHtml(
+            truncate(item.content,300)
+          )}
+        </div>
+
+        <div class="training-meta">
+
+          <span class="tag">
+            ${escapeHtml(item.category)}
+          </span>
+
+          ${
+            item.source_url
+            ? `<span class="tag">Source</span>`
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ============================================================
+   MEMORY
+============================================================ */
+
+function showMemoryForm(){
+
+  document
+    .getElementById("memoryForm")
+    .classList.toggle("hidden");
+
+}
+
+
+async function addMemory(){
+
+  if(!currentModel)
+    return;
+
+
+  const key =
+    document
+      .getElementById("memoryKey")
+      .value
+      .trim();
+
+  const value =
+    document
+      .getElementById("memoryValue")
+      .value
+      .trim();
+
+  const importance =
+    Number(
+      document
+        .getElementById("memoryImportance")
+        .value
+    );
+
+
+  if(!key || !value){
+
+    alert(
+      "Enter a memory key and value."
+    );
+
+    return;
+
+  }
+
+
+  const {error} =
+    await supabaseClient.rpc(
+      "set_memory",
+      {
+        p_model_id:currentModel.id,
+        p_key:key,
+        p_value:value,
+        p_importance:
+          Math.max(
+            0,
+            Math.min(
+              100,
+              importance || 50
+            )
+          )
+      }
+    );
+
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("memoryKey")
+    .value = "";
+
+  document
+    .getElementById("memoryValue")
+    .value = "";
+
+
+  document
+    .getElementById("memoryForm")
+    .classList.add("hidden");
+
+
+  await loadMemory();
+
+}
+
+
+async function loadMemory(){
+
+  if(!currentModel)
+    return;
+
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "get_memory",
+      {
+        p_model_id:currentModel.id
+      }
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+
+  const list =
+    document
+      .getElementById("memoryList");
+
+
+  if(!data?.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">◎</div>
+        <h3>No memories saved</h3>
+        <p>
+          Add persistent information for this model.
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(item=>`
+
+      <div class="training-example">
+
+        <div class="training-q">
+          ${escapeHtml(item.memory_key)}
+        </div>
+
+        <div class="training-a">
+          ${escapeHtml(item.memory_value)}
+        </div>
+
+        <div class="training-meta">
+
+          <span class="tag">
+            Importance ${item.importance}
+          </span>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ============================================================
+   SETTINGS TOGGLES
+============================================================ */
+
+function toggleTrainingMode(){
+
+  if(!currentModel)
+    return;
+
+
+  const toggle =
+    document
+      .getElementById(
+        "everyoneTrainingToggle"
+      );
+
+
+  toggle.classList.toggle("on");
+
+}
+
+
+function togglePublic(){
+
+  const toggle =
+    document
+      .getElementById(
+        "publicToggle"
+      );
+
+  toggle.classList.toggle("on");
+
+}
+
+
+/* ============================================================
+   DIAGNOSTICS
+============================================================ */
+
+async function runDiagnostics(){
+
+  const text =
+    document
+      .getElementById(
+        "diagSupabase"
+      );
+
+  const status =
+    document
+      .getElementById(
+        "diagSupabaseStatus"
+      );
+
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("id")
+        .eq("id",currentUser.id)
+        .maybeSingle();
+
+
+    if(error)
+      throw error;
+
+
+    text.textContent =
+      "Database connection working.";
+
+    status.innerHTML =
+      '<span class="status-dot"></span> Ready';
+
+
+  }catch(error){
+
+    text.textContent =
+      error.message;
+
+    status.textContent =
+      "Error";
+
+  }
+
+}
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function sleep(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+
+}
+
+
+function truncate(text,length){
+
+  if(!text)
+    return "";
+
+  if(text.length <= length)
+    return text;
+
+  return text.substring(0,length) +
+    "...";
+
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
 
 </script>
 
