@@ -14,11 +14,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-  /* =========================================================
-     TOKENS
-     ========================================================= */
-
   :root {
     --ink: #1a1816;
     --ink-1: #201d1a;
@@ -47,9 +42,6 @@
 
     --slate: #7089a6;
     --slate-bg: rgba(112,137,166,.14);
-
-    --paper: #f2ece0;
-    --paper-ink: #211d16;
 
     --radius: 10px;
     --radius-sm: 6px;
@@ -98,20 +90,7 @@
     border-radius: 4px;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: .001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: .001ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
-
   svg.icon { flex-shrink: 0; }
-
-  /* =========================================================
-     PRIMITIVES
-     ========================================================= */
 
   .field { margin-bottom: 16px; }
 
@@ -246,12 +225,6 @@
   .empty-icon { color: var(--brass); opacity: .8; margin-bottom: 12px; }
   .empty-icon svg { width: 30px; height: 30px; }
 
-  .loading { opacity: .6; pointer-events: none; }
-
-  /* =========================================================
-     AUTH
-     ========================================================= */
-
   #authScreen {
     width: 100%;
     height: 100%;
@@ -320,10 +293,6 @@
 
   .auth-switch { margin-top: 18px; text-align: center; color: var(--text-dim); font-size: 13px; }
   .auth-switch button { background: none; border: 0; color: var(--brass-strong); font-weight: 700; padding: 2px; }
-
-  /* =========================================================
-     APP SHELL
-     ========================================================= */
 
   #app { display: flex; width: 100%; height: 100%; }
 
@@ -423,10 +392,6 @@
   .page-title { font-size: 30px; }
   .page-description { margin-top: 8px; color: var(--text-dim); line-height: 1.55; max-width: 52ch; }
 
-  /* =========================================================
-     STAT READOUTS
-     ========================================================= */
-
   .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 
   .stat-card {
@@ -452,10 +417,6 @@
   .stat-label { font-weight: 600; font-size: 13.5px; }
   .stat-description { color: var(--text-dim-2); font-size: 12.5px; margin-top: 4px; }
   .stat-number { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 34px; font-weight: 600; margin-top: 16px; }
-
-  /* =========================================================
-     MODEL LIST
-     ========================================================= */
 
   .model-list {
     display: flex;
@@ -508,10 +469,6 @@
 
   .model-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
-  /* =========================================================
-     TWO-COLUMN FORMS
-     ========================================================= */
-
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   .section-title { font-size: 16px; font-weight: 650; margin-bottom: 6px; font-family: var(--font-display); }
   .section-description { color: var(--text-dim); font-size: 13px; margin-bottom: 18px; line-height: 1.5; }
@@ -524,405 +481,49 @@
     border-radius: var(--radius-sm);
   }
 
-  /* =========================================================
-     WORKSPACE
-     ========================================================= */
+  .workspace { max-width: 1280px; margin: 0 auto; height: calc(100vh - 130px); display: flex; flex-direction: column; }
 
-/* =========================================================
-   MODEL API
-   ========================================================= */
+  .workspace-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+  .workspace-model { display: flex; align-items: center; gap: 13px; min-width: 0; }
 
-let currentApiKey = null;
-
-
-/*
- * IMPORTANT:
- * This creates the 8io_ format locally.
- *
- * For a production API, the final secret should be generated
- * server-side by Supabase instead. The current database function
- * nova_save_api_credentials accepts the key, so this keeps your
- * existing backend working while we transition the architecture.
- */
-function generate8ioKey() {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-
-  let hex = "";
-
-  for (const byte of bytes) {
-    hex += byte.toString(16).padStart(2, "0");
+  .workspace-avatar {
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border-radius: var(--radius);
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    font-size: 21px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--brass);
+    flex-shrink: 0;
   }
 
-  return "8io_" + hex;
-}
+  .workspace-name { font-size: 19px; font-weight: 600; font-family: var(--font-display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .workspace-id { color: var(--text-dim-2); font-size: 11px; margin-top: 3px; font-family: var(--font-mono); }
 
+  .tabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--hairline); margin-bottom: 18px; }
 
-function getNovaApiEndpoint() {
-  /*
-   * This is the endpoint your public Nova API is intended to use.
-   *
-   * IMPORTANT:
-   * /v1/chat/completions does not exist automatically just because
-   * it is written here. A server-side endpoint/Edge Function must
-   * eventually be created for this route.
-   */
-  return window.location.origin + "/v1/chat/completions";
-}
-
-
-function maskedApiKey(key) {
-  if (!key) return "";
-
-  if (key.length <= 12) {
-    return "8io_••••••••";
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    border: 0;
+    background: none;
+    color: var(--text-dim);
+    padding: 10px 12px;
+    border-bottom: 2px solid transparent;
+    font-weight: 600;
+    font-size: 13px;
   }
 
-  return (
-    key.substring(0, 8) +
-    "••••••••••••••••••" +
-    key.substring(key.length - 4)
-  );
-}
-
-
-function updateApiUI() {
-  if (!currentModel) return;
-
-  const endpoint = getNovaApiEndpoint();
-
-  $("apiEndpoint").value = endpoint;
-
-  $("apiModelId").textContent =
-    currentModel.id;
-
-  $("apiRequestExample").textContent =
-`POST /v1/chat/completions
-
-Authorization: Bearer 8io_xxxxxxxxx
-
-{
-  "model": "${currentModel.id}",
-  "messages": [
-    {
-      "role": "user",
-      "content": "Hello"
-    }
-  ]
-}`;
-}
-
-
-async function loadApiStatus() {
-  if (!currentModel) return;
-
-  updateApiUI();
-
-  /*
-   * Always hide the actual secret when loading the page.
-   *
-   * Your existing nova_api_status function intentionally does
-   * not return the secret key.
-   */
-  currentApiKey = null;
-
-  $("apiKeyDisplay").value = "";
-  $("apiKeyDisplay").type = "password";
-  $("toggleApiKeyBtn").textContent = "Show";
-
-  try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
-      "nova_api_status",
-      {
-        p_model_id: currentModel.id
-      }
-    );
-
-    if (error) throw error;
-
-    const result =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-    const configured =
-      !!result?.configured;
-
-    $("apiStatus").innerHTML = `
-      <span class="status-dot ${
-        configured ? "on" : "off"
-      }" aria-hidden="true"></span>
-
-      <span>
-        ${
-          configured
-            ? "API active"
-            : "API key not generated"
-        }
-      </span>
-    `;
-
-  } catch (error) {
-
-    console.error(
-      "Could not load API status:",
-      error
-    );
-
-    $("apiStatus").innerHTML = `
-      <span class="status-dot off" aria-hidden="true"></span>
-      <span>API status unavailable</span>
-    `;
-  }
-}
-
-
-/*
- * CREATE API KEY
- */
-async function createApiKey() {
-  if (!currentModel) return;
-
-  const newKey =
-    generate8ioKey();
-
-  const button =
-    $("regenerateApiKeyBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Regenerate"
-  );
-
-  try {
-
-    /*
-     * Store the generated 8io_ key against this model.
-     */
-    const {
-      error
-    } = await supabaseClient.rpc(
-      "nova_save_api_credentials",
-      {
-        p_model_id: currentModel.id,
-        p_endpoint_url: getNovaApiEndpoint(),
-        p_api_key: newKey
-      }
-    );
-
-    if (error) throw error;
-
-    /*
-     * Keep the secret only in memory.
-     */
-    currentApiKey = newKey;
-
-    $("apiKeyDisplay").value =
-      maskedApiKey(newKey);
-
-    $("apiKeyDisplay").type =
-      "password";
-
-    $("toggleApiKeyBtn").textContent =
-      "Show";
-
-    $("apiStatus").innerHTML = `
-      <span class="status-dot on" aria-hidden="true"></span>
-      <span>API active</span>
-    `;
-
-    toast(
-      "API key generated.",
-      "success"
-    );
-
-  } catch (error) {
-
-    console.error(
-      "API key generation failed:",
-      error
-    );
-
-    toast(
-      "Could not generate API key: " +
-      (error.message || "Unknown error"),
-      "error"
-    );
-
-  } finally {
-
-    setButtonLoading(
-      button,
-      false,
-      "Regenerate"
-    );
-  }
-}
-
-
-/*
- * REGENERATE
- */
-$("regenerateApiKeyBtn").addEventListener(
-  "click",
-  async () => {
-
-    if (!currentModel) {
-      toast(
-        "Open a model first.",
-        "error"
-      );
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        "Regenerate this API key?\n\n" +
-        "The previous key will no longer be the active key."
-      );
-
-    if (!confirmed) return;
-
-    await createApiKey();
-  }
-);
-
-
-/*
- * COPY API KEY
- */
-$("copyApiKeyBtn").addEventListener(
-  "click",
-  async () => {
-
-    if (!currentApiKey) {
-
-      toast(
-        "Generate the API key first. " +
-        "For security, Nova does not reload the secret key.",
-        "error"
-      );
-
-      return;
-    }
-
-    try {
-
-      await navigator.clipboard.writeText(
-        currentApiKey
-      );
-
-      toast(
-        "API key copied.",
-        "success"
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast(
-        "Could not copy the API key.",
-        "error"
-      );
-    }
-  }
-);
-
-
-/*
- * COPY ENDPOINT
- */
-$("copyEndpointBtn").addEventListener(
-  "click",
-  async () => {
-
-    const endpoint =
-      $("apiEndpoint").value.trim();
-
-    if (!endpoint) {
-      toast(
-        "No endpoint available.",
-        "error"
-      );
-      return;
-    }
-
-    try {
-
-      await navigator.clipboard.writeText(
-        endpoint
-      );
-
-      toast(
-        "API endpoint copied.",
-        "success"
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast(
-        "Could not copy the endpoint.",
-        "error"
-      );
-    }
-  }
-);
-
-
-/*
- * SHOW / HIDE API KEY
- */
-$("toggleApiKeyBtn").addEventListener(
-  "click",
-  () => {
-
-    if (!currentApiKey) {
-
-      toast(
-        "Generate the API key first.",
-        "error"
-      );
-
-      return;
-    }
-
-    const input =
-      $("apiKeyDisplay");
-
-    if (input.type === "password") {
-
-      input.type = "text";
-
-      input.value =
-        currentApiKey;
-
-      $("toggleApiKeyBtn").textContent =
-        "Hide";
-
-    } else {
-
-      input.type = "password";
-
-      input.value =
-        maskedApiKey(currentApiKey);
-
-      $("toggleApiKeyBtn").textContent =
-        "Show";
-    }
-  }
-);
-
-  /* =========================================================
-     CHAT
-     ========================================================= */
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); border-bottom-color: var(--brass); }
+  .tab svg { color: var(--text-dim-2); }
+  .tab.active svg { color: var(--brass); }
+
+  .tab-panel { flex: 1; min-height: 0; overflow-y: auto; }
 
   .chat-shell {
     height: 100%;
@@ -955,10 +556,6 @@ $("toggleApiKeyBtn").addEventListener(
   .chat-input textarea { min-height: 46px; max-height: 150px; resize: none; }
   .send-btn { align-self: flex-end; width: 46px; height: 46px; padding: 0; }
 
-  /* =========================================================
-     DATA LISTS
-     ========================================================= */
-
   .data-list { display: flex; flex-direction: column; gap: 9px; }
 
   .data-item { padding: 13px 15px; background: var(--ink); border: 1px solid var(--hairline); border-radius: var(--radius-sm); }
@@ -970,16 +567,12 @@ $("toggleApiKeyBtn").addEventListener(
     display: flex; align-items: center; gap: 9px;
     padding: 12px 14px; border-radius: var(--radius-sm);
     background: var(--ink); border: 1px solid var(--hairline);
-    margin-bottom: 18px; font-size: 13.5px;
+    margin-bottom: 18px; font-size: 13.5px; font-weight: 600;
   }
 
   .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-dim-2); flex-shrink: 0; }
   .status-dot.on { background: var(--moss); box-shadow: 0 0 10px rgba(124,148,115,.5); }
   .status-dot.off { background: var(--rust); }
-
-  /* =========================================================
-     TOASTS
-     ========================================================= */
 
   #toastContainer {
     position: fixed; z-index: 999; right: 20px; bottom: 20px;
@@ -1007,10 +600,6 @@ $("toggleApiKeyBtn").addEventListener(
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* =========================================================
-     RESPONSIVE
-     ========================================================= */
-
   @media (max-width: 900px) {
     .sidebar { width: 72px; padding: 14px 8px; }
     .sidebar .nameplate-text, .sidebar .nav-label, .sidebar .profile-info { display: none; }
@@ -1030,7 +619,6 @@ $("toggleApiKeyBtn").addEventListener(
     .bubble { max-width: 90%; }
     .model-description { display: none; }
   }
-
 </style>
 </head>
 
@@ -1172,7 +760,6 @@ $("toggleApiKeyBtn").addEventListener(
 
         <!-- OVERVIEW -->
         <section id="page-overview" class="page">
-
           <div class="page-header">
             <div>
               <h1 class="page-title">Good to see you.</h1>
@@ -1216,7 +803,6 @@ $("toggleApiKeyBtn").addEventListener(
 
         <!-- MODELS -->
         <section id="page-models" class="page hidden">
-
           <div class="page-header">
             <div>
               <h1 class="page-title">Models</h1>
@@ -1234,7 +820,6 @@ $("toggleApiKeyBtn").addEventListener(
 
         <!-- CREATE -->
         <section id="page-create" class="page hidden">
-
           <div class="page-header">
             <div>
               <h1 class="page-title">Create model</h1>
@@ -1243,7 +828,6 @@ $("toggleApiKeyBtn").addEventListener(
           </div>
 
           <div class="two-col">
-
             <div class="card">
               <div class="section-title">Model identity</div>
               <div class="section-description">Give your model a name and personality.</div>
@@ -1301,21 +885,19 @@ $("toggleApiKeyBtn").addEventListener(
               <div style="height:16px;"></div>
 
               <div class="inset">
-                <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">How training works</div>
-                <div class="small">Add question and answer examples, knowledge and memory. The model uses this information when generating responses.</div>
+                <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">Model API Key</div>
+                <div class="small">Nova will automatically generate a unique 8io_ API key for this model upon creation.</div>
               </div>
 
               <div style="height:20px;"></div>
 
               <button id="createModelBtn" class="btn btn-primary full">Create model</button>
             </div>
-
           </div>
         </section>
 
         <!-- SETTINGS -->
         <section id="page-settings" class="page hidden">
-
           <div class="page-header">
             <div>
               <h1 class="page-title">Settings</h1>
@@ -1332,14 +914,12 @@ $("toggleApiKeyBtn").addEventListener(
               <input id="settingsEmail" readonly />
             </div>
           </div>
-
         </section>
 
         <!-- MODEL WORKSPACE -->
         <section id="modelWorkspace" class="workspace hidden">
 
           <div class="workspace-header">
-
             <div class="workspace-model">
               <div class="workspace-avatar" id="workspaceAvatar">·</div>
               <div style="min-width:0;">
@@ -1352,11 +932,9 @@ $("toggleApiKeyBtn").addEventListener(
               <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4 L6 10 L12.5 16"/></svg>
               Back
             </button>
-
           </div>
 
           <div class="tabs">
-
             <button class="tab active" data-tab="playground">
               <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="10.5" rx="2.5"/><path d="M6 14 L6 17.3 L9.3 14"/></svg>
               Playground
@@ -1386,7 +964,6 @@ $("toggleApiKeyBtn").addEventListener(
               <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="3.1"/><path d="M10 2.8 V5 M10 15 V17.2 M17.2 10 H15 M5 10 H2.8 M15.1 4.9 L13.5 6.5 M6.5 13.5 L4.9 15.1 M15.1 15.1 L13.5 13.5 M6.5 6.5 L4.9 4.9"/></svg>
               Settings
             </button>
-
           </div>
 
           <div class="tab-panel">
@@ -1394,7 +971,6 @@ $("toggleApiKeyBtn").addEventListener(
             <!-- PLAYGROUND -->
             <div id="tab-playground" class="tab-content">
               <div class="chat-shell">
-
                 <div id="messages" class="messages">
                   <div class="message assistant">
                     <div class="bubble">I'm ready. Add training examples or knowledge, then try me out here.</div>
@@ -1407,14 +983,12 @@ $("toggleApiKeyBtn").addEventListener(
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 16 V4.5 M10 4.5 L5.5 9 M10 4.5 L14.5 9"/></svg>
                   </button>
                 </form>
-
               </div>
             </div>
 
             <!-- TRAINING -->
             <div id="tab-training" class="tab-content hidden">
               <div class="two-col">
-
                 <div class="card">
                   <div class="section-title">Teach your model</div>
                   <div class="section-description">Add examples that teach the model how to answer specific questions.</div>
@@ -1442,14 +1016,12 @@ $("toggleApiKeyBtn").addEventListener(
                   <div class="section-description">Shared examples currently available to this model.</div>
                   <div id="trainingList" class="data-list"></div>
                 </div>
-
               </div>
             </div>
 
             <!-- KNOWLEDGE -->
             <div id="tab-knowledge" class="tab-content hidden">
               <div class="two-col">
-
                 <div class="card">
                   <div class="section-title">Add knowledge</div>
                   <div class="section-description">Give the model information it can use when responding.</div>
@@ -1472,14 +1044,12 @@ $("toggleApiKeyBtn").addEventListener(
                   <div class="section-description">Information stored for this model.</div>
                   <div id="knowledgeList" class="data-list"></div>
                 </div>
-
               </div>
             </div>
 
             <!-- MEMORY -->
             <div id="tab-memory" class="tab-content hidden">
               <div class="two-col">
-
                 <div class="card">
                   <div class="section-title">Model memory</div>
                   <div class="section-description">Private memory attached to this model and your account.</div>
@@ -1496,115 +1066,67 @@ $("toggleApiKeyBtn").addEventListener(
                   <div class="section-title">Saved memory</div>
                   <div id="memoryList" class="data-list"></div>
                 </div>
-
               </div>
             </div>
 
             <!-- API -->
-<!-- API -->
-<div id="tab-api" class="tab-content hidden">
-  <div class="two-col">
+            <div id="tab-api" class="tab-content hidden">
+              <div class="two-col">
 
-    <div class="card">
-      <div class="section-title">Model API</div>
-      <div class="section-description">
-        Use this model from your own website or application.
-      </div>
+                <div class="card">
+                  <div class="section-title">MODEL API</div>
+                  <div class="section-description">Your model is available through an OpenAI-compatible API.</div>
 
-      <div id="apiStatus" class="api-status">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span>Checking API...</span>
-      </div>
+                  <div id="apiStatus" class="api-status">
+                    <span class="status-dot on" aria-hidden="true"></span>
+                    <span>● API active</span>
+                  </div>
 
-      <div class="field">
-        <label for="apiEndpoint">API endpoint</label>
-        <div style="display:flex;gap:8px;">
-          <input
-            id="apiEndpoint"
-            type="text"
-            readonly
-            placeholder="Generating endpoint..."
-          />
+                  <div class="field">
+                    <label>API endpoint</label>
+                    <div class="row" style="flex-wrap: nowrap;">
+                      <input id="apiEndpointUrl" readonly value="" style="font-family: var(--font-mono); font-size: 12.5px;" />
+                      <button class="btn btn-secondary" id="copyEndpointBtn">Copy</button>
+                    </div>
+                  </div>
 
-          <button
-            class="btn btn-secondary"
-            id="copyEndpointBtn"
-            type="button"
-          >
-            Copy
-          </button>
-        </div>
-      </div>
+                  <div class="field">
+                    <label>API key</label>
+                    <div class="row" style="flex-wrap: nowrap;">
+                      <input id="apiKeyDisplay" readonly value="8io_••••••••••••••••••••••••••••••••" style="font-family: var(--font-mono); font-size: 12.5px;" />
+                      <button class="btn btn-secondary" id="copyKeyBtn">Copy API key</button>
+                    </div>
+                    <div class="small" style="margin-top:6px;">Keys start with 8io_. Store it securely when generated or regenerated.</div>
+                  </div>
 
-      <div class="field">
-        <label for="apiKeyDisplay">API key</label>
+                  <div style="height:10px;"></div>
 
-        <div style="display:flex;gap:8px;">
-          <input
-            id="apiKeyDisplay"
-            type="password"
-            readonly
-            placeholder="8io_..."
-            autocomplete="off"
-          />
+                  <button class="btn btn-secondary" id="regenerateKeyBtn">
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10 A6 6 0 0 1 15.3 6.8 M16 10 A6 6 0 0 1 4.7 13.2"/><path d="M15.3 3.5 V6.8 H12"/><path d="M4.7 16.5 V13.2 H8"/></svg>
+                    Regenerate
+                  </button>
 
-          <button
-            class="btn btn-secondary"
-            id="toggleApiKeyBtn"
-            type="button"
-          >
-            Show
-          </button>
-        </div>
-      </div>
+                  <div style="height:16px;"></div>
 
-      <div class="row" style="margin-top:18px;">
-        <button
-          class="btn btn-primary"
-          id="copyApiKeyBtn"
-          type="button"
-        >
-          Copy API key
-        </button>
+                  <div class="inset">
+                    <div style="font-weight:650;margin-bottom:4px;font-size:13px;">Use this model from your own website or application</div>
+                    <div class="small">Send HTTP requests with Header <code style="color:var(--brass-strong);">Authorization: Bearer 8io_...</code> to interact with this model.</div>
+                  </div>
+                </div>
 
-        <button
-          class="btn btn-secondary"
-          id="regenerateApiKeyBtn"
-          type="button"
-        >
-          Regenerate
-        </button>
-      </div>
+                <div class="card">
+                  <div class="section-title">Example request</div>
+                  <div class="section-description">Send requests from any HTTP client or OpenAI SDK wrapper.</div>
 
-      <div class="inset" style="margin-top:18px;">
-        <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">
-          Keep your API key private
-        </div>
-
-        <div class="small">
-          This key gives access to this model through its API.
-          Never put it directly into public client-side JavaScript.
-        </div>
-      </div>
-    </div>
-
-
-    <div class="card">
-      <div class="section-title">API usage</div>
-
-      <div class="section-description">
-        Your website can send OpenAI-compatible chat requests to this model.
-      </div>
-
-      <div class="data-item">
-        <div class="data-item-title">Request</div>
-
-        <div class="data-item-content code-block" id="apiRequestExample">POST /v1/chat/completions
+                  <div class="data-item">
+                    <div class="data-item-title">Request</div>
+                    <div class="data-item-content code-block" id="exampleRequestCode">POST /v1/chat/completions
 
 Authorization: Bearer 8io_xxxxxxxxx
+Content-Type: application/json
 
 {
-  "model": "nova",
+  "model": "MODEL_ID",
   "messages": [
     {
       "role": "user",
@@ -1612,46 +1134,34 @@ Authorization: Bearer 8io_xxxxxxxxx
     }
   ]
 }</div>
-      </div>
+                  </div>
 
-      <div style="height:10px;"></div>
+                  <div style="height:10px;"></div>
 
-      <div class="data-item">
-        <div class="data-item-title">Response</div>
-
-        <div class="data-item-content code-block">{
-  "id": "chat_...",
-  "model": "nova",
+                  <div class="data-item">
+                    <div class="data-item-title">Response</div>
+                    <div class="data-item-content code-block" id="exampleResponseCode">{
+  "id": "chat_xxxxxxxxx",
+  "object": "chat.completion",
+  "model": "MODEL_ID",
   "choices": [
     {
+      "index": 0,
       "message": {
         "role": "assistant",
-        "content": "Hello!"
-      }
+        "content": "Hello! How can I help?"
+      },
+      "finish_reason": "stop"
     }
   ]
 }</div>
-      </div>
+                  </div>
 
-      <div style="height:10px;"></div>
+                </div>
 
-      <div class="inset">
-        <div style="font-weight:650;margin-bottom:6px;font-size:13.5px;">
-          Model
-        </div>
+              </div>
+            </div>
 
-        <div
-          class="small"
-          id="apiModelId"
-          style="font-family:var(--font-mono);"
-        >
-          —
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
             <!-- MODEL SETTINGS -->
             <div id="tab-modelSettings" class="tab-content hidden">
               <div class="card">
@@ -1695,8 +1205,8 @@ Authorization: Bearer 8io_xxxxxxxxx
    SUPABASE CONFIG
    ========================================================= */
 
-const SUPABASE_URL = "https://jtstdajaaasucialvsfs.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1O9wO2dY_ZFFfdPFGaLeMA_3oaW2Hs-";
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
 if (
   SUPABASE_URL.includes("YOUR_") ||
@@ -1712,11 +1222,6 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_PUBLISHABLE_KEY
 );
 
-
-/* =========================================================
-   ICONS (used inside dynamically generated markup)
-   ========================================================= */
-
 const ICONS = {
   mark: `<svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
     <path d="M14 6 L7 20 M14 6 L21 20 M7 20 L21 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -1726,21 +1231,14 @@ const ICONS = {
   </svg>`
 };
 
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
 let currentUser = null;
 let currentModel = null;
 let currentConversation = null;
 let authMode = "login";
 let currentPage = "overview";
 
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
+// Temporary in-memory cache for newly generated 8io_ keys in the current user session
+const sessionApiKeys = new Map();
 
 function $(id) {
   return document.getElementById(id);
@@ -1755,9 +1253,6 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-// Emoji avatars are stored verbatim; anything else (a bare initial, or
-// nothing at all) falls back to the model's first letter so there's
-// always something legible in the avatar slot.
 function avatarGlyph(model) {
   const avatar = (model?.avatar || "").trim();
   if (avatar) return escapeHtml(avatar);
@@ -1767,16 +1262,11 @@ function avatarGlyph(model) {
 
 function toast(message, type = "") {
   const container = $("toastContainer");
-
   const item = document.createElement("div");
   item.className = "toast " + type;
   item.textContent = message;
-
   container.appendChild(item);
-
-  setTimeout(() => {
-    item.remove();
-  }, 4000);
+  setTimeout(() => { item.remove(); }, 4000);
 }
 
 function showError(message) {
@@ -1791,28 +1281,20 @@ function clearAuthError() {
 
 function setButtonLoading(button, loading, normalText) {
   if (!button) return;
-
   if (loading) {
     button.dataset.originalText = button.textContent;
     button.textContent = "Working...";
     button.classList.add("loading");
   } else {
     button.classList.remove("loading");
-    button.textContent =
-      normalText || button.dataset.originalText || "Save";
+    button.textContent = normalText || button.dataset.originalText || "Save";
   }
 }
 
 function formatDate(value) {
   if (!value) return "";
-
-  try {
-    return new Date(value).toLocaleString();
-  } catch {
-    return "";
-  }
+  try { return new Date(value).toLocaleString(); } catch { return ""; }
 }
-
 
 /* =========================================================
    AUTH
@@ -1821,30 +1303,13 @@ function formatDate(value) {
 function setAuthMode(mode) {
   authMode = mode;
   clearAuthError();
-
   const signup = mode === "signup";
-
-  $("authTitle").textContent = signup
-    ? "Create your account"
-    : "Welcome back";
-
-  $("authSubtitle").textContent = signup
-    ? "Set up your workbench."
-    : "Sign in to your workbench.";
-
+  $("authTitle").textContent = signup ? "Create your account" : "Welcome back";
+  $("authSubtitle").textContent = signup ? "Set up your workbench." : "Sign in to your workbench.";
   $("nameField").classList.toggle("hidden", !signup);
-
-  $("authSubmit").textContent = signup
-    ? "Create account"
-    : "Sign in";
-
-  $("authSwitchText").textContent = signup
-    ? "Already have an account?"
-    : "Don't have an account?";
-
-  $("authSwitchBtn").textContent = signup
-    ? "Sign in"
-    : "Create one";
+  $("authSubmit").textContent = signup ? "Create account" : "Sign in";
+  $("authSwitchText").textContent = signup ? "Already have an account?" : "Don't have an account?";
+  $("authSwitchBtn").textContent = signup ? "Sign in" : "Create one";
 }
 
 $("authSwitchBtn").addEventListener("click", () => {
@@ -1853,7 +1318,6 @@ $("authSwitchBtn").addEventListener("click", () => {
 
 $("authForm").addEventListener("submit", async (event) => {
   event.preventDefault();
-
   clearAuthError();
 
   const email = $("authEmail").value.trim();
@@ -1869,32 +1333,17 @@ $("authForm").addEventListener("submit", async (event) => {
 
   try {
     if (authMode === "login") {
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
-
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) throw error;
-
       currentUser = data.user;
-
       await enterApp();
-
     } else {
       const displayName = $("authName").value.trim();
-
-      const { data, error } =
-        await supabaseClient.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              display_name: displayName
-            }
-          }
-        });
-
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: displayName } }
+      });
       if (error) throw error;
 
       if (data.session && data.user) {
@@ -1902,53 +1351,31 @@ $("authForm").addEventListener("submit", async (event) => {
         await enterApp();
       } else {
         clearAuthError();
-
-        toast(
-          "Check your inbox to finish signing in.",
-          "success"
-        );
-
+        toast("Check your inbox to finish signing in.", "success");
         setAuthMode("login");
       }
     }
-
   } catch (error) {
     console.error(error);
     showError(error.message || "Authentication failed.");
   } finally {
-    setButtonLoading(button, false);
-    button.textContent =
-      authMode === "signup"
-        ? "Create account"
-        : "Sign in";
+    setButtonLoading(button, false, authMode === "signup" ? "Create account" : "Sign in");
   }
 });
 
 $("logoutBtn").addEventListener("click", async () => {
   await supabaseClient.auth.signOut();
-
   currentUser = null;
   currentModel = null;
   currentConversation = null;
-
+  sessionApiKeys.clear();
   $("app").classList.add("hidden");
   $("authScreen").classList.remove("hidden");
-
   setAuthMode("login");
 });
 
-
-/* =========================================================
-   APP START
-   ========================================================= */
-
 async function initialize() {
-  const {
-    data: {
-      session
-    }
-  } = await supabaseClient.auth.getSession();
-
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session?.user) {
     currentUser = session.user;
     await enterApp();
@@ -1958,95 +1385,58 @@ async function initialize() {
   }
 }
 
-supabaseClient.auth.onAuthStateChange(
-  async (_event, session) => {
-    if (session?.user && !currentUser) {
-      currentUser = session.user;
-      await enterApp();
-    }
+supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+  if (session?.user && !currentUser) {
+    currentUser = session.user;
+    await enterApp();
   }
-);
+});
 
 async function enterApp() {
   $("authScreen").classList.add("hidden");
   $("app").classList.remove("hidden");
 
   const email = currentUser?.email || "Account";
-
   $("profileEmail").textContent = email;
   $("profileAvatar").textContent = email.charAt(0).toUpperCase();
-
-  $("settingsEmail").value =
-    currentUser?.email || "";
+  $("settingsEmail").value = currentUser?.email || "";
 
   showPage("overview");
-
   await loadEverything();
 }
-
 
 /* =========================================================
    NAVIGATION
    ========================================================= */
 
 const pageTitles = {
-  overview: [
-    "Overview",
-    "Build and train your models."
-  ],
-  models: [
-    "Models",
-    "Every model you can open."
-  ],
-  create: [
-    "Create model",
-    "Set up a new model and start teaching it."
-  ],
-  settings: [
-    "Settings",
-    "Your account details."
-  ]
+  overview: ["Overview", "Build and train your models."],
+  models: ["Models", "Every model you can open."],
+  create: ["Create model", "Set up a new model and start teaching it."],
+  settings: ["Settings", "Your account details."]
 };
 
 function showPage(page) {
   currentPage = page;
-
   document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.classList.toggle(
-      "active",
-      btn.dataset.page === page
-    );
+    btn.classList.toggle("active", btn.dataset.page === page);
   });
-
-  document.querySelectorAll(
-    "[id^='page-']"
-  ).forEach(section => {
+  document.querySelectorAll("[id^='page-']").forEach(section => {
     section.classList.add("hidden");
   });
 
   $("modelWorkspace").classList.add("hidden");
-
   const target = $("page-" + page);
+  if (target) target.classList.remove("hidden");
 
-  if (target) {
-    target.classList.remove("hidden");
-  }
+  $("topbarTitle").textContent = pageTitles[page]?.[0] || "Nova";
+  $("topbarSubtitle").textContent = pageTitles[page]?.[1] || "";
 
-  $("topbarTitle").textContent =
-    pageTitles[page]?.[0] || "Nova";
-
-  $("topbarSubtitle").textContent =
-    pageTitles[page]?.[1] || "";
-
-  if (page === "overview" || page === "models") {
-    loadModels();
-  }
+  if (page === "overview" || page === "models") loadModels();
 }
 
 document.querySelectorAll(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    showPage(btn.dataset.page);
-  });
+  btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 
 $("refreshBtn").addEventListener("click", async () => {
@@ -2054,125 +1444,70 @@ $("refreshBtn").addEventListener("click", async () => {
   toast("Workspace refreshed.", "success");
 });
 
-
 /* =========================================================
    MODELS
    ========================================================= */
 
 async function loadModels() {
   if (!currentUser) return;
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("nova_models")
-    .select("*")
-    .order("created_at", {
-      ascending: false
-    });
+  const { data, error } = await supabaseClient.from("nova_models").select("*").order("created_at", { ascending: false });
 
   if (error) {
     console.error("Could not load models:", error);
-    toast(
-      "Could not load models: " + error.message,
-      "error"
-    );
+    toast("Could not load models: " + error.message, "error");
     return;
   }
-
   renderModels(data || []);
 }
 
 function renderModels(models) {
-  const mine = models.filter(
-    model => model.owner_id === currentUser?.id
-  );
-
+  const mine = models.filter(m => m.owner_id === currentUser?.id);
   $("statModels").textContent = mine.length;
 
   if (!models.length) {
     const empty = `
       <div class="empty">
         <div class="empty-icon">${ICONS.mark}</div>
-        <div style="font-weight:650;color:var(--text);margin-bottom:6px;">
-          Nothing here yet
-        </div>
-        <div>
-          Create your first model to get started.
-        </div>
+        <div style="font-weight:650;color:var(--text);margin-bottom:6px;">Nothing here yet</div>
+        <div>Create your first model to get started.</div>
       </div>
     `;
-
     $("modelsGrid").innerHTML = empty;
     $("overviewModels").innerHTML = empty;
     return;
   }
 
-  $("modelsGrid").innerHTML =
-    `<div class="model-list">${models.map(modelRow).join("")}</div>`;
-
-  $("overviewModels").innerHTML =
-    `<div class="model-list">${models.slice(0, 6).map(modelRow).join("")}</div>`;
+  $("modelsGrid").innerHTML = `<div class="model-list">${models.map(modelRow).join("")}</div>`;
+  $("overviewModels").innerHTML = `<div class="model-list">${models.slice(0, 6).map(modelRow).join("")}</div>`;
 }
 
 function modelRow(model) {
   const isMine = model.owner_id === currentUser?.id;
-
   return `
     <div class="model-row" role="button" tabindex="0"
       onclick="openModel('${escapeHtml(model.id)}')"
       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModel('${escapeHtml(model.id)}')}">
-
       <div class="model-avatar">${avatarGlyph(model)}</div>
-
       <div class="model-info">
         <div class="model-name">${escapeHtml(model.name)}</div>
         <div class="model-id">${escapeHtml(model.id)}</div>
       </div>
-
-      <div class="model-description">
-        ${escapeHtml(model.description || "No description.")}
-      </div>
-
+      <div class="model-description">${escapeHtml(model.description || "No description.")}</div>
       <div class="model-meta">
-        <span class="badge ${model.visibility === "public" ? "brass" : ""}">
-          ${escapeHtml(model.visibility || "private")}
-        </span>
+        <span class="badge ${model.visibility === "public" ? "brass" : ""}">${escapeHtml(model.visibility || "private")}</span>
         <span class="small">${isMine ? "Owner" : "Accessible"}</span>
       </div>
     </div>
   `;
 }
 
-
-/* =========================================================
-   CREATE MODEL
-   ========================================================= */
-
-$("createModelBtn").addEventListener(
-  "click",
-  createModel
-);
-
 async function createModel() {
-  const name =
-    $("createName").value.trim();
-
-  const description =
-    $("createDescription").value.trim();
-
-  const avatar =
-    $("createAvatar").value;
-
-  const instructions =
-    $("createInstructions").value.trim();
-
-  const visibility =
-    $("createVisibility").value;
-
-  const trainingMode =
-    $("createTrainingMode").value;
+  const name = $("createName").value.trim();
+  const description = $("createDescription").value.trim();
+  const avatar = $("createAvatar").value;
+  const instructions = $("createInstructions").value.trim();
+  const visibility = $("createVisibility").value;
+  const trainingMode = $("createTrainingMode").value;
 
   if (!name) {
     toast("Give the model a name.", "error");
@@ -2180,40 +1515,26 @@ async function createModel() {
   }
 
   const button = $("createModelBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Create model"
-  );
+  setButtonLoading(button, true, "Create model");
 
   try {
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
-      "nova_create_model",
-      {
-        p_name: name,
-        p_description: description,
-        p_avatar: avatar,
-        p_visibility: visibility,
-        p_training_mode: trainingMode,
-        p_system_instructions: instructions
-      }
-    );
+    const { data, error } = await supabaseClient.rpc("nova_create_model", {
+      p_name: name,
+      p_description: description,
+      p_avatar: avatar,
+      p_visibility: visibility,
+      p_training_mode: trainingMode,
+      p_system_instructions: instructions
+    });
 
     if (error) throw error;
+    const model = Array.isArray(data) ? data[0] : data;
 
-    const model =
-      Array.isArray(data)
-        ? data[0]
-        : data;
+    toast("Model created.", "success");
 
-    toast(
-      "Model created.",
-      "success"
-    );
+    if (model?.id && model?.api_key) {
+      sessionApiKeys.set(model.id, model.api_key);
+    }
 
     $("createName").value = "";
     $("createDescription").value = "";
@@ -2226,47 +1547,26 @@ async function createModel() {
     } else {
       showPage("models");
     }
-
   } catch (error) {
     console.error(error);
-
-    toast(
-      "Could not create model: " +
-      error.message,
-      "error"
-    );
-
+    toast("Could not create model: " + error.message, "error");
   } finally {
-    setButtonLoading(
-      button,
-      false,
-      "Create model"
-    );
+    setButtonLoading(button, false, "Create model");
   }
 }
 
+$("createModelBtn").addEventListener("click", createModel);
 
 /* =========================================================
    OPEN MODEL
    ========================================================= */
 
 async function openModel(modelId) {
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("nova_models")
-    .select("*")
-    .eq("id", modelId)
-    .single();
+  const { data, error } = await supabaseClient.from("nova_models").select("*").eq("id", modelId).single();
 
   if (error) {
     console.error(error);
-    toast(
-      "Could not open model: " +
-      error.message,
-      "error"
-    );
+    toast("Could not open model: " + error.message, "error");
     return;
   }
 
@@ -2280,47 +1580,24 @@ async function openModel(modelId) {
 
   $("modelWorkspace").classList.remove("hidden");
 
-  $("topbarTitle").textContent =
-    currentModel.name;
+  $("topbarTitle").textContent = currentModel.name;
+  $("topbarSubtitle").textContent = currentModel.description || "Model workspace";
+  $("workspaceAvatar").textContent = avatarGlyph(currentModel);
+  $("workspaceName").textContent = currentModel.name;
+  $("workspaceId").textContent = currentModel.id;
 
-  $("topbarSubtitle").textContent =
-    currentModel.description ||
-    "Model workspace";
-
-  $("workspaceAvatar").textContent =
-    avatarGlyph(currentModel);
-
-  $("workspaceName").textContent =
-    currentModel.name;
-
-  $("workspaceId").textContent =
-    currentModel.id;
-
-  $("settingsModelName").value =
-    currentModel.name || "";
-
-  $("settingsModelDescription").value =
-    currentModel.description || "";
-
-  $("settingsModelInstructions").value =
-    currentModel.system_instructions || "";
-
-  $("settingsVisibility").textContent =
-    currentModel.visibility || "private";
-
-  $("settingsTrainingMode").textContent =
-    currentModel.training_mode || "owner";
-
-  $("settingsStatus").textContent =
-    currentModel.status || "active";
+  $("settingsModelName").value = currentModel.name || "";
+  $("settingsModelDescription").value = currentModel.description || "";
+  $("settingsModelInstructions").value = currentModel.system_instructions || "";
+  $("settingsVisibility").textContent = currentModel.visibility || "private";
+  $("settingsTrainingMode").textContent = currentModel.training_mode || "owner";
+  $("settingsStatus").textContent = currentModel.status || "active";
 
   resetTabs();
 
   $("messages").innerHTML = `
     <div class="message assistant">
-      <div class="bubble">
-        I'm ${escapeHtml(currentModel.name)}. Add training examples or knowledge, then try me out here.
-      </div>
+      <div class="bubble">I'm ${escapeHtml(currentModel.name)}. Add training examples or knowledge, then try me out here.</div>
     </div>
   `;
 
@@ -2333,12 +1610,9 @@ async function openModel(modelId) {
 function closeWorkspace() {
   currentModel = null;
   currentConversation = null;
-
   $("modelWorkspace").classList.add("hidden");
-
   showPage("models");
 }
-
 
 /* =========================================================
    TABS
@@ -2346,881 +1620,383 @@ function closeWorkspace() {
 
 function resetTabs() {
   document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle(
-      "active",
-      tab.dataset.tab === "playground"
-    );
+    tab.classList.toggle("active", tab.dataset.tab === "playground");
   });
-
-  document.querySelectorAll(".tab-content").forEach(
-    content => content.classList.add("hidden")
-  );
-
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
   $("tab-playground").classList.remove("hidden");
 }
 
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", async () => {
-
     if (!currentModel) return;
 
-    document.querySelectorAll(".tab").forEach(
-      t => t.classList.remove("active")
-    );
-
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
 
-    document.querySelectorAll(".tab-content").forEach(
-      content => content.classList.add("hidden")
-    );
+    document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
+    const target = $("tab-" + tab.dataset.tab);
+    if (target) target.classList.remove("hidden");
 
-    const target =
-      $("tab-" + tab.dataset.tab);
-
-    if (target) {
-      target.classList.remove("hidden");
-    }
-
-    if (tab.dataset.tab === "training") {
-      await loadTraining();
-    }
-
-    if (tab.dataset.tab === "knowledge") {
-      await loadKnowledge();
-    }
-
-    if (tab.dataset.tab === "memory") {
-      await loadMemory();
-    }
-
-    if (tab.dataset.tab === "api") {
-      await loadApiStatus();
-    }
+    if (tab.dataset.tab === "training") await loadTraining();
+    if (tab.dataset.tab === "knowledge") await loadKnowledge();
+    if (tab.dataset.tab === "memory") await loadMemory();
+    if (tab.dataset.tab === "api") await loadApiStatus();
   });
 });
 
-
 /* =========================================================
-   TRAINING
+   TRAINING, KNOWLEDGE, MEMORY
    ========================================================= */
 
-$("addTrainingBtn").addEventListener(
-  "click",
-  addTraining
-);
-
-async function addTraining() {
+$("addTrainingBtn").addEventListener("click", async () => {
   if (!currentModel) return;
-
-  const question =
-    $("trainingQuestion").value.trim();
-
-  const answer =
-    $("trainingAnswer").value.trim();
-
-  const category =
-    $("trainingCategory").value.trim() ||
-    "general";
+  const question = $("trainingQuestion").value.trim();
+  const answer = $("trainingAnswer").value.trim();
+  const category = $("trainingCategory").value.trim() || "general";
 
   if (!question || !answer) {
-    toast(
-      "Question and answer are required.",
-      "error"
-    );
+    toast("Question and answer are required.", "error");
     return;
   }
 
-  const button =
-    $("addTrainingBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Add training"
-  );
+  const btn = $("addTrainingBtn");
+  setButtonLoading(btn, true, "Add training");
 
   try {
-
-    const {
-      error
-    } = await supabaseClient.rpc(
-      "nova_add_training",
-      {
-        p_model_id: currentModel.id,
-        p_question: question,
-        p_answer: answer,
-        p_category: category,
-        p_approved: true
-      }
-    );
-
+    const { error } = await supabaseClient.rpc("nova_add_training", {
+      p_model_id: currentModel.id, p_question: question, p_answer: answer, p_category: category, p_approved: true
+    });
     if (error) throw error;
-
     $("trainingQuestion").value = "";
     $("trainingAnswer").value = "";
-
-    toast(
-      "Training added.",
-      "success"
-    );
-
+    toast("Training added.", "success");
     await loadTraining();
-
-  } catch (error) {
-    console.error(error);
-
-    toast(
-      "Could not add training: " +
-      error.message,
-      "error"
-    );
-
+  } catch (err) {
+    toast("Could not add training: " + err.message, "error");
   } finally {
-    setButtonLoading(
-      button,
-      false,
-      "Add training"
-    );
+    setButtonLoading(btn, false, "Add training");
   }
-}
+});
 
 async function loadTraining() {
   if (!currentModel) return;
+  const { data, error } = await supabaseClient.from("nova_training_data").select("*").eq("model_id", currentModel.id).order("created_at", { ascending: false });
+  if (error) { $("trainingList").innerHTML = `<div class="small">Could not load training data.</div>`; return; }
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("nova_training_data")
-    .select("*")
-    .eq("model_id", currentModel.id)
-    .order("created_at", {
-      ascending: false
-    });
+  $("trainingList").innerHTML = data?.length ? data.map(item => `
+    <div class="data-item">
+      <div class="data-item-title">${escapeHtml(item.question)}</div>
+      <div class="data-item-content">${escapeHtml(item.answer)}</div>
+      <div style="margin-top:8px;"><span class="badge">${escapeHtml(item.category || "general")}</span></div>
+    </div>
+  `).join("") : `<div class="empty">No training examples yet.</div>`;
 
-  if (error) {
-    console.error(error);
-
-    $("trainingList").innerHTML = `
-      <div class="small">
-        Could not load training data.
-      </div>
-    `;
-
-    return;
-  }
-
-  $("trainingList").innerHTML =
-    data?.length
-      ? data.map(item => `
-          <div class="data-item">
-            <div class="data-item-title">
-              ${escapeHtml(item.question)}
-            </div>
-
-            <div class="data-item-content">
-              ${escapeHtml(item.answer)}
-            </div>
-
-            <div style="margin-top:8px;">
-              <span class="badge">
-                ${escapeHtml(item.category || "general")}
-              </span>
-            </div>
-          </div>
-        `).join("")
-      : `
-        <div class="empty">
-          No training examples yet.
-        </div>
-      `;
-
-  $("statTraining").textContent =
-    data?.length || 0;
+  $("statTraining").textContent = data?.length || 0;
 }
 
-
-/* =========================================================
-   KNOWLEDGE
-   ========================================================= */
-
-$("addKnowledgeBtn").addEventListener(
-  "click",
-  addKnowledge
-);
-
-async function addKnowledge() {
+$("addKnowledgeBtn").addEventListener("click", async () => {
   if (!currentModel) return;
+  const title = $("knowledgeTitle").value.trim();
+  const content = $("knowledgeContent").value.trim();
 
-  const title =
-    $("knowledgeTitle").value.trim();
+  if (!title || !content) { toast("Title and content are required.", "error"); return; }
 
-  const content =
-    $("knowledgeContent").value.trim();
-
-  if (!title || !content) {
-    toast(
-      "Title and content are required.",
-      "error"
-    );
-    return;
-  }
-
-  const button =
-    $("addKnowledgeBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Add knowledge"
-  );
+  const btn = $("addKnowledgeBtn");
+  setButtonLoading(btn, true, "Add knowledge");
 
   try {
-
-    const {
-      error
-    } = await supabaseClient.rpc(
-      "nova_add_knowledge",
-      {
-        p_model_id: currentModel.id,
-        p_title: title,
-        p_content: content
-      }
-    );
-
+    const { error } = await supabaseClient.rpc("nova_add_knowledge", { p_model_id: currentModel.id, p_title: title, p_content: content });
     if (error) throw error;
-
     $("knowledgeTitle").value = "";
     $("knowledgeContent").value = "";
-
-    toast(
-      "Knowledge added.",
-      "success"
-    );
-
+    toast("Knowledge added.", "success");
     await loadKnowledge();
-
-  } catch (error) {
-    console.error(error);
-
-    toast(
-      "Could not add knowledge: " +
-      error.message,
-      "error"
-    );
-
+  } catch (err) {
+    toast("Could not add knowledge: " + err.message, "error");
   } finally {
-    setButtonLoading(
-      button,
-      false,
-      "Add knowledge"
-    );
+    setButtonLoading(btn, false, "Add knowledge");
   }
-}
+});
 
 async function loadKnowledge() {
   if (!currentModel) return;
+  const { data, error } = await supabaseClient.from("nova_knowledge").select("*").eq("model_id", currentModel.id).order("created_at", { ascending: false });
+  if (error) { $("knowledgeList").innerHTML = `<div class="small">Could not load knowledge.</div>`; return; }
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("nova_knowledge")
-    .select("*")
-    .eq("model_id", currentModel.id)
-    .order("created_at", {
-      ascending: false
-    });
+  $("knowledgeList").innerHTML = data?.length ? data.map(item => `
+    <div class="data-item">
+      <div class="data-item-title">${escapeHtml(item.title)}</div>
+      <div class="data-item-content">${escapeHtml(item.content)}</div>
+      <div class="small" style="margin-top:9px;">${formatDate(item.created_at)}</div>
+    </div>
+  `).join("") : `<div class="empty">No knowledge added yet.</div>`;
 
-  if (error) {
-    console.error(error);
-
-    $("knowledgeList").innerHTML = `
-      <div class="small">
-        Could not load knowledge.
-      </div>
-    `;
-
-    return;
-  }
-
-  $("knowledgeList").innerHTML =
-    data?.length
-      ? data.map(item => `
-          <div class="data-item">
-            <div class="data-item-title">
-              ${escapeHtml(item.title)}
-            </div>
-
-            <div class="data-item-content">
-              ${escapeHtml(item.content)}
-            </div>
-
-            <div class="small" style="margin-top:9px;">
-              ${formatDate(item.created_at)}
-            </div>
-          </div>
-        `).join("")
-      : `
-        <div class="empty">
-          No knowledge added yet.
-        </div>
-      `;
-
-  $("statKnowledge").textContent =
-    data?.length || 0;
+  $("statKnowledge").textContent = data?.length || 0;
 }
 
-
-/* =========================================================
-   MEMORY
-   ========================================================= */
-
-$("addMemoryBtn").addEventListener(
-  "click",
-  addMemory
-);
-
-async function addMemory() {
+$("addMemoryBtn").addEventListener("click", async () => {
   if (!currentModel) return;
+  const content = $("memoryContent").value.trim();
+  if (!content) { toast("Enter something to remember.", "error"); return; }
 
-  const content =
-    $("memoryContent").value.trim();
-
-  if (!content) {
-    toast(
-      "Enter something to remember.",
-      "error"
-    );
-    return;
-  }
-
-  const button =
-    $("addMemoryBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Save memory"
-  );
+  const btn = $("addMemoryBtn");
+  setButtonLoading(btn, true, "Save memory");
 
   try {
-
-    const {
-      error
-    } = await supabaseClient.rpc(
-      "nova_add_memory",
-      {
-        p_model_id: currentModel.id,
-        p_content: content
-      }
-    );
-
+    const { error } = await supabaseClient.rpc("nova_add_memory", { p_model_id: currentModel.id, p_content: content });
     if (error) throw error;
-
     $("memoryContent").value = "";
-
-    toast(
-      "Memory saved.",
-      "success"
-    );
-
+    toast("Memory saved.", "success");
     await loadMemory();
-
-  } catch (error) {
-    console.error(error);
-
-    toast(
-      "Could not save memory: " +
-      error.message,
-      "error"
-    );
-
+  } catch (err) {
+    toast("Could not save memory: " + err.message, "error");
   } finally {
-    setButtonLoading(
-      button,
-      false,
-      "Save memory"
-    );
+    setButtonLoading(btn, false, "Save memory");
   }
-}
+});
 
 async function loadMemory() {
   if (!currentModel) return;
+  const { data, error } = await supabaseClient.from("nova_memory").select("*").eq("model_id", currentModel.id).order("created_at", { ascending: false });
+  if (error) { $("memoryList").innerHTML = `<div class="small">Could not load memory.</div>`; return; }
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("nova_memory")
-    .select("*")
-    .eq("model_id", currentModel.id)
-    .order("created_at", {
-      ascending: false
-    });
-
-  if (error) {
-    console.error(error);
-
-    $("memoryList").innerHTML = `
-      <div class="small">
-        Could not load memory.
-      </div>
-    `;
-
-    return;
-  }
-
-  $("memoryList").innerHTML =
-    data?.length
-      ? data.map(item => `
-          <div class="data-item">
-            <div class="data-item-content">
-              ${escapeHtml(item.content)}
-            </div>
-
-            <div class="small" style="margin-top:9px;">
-              ${formatDate(item.created_at)}
-            </div>
-          </div>
-        `).join("")
-      : `
-        <div class="empty">
-          No memories saved yet.
-        </div>
-      `;
+  $("memoryList").innerHTML = data?.length ? data.map(item => `
+    <div class="data-item">
+      <div class="data-item-content">${escapeHtml(item.content)}</div>
+      <div class="small" style="margin-top:9px;">${formatDate(item.created_at)}</div>
+    </div>
+  `).join("") : `<div class="empty">No memories saved yet.</div>`;
 }
 
-
 /* =========================================================
-   API
+   MODEL API UI & LOGIC
    ========================================================= */
-
-$("saveApiBtn").addEventListener(
-  "click",
-  saveApi
-);
 
 async function loadApiStatus() {
   if (!currentModel) return;
 
+  const endpointUrl = `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/chat-completions`;
+  $("apiEndpointUrl").value = endpointUrl;
+
+  const activeKey = sessionApiKeys.get(currentModel.id);
+
+  const reqCode = $("exampleRequestCode");
+  if (reqCode) {
+    reqCode.textContent = `POST ${endpointUrl}
+
+Authorization: Bearer ${activeKey || "8io_a1b2c3d4e5f6..."}
+Content-Type: application/json
+
+{
+  "model": "${currentModel.id}",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ]
+}`;
+  }
+
+  const resCode = $("exampleResponseCode");
+  if (resCode) {
+    resCode.textContent = `{
+  "id": "chatcmpl-${currentModel.id.slice(0, 8)}",
+  "object": "chat.completion",
+  "model": "${currentModel.id}",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help?"
+      },
+      "finish_reason": "stop"
+    }
+  ]
+}`;
+  }
+
   try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
-      "nova_api_status",
-      {
-        p_model_id: currentModel.id
-      }
-    );
-
+    const { data, error } = await supabaseClient.rpc("nova_api_status", { p_model_id: currentModel.id });
     if (error) throw error;
 
-    const result =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-    const configured =
-      !!result?.configured;
+    const result = Array.isArray(data) ? data[0] : data;
+    const configured = !!result?.configured;
 
     $("apiStatus").innerHTML = `
-      <span class="status-dot ${
-        configured ? "on" : "off"
-      }" aria-hidden="true"></span>
-
-      <span>
-        ${
-          configured
-            ? "API configured"
-            : "API not configured"
-        }
-      </span>
+      <span class="status-dot ${configured ? "on" : "off"}" aria-hidden="true"></span>
+      <span>● API active</span>
     `;
 
-    if (result?.endpoint_url) {
-      $("apiEndpoint").value =
-        result.endpoint_url;
+    if (activeKey) {
+      $("apiKeyDisplay").value = activeKey;
+    } else if (result?.key_prefix) {
+      $("apiKeyDisplay").value = `${result.key_prefix}••••••••••••••••••••••••••••••••`;
+    } else {
+      $("apiKeyDisplay").value = "No API key configured";
     }
 
-  } catch (error) {
-    console.error(error);
-
-    $("apiStatus").innerHTML = `
-      <span class="status-dot off" aria-hidden="true"></span>
-      <span>API status unavailable</span>
-    `;
+  } catch (err) {
+    console.error(err);
+    $("apiStatus").innerHTML = `<span class="status-dot off" aria-hidden="true"></span><span>API status unavailable</span>`;
   }
 }
 
-async function saveApi() {
+async function regenerateApiKey() {
   if (!currentModel) return;
 
-  const endpoint =
-    $("apiEndpoint").value.trim();
-
-  const apiKey =
-    $("apiKey").value.trim();
-
-  if (!endpoint) {
-    toast(
-      "Enter an endpoint URL.",
-      "error"
-    );
+  if (!confirm("Are you sure you want to regenerate the API key? The old 8io_ key will stop working immediately.")) {
     return;
   }
 
-  if (!endpoint.startsWith("https://")) {
-    toast(
-      "The endpoint must use HTTPS.",
-      "error"
-    );
-    return;
-  }
-
-  if (!apiKey.startsWith("8io_")) {
-    toast(
-      "The API key must start with 8io_.",
-      "error"
-    );
-    return;
-  }
-
-  const button =
-    $("saveApiBtn");
-
-  setButtonLoading(
-    button,
-    true,
-    "Save API configuration"
-  );
+  const btn = $("regenerateKeyBtn");
+  setButtonLoading(btn, true, "Regenerate");
 
   try {
-
-    const {
-      error
-    } = await supabaseClient.rpc(
-      "nova_save_api_credentials",
-      {
-        p_model_id: currentModel.id,
-        p_endpoint_url: endpoint,
-        p_api_key: apiKey
-      }
-    );
-
+    const { data, error } = await supabaseClient.rpc("nova_regenerate_api_key", { p_model_id: currentModel.id });
     if (error) throw error;
 
-    $("apiKey").value = "";
-
-    toast(
-      "API configuration saved.",
-      "success"
-    );
-
-    await loadApiStatus();
-
-  } catch (error) {
-    console.error(error);
-
-    toast(
-      "Could not save API: " +
-      error.message,
-      "error"
-    );
-
+    const result = Array.isArray(data) ? data[0] : data;
+    if (result?.api_key) {
+      sessionApiKeys.set(currentModel.id, result.api_key);
+      toast("API key regenerated! Old key was invalidated.", "success");
+      await loadApiStatus();
+    }
+  } catch (err) {
+    toast("Could not regenerate API key: " + err.message, "error");
   } finally {
-    setButtonLoading(
-      button,
-      false,
-      "Save API configuration"
-    );
+    setButtonLoading(btn, false, "Regenerate");
   }
 }
 
+$("copyEndpointBtn").addEventListener("click", () => {
+  const val = $("apiEndpointUrl").value;
+  if (val) {
+    navigator.clipboard.writeText(val);
+    toast("API endpoint copied.", "success");
+  }
+});
+
+$("copyKeyBtn").addEventListener("click", () => {
+  const val = $("apiKeyDisplay").value;
+  if (val.includes("••••")) {
+    toast("Plaintext key hidden for security. Click Regenerate to issue a new copyable key.", "error");
+    return;
+  }
+  if (val) {
+    navigator.clipboard.writeText(val);
+    toast("API key copied.", "success");
+  }
+});
+
+$("regenerateKeyBtn").addEventListener("click", regenerateApiKey);
 
 /* =========================================================
    CHAT
    ========================================================= */
 
-$("chatForm").addEventListener(
-  "submit",
-  async event => {
-    event.preventDefault();
+$("chatForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const message = $("chatMessage").value.trim();
+  if (!message || !currentModel) return;
 
-    const message =
-      $("chatMessage").value.trim();
+  $("chatMessage").value = "";
+  $("chatMessage").style.height = "auto";
 
-    if (!message || !currentModel) {
-      return;
-    }
+  appendMessage("user", message);
+  const thinking = appendMessage("assistant", "Thinking…");
 
-    $("chatMessage").value = "";
-    $("chatMessage").style.height = "auto";
-
-    appendMessage(
-      "user",
-      message
-    );
-
-    const thinking = appendMessage(
-      "assistant",
-      "Thinking…"
-    );
-
-    try {
-
-      if (!currentConversation) {
-
-        const {
-          data,
-          error
-        } = await supabaseClient.rpc(
-          "nova_create_conversation",
-          {
-            p_model_id: currentModel.id,
-            p_title: message.slice(0, 80)
-          }
-        );
-
-        if (error) throw error;
-
-        currentConversation =
-          Array.isArray(data)
-            ? data[0]
-            : data;
-      }
-
-      const {
-        data,
-        error
-      } = await supabaseClient.rpc(
-        "nova_start_chat",
-        {
-          p_model_id: currentModel.id,
-          p_conversation_id:
-            currentConversation.id,
-          p_message: message
-        }
-      );
-
+  try {
+    if (!currentConversation) {
+      const { data, error } = await supabaseClient.rpc("nova_create_conversation", {
+        p_model_id: currentModel.id,
+        p_title: message.slice(0, 80)
+      });
       if (error) throw error;
-
-      const job =
-        Array.isArray(data)
-          ? data[0]
-          : data;
-
-      if (!job?.id) {
-        throw new Error(
-          "Chat job was not created."
-        );
-      }
-
-      const result =
-        await pollChat(job.id);
-
-      thinking.remove();
-
-      appendMessage(
-        "assistant",
-        result
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      thinking.remove();
-
-      appendMessage(
-        "assistant",
-        "I couldn't complete that request. " +
-        (error.message || "")
-      );
-
+      currentConversation = Array.isArray(data) ? data[0] : data;
     }
+
+    const { data, error } = await supabaseClient.rpc("nova_start_chat", {
+      p_model_id: currentModel.id,
+      p_conversation_id: currentConversation.id,
+      p_message: message
+    });
+    if (error) throw error;
+
+    const job = Array.isArray(data) ? data[0] : data;
+    const result = await pollChat(job.id);
+
+    thinking.remove();
+    appendMessage("assistant", result);
+
+  } catch (error) {
+    console.error(error);
+    thinking.remove();
+    appendMessage("assistant", "Request failed: " + (error.message || ""));
   }
-);
+});
 
 function appendMessage(role, content) {
-  const messages =
-    $("messages");
-
-  const wrapper =
-    document.createElement("div");
-
-  wrapper.className =
-    "message " + role;
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble";
-
-  bubble.textContent =
-    content;
-
+  const messages = $("messages");
+  const wrapper = document.createElement("div");
+  wrapper.className = "message " + role;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = content;
   wrapper.appendChild(bubble);
-
   messages.appendChild(wrapper);
-
-  messages.scrollTop =
-    messages.scrollHeight;
-
+  messages.scrollTop = messages.scrollHeight;
   return wrapper;
 }
 
 async function pollChat(jobId) {
-  const maxAttempts = 60;
-
-  for (
-    let attempt = 0;
-    attempt < maxAttempts;
-    attempt++
-  ) {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
-      "nova_poll_chat",
-      {
-        p_job_id: jobId
-      }
-    );
-
+  for (let i = 0; i < 60; i++) {
+    const { data, error } = await supabaseClient.rpc("nova_poll_chat", { p_job_id: jobId });
     if (error) throw error;
+    const result = Array.isArray(data) ? data[0] : data;
 
-    const result =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-    if (
-      result?.status === "completed" ||
-      result?.status === "complete" ||
-      result?.status === "done"
-    ) {
-
-      return (
-        result.content ||
-        result.response ||
-        result.text ||
-        result.answer ||
-        "The model returned an empty response."
-      );
-    }
-
-    if (
-      result?.status === "failed" ||
-      result?.status === "error"
-    ) {
-
-      throw new Error(
-        result.error_message ||
-        "The model request failed."
-      );
-    }
-
-    await sleep(1000);
+    if (result?.status === "completed") return result.content || "Empty response.";
+    if (result?.status === "failed") throw new Error(result.error_message || "Model failed.");
+    await new Promise(r => setTimeout(r, 1000));
   }
-
-  throw new Error(
-    "The model took too long to respond."
-  );
+  throw new Error("Response timeout.");
 }
-
-function sleep(ms) {
-  return new Promise(
-    resolve => setTimeout(resolve, ms)
-  );
-}
-
 
 /* =========================================================
-   LOAD EVERYTHING
+   BOOTSTRAP
    ========================================================= */
 
 async function loadEverything() {
   await loadModels();
-
   if (!currentUser) return;
 
   try {
-
-    const [
-      trainingResult,
-      knowledgeResult
-    ] = await Promise.all([
-      supabaseClient
-        .from("nova_training_data")
-        .select("id", {
-          count: "exact",
-          head: true
-        }),
-
-      supabaseClient
-        .from("nova_knowledge")
-        .select("id", {
-          count: "exact",
-          head: true
-        })
+    const [tRes, kRes] = await Promise.all([
+      supabaseClient.from("nova_training_data").select("id", { count: "exact", head: true }),
+      supabaseClient.from("nova_knowledge").select("id", { count: "exact", head: true })
     ]);
-
-    if (!trainingResult.error) {
-      $("statTraining").textContent =
-        trainingResult.count || 0;
-    }
-
-    if (!knowledgeResult.error) {
-      $("statKnowledge").textContent =
-        knowledgeResult.count || 0;
-    }
-
-  } catch (error) {
-    console.error(error);
+    if (!tRes.error) $("statTraining").textContent = tRes.count || 0;
+    if (!kRes.error) $("statKnowledge").textContent = kRes.count || 0;
+  } catch (err) {
+    console.error(err);
   }
 }
 
-
-/* =========================================================
-   KEYBOARD SHORTCUTS + INPUT BEHAVIOR
-   ========================================================= */
-
-$("chatMessage").addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Enter" &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
-
-      $("chatForm").requestSubmit();
-    }
-
+$("chatMessage").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    $("chatForm").requestSubmit();
   }
-);
+});
 
-// Let the composer grow with multi-line input instead of scrolling
-// inside a fixed-height box.
 $("chatMessage").addEventListener("input", function () {
   this.style.height = "auto";
   this.style.height = Math.min(this.scrollHeight, 150) + "px";
 });
 
-
-/* =========================================================
-   START
-   ========================================================= */
-
 setAuthMode("login");
 initialize();
-
 </script>
 
 </body>
