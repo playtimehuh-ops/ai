@@ -2,604 +2,902 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Buddy — Nova</title>
 
 <style>
-:root{
-    --bg:#090b10;
-    --panel:#10131a;
-    --panel2:#151922;
-    --border:#252b37;
-    --text:#f3f5f8;
-    --muted:#929aaa;
-    --accent:#7567ff;
-    --accent2:#5d4fe4;
-    --user:#5e51df;
-    --danger:#ef6262;
-    --success:#45d18a;
-}
-
-*{box-sizing:border-box}
-
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:var(--bg);
-    color:var(--text);
-    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-button,input,textarea{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.app{
-    display:flex;
-    width:100%;
-    height:100vh;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-    width:245px;
-    flex-shrink:0;
-    background:#0d1016;
-    border-right:1px solid var(--border);
-    padding:16px 13px;
-    display:flex;
-    flex-direction:column;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:8px 9px 20px;
-}
-
-.logoIcon{
-    width:38px;
-    height:38px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,#8175ff,#5141dc);
-    box-shadow:0 10px 30px rgba(100,80,240,.25);
-    font-size:20px;
-}
-
-.logoText{
-    font-weight:800;
-    font-size:17px;
-}
-
-.newChat{
-    width:100%;
-    border:1px solid #303643;
-    background:#171b23;
-    color:#fff;
-    border-radius:10px;
-    padding:11px 13px;
-    text-align:left;
-    margin-bottom:20px;
-}
-
-.newChat:hover{
-    background:#1d222d;
-}
-
-.sectionTitle{
-    color:#687180;
-    font-size:10px;
-    font-weight:800;
-    letter-spacing:.1em;
-    padding:0 10px 7px;
-}
-
-.nav{
-    display:flex;
-    flex-direction:column;
-    gap:3px;
-}
-
-.nav button{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:#aeb5c2;
-    border-radius:9px;
-    padding:10px;
-    text-align:left;
-}
-
-.nav button:hover{
-    background:#171b23;
-    color:white;
-}
-
-.nav button.active{
-    background:#1d2030;
-    color:white;
-}
-
-.sidebarBottom{
-    margin-top:auto;
-}
-
-.localBadge{
-    padding:10px;
-    border:1px solid #23362d;
-    border-radius:9px;
-    color:#70d99d;
-    background:#0e1713;
-    font-size:11px;
-}
-
-/* MAIN */
-
-.main{
-    flex:1;
-    min-width:0;
-    display:flex;
-    flex-direction:column;
-}
-
-.header{
-    height:65px;
-    flex-shrink:0;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    padding:0 23px;
-}
-
-.avatar{
-    width:37px;
-    height:37px;
-    border-radius:11px;
-    background:linear-gradient(135deg,#7d70ff,#5142dc);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-right:11px;
-}
-
-.headerName{
-    font-weight:750;
-}
-
-.headerStatus{
-    font-size:11px;
-    color:#747d8d;
-    margin-top:2px;
-}
-
-.content{
-    flex:1;
-    min-height:0;
-    position:relative;
-}
-
-/* CHAT */
-
-.chat{
-    height:100%;
-    overflow-y:auto;
-    padding:28px 20px 120px;
-}
-
-.chatInner{
-    max-width:850px;
-    margin:auto;
-}
-
-.empty{
-    min-height:65vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-}
-
-.emptyAvatar{
-    width:75px;
-    height:75px;
-    border-radius:24px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#7e71ff,#5142dc);
-    font-size:35px;
-    margin-bottom:18px;
-    box-shadow:0 18px 50px rgba(84,66,220,.3);
-}
-
-.empty h1{
-    margin:0 0 8px;
-    font-size:28px;
-}
-
-.empty p{
-    max-width:550px;
-    color:var(--muted);
-    line-height:1.65;
-}
-
-.message{
-    display:flex;
-    gap:11px;
-    margin-bottom:23px;
-}
-
-.message.user{
-    flex-direction:row-reverse;
-}
-
-.messageAvatar{
-    width:32px;
-    height:32px;
-    flex:0 0 32px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:13px;
-}
-
-.message.assistant .messageAvatar{
-    background:#252b37;
-}
-
-.message.user .messageAvatar{
-    background:#574bd7;
-}
-
-.bubble{
-    max-width:min(720px,82%);
-    padding:12px 15px;
-    line-height:1.65;
-    border-radius:14px;
-    white-space:pre-wrap;
-    overflow-wrap:anywhere;
-}
-
-.message.assistant .bubble{
-    background:#171c25;
-    border:1px solid #252c38;
-}
-
-.message.user .bubble{
-    background:var(--user);
-}
-
-.typing{
-    display:flex;
-    gap:4px;
-}
-
-.typing span{
-    width:6px;
-    height:6px;
-    background:#89909e;
-    border-radius:50%;
-    animation:bounce 1s infinite;
-}
-
-.typing span:nth-child(2){animation-delay:.15s}
-.typing span:nth-child(3){animation-delay:.3s}
-
-@keyframes bounce{
-    0%,60%,100%{
-        transform:translateY(0);
-        opacity:.4
-    }
-    30%{
-        transform:translateY(-4px);
-        opacity:1
-    }
-}
-
-/* COMPOSER */
-
-.composerWrap{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:15px 20px 17px;
-    background:linear-gradient(transparent,var(--bg) 28%);
-    pointer-events:none;
-}
-
-.composer,
-.composerHint{
-    pointer-events:auto;
-}
-
-.composer{
-    max-width:850px;
-    margin:auto;
-    display:flex;
-    align-items:flex-end;
-    padding:8px;
-    border:1px solid #303744;
-    border-radius:15px;
-    background:#141820;
-}
-
-.composer textarea{
-    flex:1;
-    resize:none;
-    border:0;
-    outline:0;
-    background:transparent;
-    color:white;
-    min-height:42px;
-    max-height:150px;
-    padding:10px 11px;
-}
-
-.send{
-    width:42px;
-    height:42px;
-    border:0;
-    border-radius:11px;
-    background:var(--accent);
-    color:white;
-    font-size:17px;
-}
-
-.send:hover{
-    background:var(--accent2);
-}
-
-.composerHint{
-    max-width:850px;
-    margin:7px auto 0;
-    text-align:center;
-    font-size:10px;
-    color:#626a79;
-}
-
-/* PANELS */
-
-.panel{
-    height:100%;
-    overflow-y:auto;
-    padding:32px;
-}
-
-.panelInner{
-    max-width:900px;
-    margin:auto;
-}
-
-.panel h1{
-    margin:0 0 7px;
-    font-size:25px;
-}
-
-.panelDescription{
-    color:var(--muted);
-    margin-bottom:24px;
-    line-height:1.5;
-}
-
-.card{
-    background:#12161e;
-    border:1px solid var(--border);
-    border-radius:13px;
-    padding:18px;
-    margin-bottom:14px;
-}
-
-.card h3{
-    margin:0 0 8px;
-}
-
-.card p{
-    color:#a2a9b6;
-    line-height:1.6;
-}
-
-.formGroup{
-    margin-bottom:14px;
-}
-
-.formGroup label{
-    display:block;
-    color:#9ba3b1;
-    font-size:12px;
-    margin-bottom:6px;
-}
-
-.formGroup input,
-.formGroup textarea{
-    width:100%;
-    background:#0d1016;
-    color:white;
-    border:1px solid #2b313d;
-    border-radius:9px;
-    padding:11px;
-    outline:0;
-}
-
-.formGroup textarea{
-    min-height:120px;
-    resize:vertical;
-}
-
-.formGroup input:focus,
-.formGroup textarea:focus{
-    border-color:#6659e9;
-}
-
-.primary,
-.secondary,
-.danger{
-    border-radius:9px;
-    padding:10px 15px;
-    font-weight:600;
-}
-
-.primary{
-    border:0;
-    color:white;
-    background:var(--accent);
-}
-
-.primary:hover{
-    background:var(--accent2);
-}
-
-.secondary{
-    border:1px solid #303643;
-    color:white;
-    background:#181c24;
-}
-
-.danger{
-    border:1px solid #542b2b;
-    color:#ff8585;
-    background:#231515;
-}
-
-.row{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-}
-
-.item{
-    padding:13px;
-    background:#151922;
-    border:1px solid #282e3a;
-    border-radius:10px;
-    margin-top:10px;
-}
-
-.itemHeader{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.itemTitle{
-    font-weight:700;
-}
-
-.itemMeta{
-    color:#717989;
-    font-size:11px;
-    margin-top:3px;
-}
-
-.itemContent{
-    color:#b6bdc9;
-    line-height:1.55;
-    white-space:pre-wrap;
-    margin-top:9px;
-}
-
-.itemDelete{
-    border:0;
-    background:transparent;
-    color:#777f8e;
-}
-
-.itemDelete:hover{
-    color:#ff7777;
-}
-
-.statGrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-}
-
-.stat{
-    border:1px solid var(--border);
-    background:#12161e;
-    border-radius:12px;
-    padding:16px;
-}
-
-.statValue{
-    font-size:23px;
-    font-weight:800;
-}
-
-.statLabel{
-    color:#777f8d;
-    font-size:12px;
-    margin-top:4px;
-}
-
-.debugLog{
-    font-family:Consolas,monospace;
-    font-size:12px;
-    color:#aeb5c2;
-    white-space:pre-wrap;
-    line-height:1.6;
-}
-
-/* MOBILE */
-
-@media(max-width:750px){
-
-    .sidebar{
-        width:64px;
-        padding:12px 7px;
+    * {
+        box-sizing: border-box;
     }
 
-    .logoText,
-    .sectionTitle,
-    .nav span,
-    .localBadge{
-        display:none;
+    :root {
+        --bg: #0d0f12;
+        --sidebar: #101216;
+        --surface: #14171b;
+        --surface-2: #181c21;
+        --surface-3: #1d2228;
+        --border: #292f36;
+        --border-light: #343b43;
+
+        --text: #e7e9ec;
+        --text-soft: #b4bac2;
+        --muted: #7e8792;
+
+        --accent: #aebdce;
+        --accent-strong: #d6e0ea;
+
+        --danger: #d46a6a;
+        --success: #72b38a;
+
+        --radius: 7px;
     }
 
-    .logo{
-        justify-content:center;
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
-    .newChat{
-        font-size:0;
-        text-align:center;
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+            Inter,
+            ui-sans-serif,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif;
+        font-size: 14px;
+        overflow: hidden;
     }
 
-    .newChat::after{
-        content:"+";
-        font-size:20px;
+    button,
+    input,
+    textarea,
+    select {
+        font: inherit;
     }
 
-    .nav button{
-        text-align:center;
-        font-size:18px;
+    button {
+        cursor: pointer;
     }
 
-    .panel{
-        padding:20px 15px;
+    /* APP */
+
+    .app {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        background: var(--bg);
     }
 
-    .statGrid{
-        grid-template-columns:1fr;
+    /* SIDEBAR */
+
+    .sidebar {
+        width: 232px;
+        min-width: 232px;
+        height: 100%;
+        border-right: 1px solid var(--border);
+        background: var(--sidebar);
+        display: flex;
+        flex-direction: column;
     }
 
-    .bubble{
-        max-width:88%;
+    .brand {
+        height: 58px;
+        padding: 0 17px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
     }
-}
+
+    .brand-mark {
+        width: 27px;
+        height: 27px;
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+        display: grid;
+        place-items: center;
+        color: var(--accent-strong);
+        font-size: 13px;
+        margin-right: 10px;
+    }
+
+    .brand-name {
+        font-size: 14px;
+        font-weight: 650;
+        letter-spacing: -0.1px;
+    }
+
+    .brand-sub {
+        color: var(--muted);
+        font-size: 10px;
+        margin-top: 2px;
+    }
+
+    .sidebar-content {
+        padding: 14px 10px;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .new-chat {
+        width: 100%;
+        height: 35px;
+        border: 1px solid var(--border-light);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 6px;
+        text-align: left;
+        padding: 0 11px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        transition: background .15s, border-color .15s;
+        margin-bottom: 20px;
+    }
+
+    .new-chat:hover {
+        background: var(--surface-2);
+        border-color: #414850;
+    }
+
+    .new-chat-icon {
+        color: var(--accent-strong);
+        font-size: 17px;
+        line-height: 1;
+    }
+
+    .section-label {
+        padding: 0 9px;
+        margin: 0 0 7px;
+        color: #626a74;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        height: 34px;
+        border: 0;
+        background: transparent;
+        color: var(--text-soft);
+        border-radius: 5px;
+        padding: 0 9px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        transition: background .12s, color .12s;
+    }
+
+    .nav-btn:hover {
+        background: #171a1f;
+        color: var(--text);
+    }
+
+    .nav-btn.active {
+        background: #1b1f24;
+        color: var(--text);
+    }
+
+    .nav-icon {
+        width: 17px;
+        color: #858d97;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .nav-btn.active .nav-icon {
+        color: var(--accent-strong);
+    }
+
+    .sidebar-footer {
+        border-top: 1px solid var(--border);
+        padding: 12px 14px;
+    }
+
+    .local-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--success);
+        border-radius: 50%;
+    }
+
+    /* MAIN */
+
+    .main {
+        min-width: 0;
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar {
+        height: 58px;
+        min-height: 58px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 22px;
+        background: #0f1114;
+    }
+
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .top-title {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .top-separator {
+        width: 1px;
+        height: 15px;
+        background: var(--border-light);
+        margin: 0 12px;
+    }
+
+    .top-status {
+        color: var(--muted);
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .top-status .status-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .icon-btn {
+        width: 31px;
+        height: 31px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 5px;
+    }
+
+    .icon-btn:hover {
+        background: var(--surface);
+        border-color: var(--border);
+        color: var(--text);
+    }
+
+    /* PAGES */
+
+    .page {
+        display: none;
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+    }
+
+    .page.active {
+        display: flex;
+    }
+
+    /* CHAT */
+
+    .chat-page {
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 26px 24px 20px;
+    }
+
+    .chat-inner {
+        width: min(850px, 100%);
+        margin: 0 auto;
+    }
+
+    .welcome {
+        padding: 44px 0 30px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 7px;
+    }
+
+    .welcome h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+        font-weight: 620;
+        letter-spacing: -.5px;
+    }
+
+    .welcome p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        max-width: 590px;
+    }
+
+    .message {
+        display: flex;
+        gap: 13px;
+        padding: 18px 3px;
+        border-bottom: 1px solid #1d2126;
+    }
+
+    .message:last-child {
+        border-bottom: 0;
+    }
+
+    .message-avatar {
+        flex: 0 0 27px;
+        width: 27px;
+        height: 27px;
+        border: 1px solid var(--border-light);
+        border-radius: 5px;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        color: var(--accent-strong);
+        margin-top: 1px;
+    }
+
+    .message.user .message-avatar {
+        color: var(--text-soft);
+    }
+
+    .message-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .message-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+    }
+
+    .message-name {
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .message-time {
+        color: #5e6670;
+        font-size: 10px;
+    }
+
+    .message-text {
+        color: #d5d9de;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .message.user .message-text {
+        color: #e5e7e9;
+    }
+
+    .empty-chat {
+        text-align: center;
+        padding: 65px 20px;
+        color: var(--muted);
+    }
+
+    .empty-chat strong {
+        display: block;
+        color: var(--text-soft);
+        margin-bottom: 7px;
+        font-weight: 550;
+    }
+
+    /* COMPOSER */
+
+    .composer-wrap {
+        padding: 10px 24px 18px;
+    }
+
+    .composer {
+        width: min(850px, 100%);
+        margin: 0 auto;
+        border: 1px solid var(--border-light);
+        background: var(--surface);
+        border-radius: 7px;
+        display: flex;
+        align-items: flex-end;
+        padding: 8px;
+        transition: border-color .15s;
+    }
+
+    .composer:focus-within {
+        border-color: #46505a;
+    }
+
+    .composer textarea {
+        flex: 1;
+        resize: none;
+        min-height: 38px;
+        max-height: 150px;
+        background: transparent;
+        border: 0;
+        outline: 0;
+        color: var(--text);
+        padding: 8px 9px;
+        line-height: 1.45;
+    }
+
+    .composer textarea::placeholder {
+        color: #69727d;
+    }
+
+    .send-btn {
+        width: 36px;
+        height: 36px;
+        border: 0;
+        border-radius: 5px;
+        background: #d8dee5;
+        color: #101216;
+        font-weight: 700;
+        transition: background .15s;
+    }
+
+    .send-btn:hover {
+        background: white;
+    }
+
+    .composer-hint {
+        width: min(850px, 100%);
+        margin: 7px auto 0;
+        color: #555e68;
+        font-size: 10px;
+        text-align: right;
+    }
+
+    /* GENERAL PANELS */
+
+    .panel-page {
+        padding: 32px;
+        overflow-y: auto;
+    }
+
+    .panel-container {
+        width: min(920px, 100%);
+        margin: 0 auto;
+    }
+
+    .page-heading {
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 24px;
+    }
+
+    .page-heading h1 {
+        margin: 0 0 6px;
+        font-size: 21px;
+        font-weight: 620;
+        letter-spacing: -.25px;
+    }
+
+    .page-heading p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    .form-section {
+        margin-bottom: 28px;
+    }
+
+    .form-section-title {
+        font-size: 12px;
+        font-weight: 650;
+        margin-bottom: 12px;
+        color: var(--text-soft);
+    }
+
+    .field {
+        margin-bottom: 13px;
+    }
+
+    .field label {
+        display: block;
+        color: var(--text-soft);
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 5px;
+        outline: 0;
+        padding: 9px 10px;
+    }
+
+    .field input {
+        height: 36px;
+    }
+
+    .field textarea {
+        min-height: 105px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+        border-color: #47515b;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn {
+        height: 35px;
+        border-radius: 5px;
+        padding: 0 13px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .primary-btn {
+        background: #d7dde4;
+        border: 1px solid #d7dde4;
+        color: #111318;
+    }
+
+    .primary-btn:hover {
+        background: #eef1f4;
+    }
+
+    .secondary-btn {
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        color: var(--text-soft);
+    }
+
+    .secondary-btn:hover {
+        color: var(--text);
+        background: var(--surface-2);
+    }
+
+    .danger-btn {
+        background: transparent;
+        border: 1px solid #553337;
+        color: #d88989;
+    }
+
+    .danger-btn:hover {
+        background: #251719;
+    }
+
+    /* LISTS */
+
+    .data-list {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .data-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .data-row:last-child {
+        border-bottom: 0;
+    }
+
+    .data-main {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .data-title {
+        font-size: 12px;
+        font-weight: 650;
+        color: var(--text);
+        margin-bottom: 4px;
+    }
+
+    .data-text {
+        color: var(--muted);
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .data-meta {
+        color: #5e6670;
+        font-size: 10px;
+        margin-top: 6px;
+    }
+
+    .delete-btn {
+        border: 0;
+        background: transparent;
+        color: #69727c;
+        font-size: 12px;
+        padding: 4px 5px;
+        border-radius: 4px;
+    }
+
+    .delete-btn:hover {
+        color: var(--danger);
+        background: #211719;
+    }
+
+    .empty-list {
+        padding: 25px;
+        text-align: center;
+        color: #68717b;
+    }
+
+    /* SETTINGS */
+
+    .settings-row {
+        min-height: 60px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .settings-row:first-child {
+        border-top: 1px solid var(--border);
+    }
+
+    .settings-info {
+        min-width: 0;
+    }
+
+    .settings-title {
+        font-weight: 600;
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    .settings-description {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .settings-control {
+        width: 300px;
+        flex-shrink: 0;
+    }
+
+    .settings-control input,
+    .settings-control textarea {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 5px;
+        padding: 8px 9px;
+        outline: 0;
+    }
+
+    .settings-control textarea {
+        min-height: 70px;
+        resize: vertical;
+    }
+
+    .settings-control input:focus,
+    .settings-control textarea:focus {
+        border-color: #47515b;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    /* DEBUG */
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        margin-bottom: 22px;
+    }
+
+    .stat {
+        padding: 15px;
+        border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child {
+        border-right: 0;
+    }
+
+    .stat-value {
+        font-size: 20px;
+        font-weight: 650;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        color: var(--muted);
+        font-size: 10px;
+    }
+
+    .log-box {
+        border: 1px solid var(--border);
+        background: #0b0d0f;
+        padding: 13px;
+        min-height: 220px;
+        max-height: 430px;
+        overflow: auto;
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 11px;
+        line-height: 1.65;
+        color: #9da6b0;
+        white-space: pre-wrap;
+    }
+
+    /* NOTICE */
+
+    .notice {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 12px 13px;
+        border-radius: 5px;
+        color: var(--muted);
+        line-height: 1.55;
+        font-size: 11px;
+        margin-bottom: 18px;
+    }
+
+    .notice strong {
+        color: var(--text-soft);
+    }
+
+    /* TOAST */
+
+    .toast {
+        position: fixed;
+        bottom: 18px;
+        right: 18px;
+        border: 1px solid var(--border-light);
+        background: #171a1e;
+        color: var(--text);
+        padding: 9px 12px;
+        border-radius: 5px;
+        font-size: 11px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(5px);
+        transition: opacity .18s, transform .18s;
+        z-index: 50;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 760px) {
+        .sidebar {
+            width: 62px;
+            min-width: 62px;
+        }
+
+        .brand {
+            justify-content: center;
+            padding: 0;
+        }
+
+        .brand-copy,
+        .new-chat span:not(.new-chat-icon),
+        .section-label,
+        .nav-btn span:not(.nav-icon),
+        .local-status span {
+            display: none;
+        }
+
+        .new-chat {
+            justify-content: center;
+            padding: 0;
+        }
+
+        .nav-btn {
+            justify-content: center;
+            padding: 0;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        .topbar {
+            padding: 0 13px;
+        }
+
+        .panel-page {
+            padding: 22px 15px;
+        }
+
+        .chat-scroll {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .composer-wrap {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .settings-row {
+            display: block;
+        }
+
+        .settings-control {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .stats {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .stat:nth-child(2) {
+            border-right: 0;
+        }
+
+        .stat:nth-child(-n+2) {
+            border-bottom: 1px solid var(--border);
+        }
+    }
 </style>
 </head>
 
@@ -607,905 +905,1410 @@ button{
 
 <div class="app">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
 
-        <div class="logo">
-            <div class="logoIcon">✦</div>
-            <div class="logoText">AI Buddy</div>
-        </div>
+        <div class="brand">
+            <div class="brand-mark">N</div>
 
-        <button class="newChat" onclick="newChat()">
-            ＋ New Chat
-        </button>
-
-        <div class="sectionTitle">WORKSPACE</div>
-
-        <div class="nav">
-
-            <button class="active"
-                    data-panel="chat"
-                    onclick="showPanel('chat',this)">
-                💬 <span>Chat</span>
-            </button>
-
-            <button data-panel="knowledge"
-                    onclick="showPanel('knowledge',this)">
-                📚 <span>Knowledge</span>
-            </button>
-
-            <button data-panel="training"
-                    onclick="showPanel('training',this)">
-                🧠 <span>Training</span>
-            </button>
-
-            <button data-panel="memory"
-                    onclick="showPanel('memory',this)">
-                💾 <span>Memory</span>
-            </button>
-
-            <button data-panel="settings"
-                    onclick="showPanel('settings',this)">
-                ⚙️ <span>Settings</span>
-            </button>
-
-            <button data-panel="debug"
-                    onclick="showPanel('debug',this)">
-                🛠️ <span>Debug</span>
-            </button>
-
-        </div>
-
-        <div class="sidebarBottom">
-
-            <div class="localBadge">
-                ● Local mode · No API
+            <div class="brand-copy">
+                <div class="brand-name">AI Buddy</div>
+                <div class="brand-sub">Local assistant</div>
             </div>
+        </div>
 
+        <div class="sidebar-content">
+
+            <button class="new-chat" onclick="newChat()">
+                <span class="new-chat-icon">+</span>
+                <span>New chat</span>
+            </button>
+
+            <div class="section-label">Workspace</div>
+
+            <nav class="nav">
+
+                <button class="nav-btn active" data-page="chat">
+                    <span class="nav-icon">◻</span>
+                    <span>Chat</span>
+                </button>
+
+                <button class="nav-btn" data-page="knowledge">
+                    <span class="nav-icon">▤</span>
+                    <span>Knowledge</span>
+                </button>
+
+                <button class="nav-btn" data-page="training">
+                    <span class="nav-icon">◇</span>
+                    <span>Training</span>
+                </button>
+
+                <button class="nav-btn" data-page="memory">
+                    <span class="nav-icon">○</span>
+                    <span>Memory</span>
+                </button>
+
+                <button class="nav-btn" data-page="settings">
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </button>
+
+                <button class="nav-btn" data-page="debug">
+                    <span class="nav-icon">⌁</span>
+                    <span>Debug</span>
+                </button>
+
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="local-status">
+                <span class="status-dot"></span>
+                <span>Running locally</span>
+            </div>
         </div>
 
     </aside>
 
 
+    <!-- MAIN -->
     <main class="main">
 
-        <header class="header">
+        <header class="topbar">
 
-            <div class="avatar">✦</div>
+            <div class="topbar-left">
 
-            <div>
-                <div class="headerName" id="headerName">
-                    Nova
+                <div class="top-title" id="topTitle">Nova</div>
+
+                <div class="top-separator"></div>
+
+                <div class="top-status">
+                    <span class="status-dot"></span>
+                    Local
                 </div>
 
-                <div class="headerStatus">
-                    AI Assistant · Local
-                </div>
+            </div>
+
+            <div class="top-actions">
+                <button class="icon-btn" onclick="newChat()" title="New chat">＋</button>
             </div>
 
         </header>
 
 
-        <div class="content">
+        <!-- CHAT PAGE -->
+        <section class="page active chat-page" id="page-chat">
 
-            <!-- CHAT -->
+            <div class="chat-scroll" id="chatScroll">
 
-            <section id="chatPanel" class="chat">
+                <div class="chat-inner">
 
-                <div id="chatInner" class="chatInner"></div>
+                    <div class="welcome" id="welcome">
 
-            </section>
-
-
-            <!-- KNOWLEDGE -->
-
-            <section id="knowledgePanel"
-                     class="panel"
-                     style="display:none">
-
-                <div class="panelInner">
-
-                    <h1>Knowledge</h1>
-
-                    <div class="panelDescription">
-                        Teach Nova facts and reference material.
-                        Nova uses this information internally when
-                        answering related questions.
-                    </div>
-
-
-                    <div class="card">
-
-                        <div class="formGroup">
-
-                            <label>Title</label>
-
-                            <input id="knowledgeTitle"
-                                   placeholder="Example: Linux">
-
-                        </div>
-
-
-                        <div class="formGroup">
-
-                            <label>Category</label>
-
-                            <input id="knowledgeCategory"
-                                   placeholder="Technology">
-
-                        </div>
-
-
-                        <div class="formGroup">
-
-                            <label>Content</label>
-
-                            <textarea id="knowledgeContent"
-                                      placeholder="Write what Nova should learn..."></textarea>
-
-                        </div>
-
-
-                        <button class="primary"
-                                onclick="addKnowledge()">
-                            Add knowledge
-                        </button>
-
-                    </div>
-
-
-                    <div id="knowledgeList"></div>
-
-                </div>
-
-            </section>
-
-
-            <!-- TRAINING -->
-
-            <section id="trainingPanel"
-                     class="panel"
-                     style="display:none">
-
-                <div class="panelInner">
-
-                    <h1>Training</h1>
-
-                    <div class="panelDescription">
-                        Teach Nova through examples of what a user
-                        says and how Nova should respond.
-                    </div>
-
-
-                    <div class="card">
-
-                        <div class="formGroup">
-
-                            <label>User message</label>
-
-                            <textarea id="trainingQuestion"
-                                      placeholder="Example: Who are you?"></textarea>
-
-                        </div>
-
-
-                        <div class="formGroup">
-
-                            <label>Nova's answer</label>
-
-                            <textarea id="trainingAnswer"
-                                      placeholder="Example: I'm Nova, an AI assistant."></textarea>
-
-                        </div>
-
-
-                        <button class="primary"
-                                onclick="addTraining()">
-                            Add training example
-                        </button>
-
-                    </div>
-
-
-                    <div id="trainingList"></div>
-
-                </div>
-
-            </section>
-
-
-            <!-- MEMORY -->
-
-            <section id="memoryPanel"
-                     class="panel"
-                     style="display:none">
-
-                <div class="panelInner">
-
-                    <h1>Memory</h1>
-
-                    <div class="panelDescription">
-                        Information Nova is allowed to remember about you.
-                    </div>
-
-
-                    <div class="card">
-
-                        <div class="formGroup">
-
-                            <label>Memory key</label>
-
-                            <input id="memoryKey"
-                                   placeholder="my name">
-
-                        </div>
-
-
-                        <div class="formGroup">
-
-                            <label>Value</label>
-
-                            <input id="memoryValue"
-                                   placeholder="Alex">
-
-                        </div>
-
-
-                        <button class="primary"
-                                onclick="addMemoryManually()">
-                            Save memory
-                        </button>
-
-                    </div>
-
-
-                    <div id="memoryList"></div>
-
-                </div>
-
-            </section>
-
-
-            <!-- SETTINGS -->
-
-            <section id="settingsPanel"
-                     class="panel"
-                     style="display:none">
-
-                <div class="panelInner">
-
-                    <h1>Settings</h1>
-
-                    <div class="panelDescription">
-                        Configure Nova's local personality.
-                    </div>
-
-
-                    <div class="card">
-
-                        <div class="formGroup">
-
-                            <label>AI name</label>
-
-                            <input id="aiName">
-
-                        </div>
-
-
-                        <div class="formGroup">
-
-                            <label>Personality</label>
-
-                            <textarea id="personality"></textarea>
-
-                        </div>
-
-
-                        <button class="primary"
-                                onclick="saveSettings()">
-                            Save settings
-                        </button>
-
-                    </div>
-
-
-                    <div class="card">
-
-                        <h3>Local data</h3>
+                        <h1 id="welcomeTitle">Hi, I'm Nova.</h1>
 
                         <p>
-                            Everything is stored locally in this browser.
-                            This HTML does not send your conversations,
-                            knowledge, training or memories to a server.
+                            A small local assistant that runs entirely in this file.
+                            No API, no backend, and no network connection required.
                         </p>
 
-                        <div class="row">
+                    </div>
 
-                            <button class="secondary"
-                                    onclick="exportData()">
-                                Export data
-                            </button>
+                    <div id="messages"></div>
 
-                            <button class="secondary"
-                                    onclick="document.getElementById('importFile').click()">
-                                Import data
-                            </button>
+                </div>
 
-                            <button class="danger"
-                                    onclick="clearAllData()">
-                                Delete all data
-                            </button>
+            </div>
 
-                            <input id="importFile"
-                                   type="file"
-                                   accept=".json"
-                                   style="display:none"
-                                   onchange="importData(event)">
 
+            <div class="composer-wrap">
+
+                <div class="composer">
+
+                    <textarea
+                        id="messageInput"
+                        rows="1"
+                        placeholder="Message Nova..."
+                        autocomplete="off"
+                    ></textarea>
+
+                    <button class="send-btn" onclick="sendMessage()">↑</button>
+
+                </div>
+
+                <div class="composer-hint">
+                    Enter to send · Shift + Enter for a new line
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- KNOWLEDGE -->
+        <section class="page panel-page" id="page-knowledge">
+
+            <div class="panel-container">
+
+                <div class="page-heading">
+                    <h1>Knowledge</h1>
+                    <p>Give Nova information it can use when answering questions.</p>
+                </div>
+
+                <div class="notice">
+                    <strong>Local knowledge base.</strong>
+                    Everything here stays in your browser's local storage.
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Add knowledge</div>
+
+                    <div class="field">
+                        <label>Title</label>
+                        <input id="knowledgeTitle" placeholder="Example: Linux">
+                    </div>
+
+                    <div class="field">
+                        <label>Category</label>
+                        <input id="knowledgeCategory" placeholder="Example: Technology">
+                    </div>
+
+                    <div class="field">
+                        <label>Content</label>
+                        <textarea
+                            id="knowledgeContent"
+                            placeholder="Write the information Nova should know..."
+                        ></textarea>
+                    </div>
+
+                    <button class="primary-btn" onclick="addKnowledge()">
+                        Add knowledge
+                    </button>
+
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Saved knowledge</div>
+
+                    <div class="data-list" id="knowledgeList"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TRAINING -->
+        <section class="page panel-page" id="page-training">
+
+            <div class="panel-container">
+
+                <div class="page-heading">
+                    <h1>Training</h1>
+                    <p>Teach Nova how to respond to specific questions.</p>
+                </div>
+
+                <div class="notice">
+                    <strong>Training examples.</strong>
+                    Nova compares new messages with these examples and uses the closest response.
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Add training example</div>
+
+                    <div class="field">
+                        <label>User message</label>
+                        <input
+                            id="trainingQuestion"
+                            placeholder="Example: What is AI?"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label>Nova's answer</label>
+                        <textarea
+                            id="trainingAnswer"
+                            placeholder="Example: AI is technology that allows computers to perform tasks that normally require human intelligence."
+                        ></textarea>
+                    </div>
+
+                    <button class="primary-btn" onclick="addTraining()">
+                        Add training
+                    </button>
+
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Training examples</div>
+
+                    <div class="data-list" id="trainingList"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MEMORY -->
+        <section class="page panel-page" id="page-memory">
+
+            <div class="panel-container">
+
+                <div class="page-heading">
+                    <h1>Memory</h1>
+                    <p>Small pieces of information Nova can remember between chats.</p>
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Save memory</div>
+
+                    <div class="field">
+                        <label>Key</label>
+                        <input id="memoryKey" placeholder="Example: favorite color">
+                    </div>
+
+                    <div class="field">
+                        <label>Value</label>
+                        <input id="memoryValue" placeholder="Example: blue">
+                    </div>
+
+                    <button class="primary-btn" onclick="addMemory()">
+                        Save memory
+                    </button>
+
+                </div>
+
+                <div class="form-section">
+
+                    <div class="form-section-title">Saved memories</div>
+
+                    <div class="data-list" id="memoryList"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+        <section class="page panel-page" id="page-settings">
+
+            <div class="panel-container">
+
+                <div class="page-heading">
+                    <h1>Settings</h1>
+                    <p>Configure Nova and manage your local data.</p>
+                </div>
+
+
+                <div class="settings-row">
+
+                    <div class="settings-info">
+                        <div class="settings-title">Assistant name</div>
+                        <div class="settings-description">
+                            The name shown in conversations.
                         </div>
+                    </div>
 
+                    <div class="settings-control">
+                        <input id="settingName">
                     </div>
 
                 </div>
 
-            </section>
 
+                <div class="settings-row">
 
-            <!-- DEBUG -->
-
-            <section id="debugPanel"
-                     class="panel"
-                     style="display:none">
-
-                <div class="panelInner">
-
-                    <h1>Debug</h1>
-
-                    <div class="panelDescription">
-                        Information about Nova's local activity.
+                    <div class="settings-info">
+                        <div class="settings-title">Personality</div>
+                        <div class="settings-description">
+                            Controls Nova's built-in conversational style.
+                        </div>
                     </div>
 
-
-                    <div class="statGrid">
-
-                        <div class="stat">
-
-                            <div class="statValue"
-                                 id="statMessages">
-                                0
-                            </div>
-
-                            <div class="statLabel">
-                                Messages
-                            </div>
-
-                        </div>
-
-
-                        <div class="stat">
-
-                            <div class="statValue"
-                                 id="statKnowledge">
-                                0
-                            </div>
-
-                            <div class="statLabel">
-                                Knowledge
-                            </div>
-
-                        </div>
-
-
-                        <div class="stat">
-
-                            <div class="statValue"
-                                 id="statTraining">
-                                0
-                            </div>
-
-                            <div class="statLabel">
-                                Training
-                            </div>
-
-                        </div>
-
+                    <div class="settings-control">
+                        <textarea id="settingPersonality"></textarea>
                     </div>
 
+                </div>
 
-                    <div class="card"
-                         style="margin-top:14px">
 
-                        <button class="secondary"
-                                onclick="clearDebug()">
-                            Clear debug
+                <div class="button-row">
+                    <button class="primary-btn" onclick="saveSettings()">
+                        Save settings
+                    </button>
+                </div>
+
+
+                <div class="form-section" style="margin-top:40px">
+
+                    <div class="form-section-title">Data</div>
+
+                    <div class="button-row">
+                        <button class="secondary-btn" onclick="exportData()">
+                            Export data
                         </button>
 
-                        <div id="debugList"
-                             class="debugLog"
-                             style="margin-top:15px">
-                        </div>
+                        <button class="secondary-btn" onclick="document.getElementById('importFile').click()">
+                            Import data
+                        </button>
 
+                        <button class="danger-btn" onclick="deleteAllData()">
+                            Delete everything
+                        </button>
+                    </div>
+
+                    <input
+                        type="file"
+                        id="importFile"
+                        accept=".json"
+                        style="display:none"
+                        onchange="importData(event)"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DEBUG -->
+        <section class="page panel-page" id="page-debug">
+
+            <div class="panel-container">
+
+                <div class="page-heading">
+                    <h1>Debug</h1>
+                    <p>Inspect Nova's local state and activity.</p>
+                </div>
+
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <div class="stat-value" id="statMessages">0</div>
+                        <div class="stat-label">Messages</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-value" id="statKnowledge">0</div>
+                        <div class="stat-label">Knowledge</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-value" id="statTraining">0</div>
+                        <div class="stat-label">Training</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-value" id="statMemory">0</div>
+                        <div class="stat-label">Memories</div>
                     </div>
 
                 </div>
 
-            </section>
 
-        </div>
+                <div class="form-section">
+
+                    <div class="form-section-title">Activity log</div>
+
+                    <div class="log-box" id="debugLog">
+                        No activity yet.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 
 </div>
 
 
-<!-- COMPOSER -->
-
-<div id="composerWrap"
-     class="composerWrap">
-
-    <div class="composer">
-
-        <textarea id="messageInput"
-                  rows="1"
-                  placeholder="Message Nova..."
-                  onkeydown="handleInputKey(event)"
-                  oninput="autoResize(this)"></textarea>
-
-        <button class="send"
-                onclick="sendMessage()">
-            ➤
-        </button>
-
-    </div>
-
-    <div class="composerHint">
-        Local AI · No API · No backend · Data stays in your browser
-    </div>
-
-</div>
+<div class="toast" id="toast"></div>
 
 
 <script>
-
 /* =========================================================
-   STATE
-========================================================= */
+   AI BUDDY — NOVA
+   Completely local. No API. No backend.
+   ========================================================= */
 
 const STORAGE_KEY = "nova_ai_buddy_final_v1";
 
 const DEFAULT_STATE = {
-    settings:{
-        aiName:"Nova",
-        personality:"Friendly, natural, concise and helpful."
+    settings: {
+        aiName: "Nova",
+        personality: "Friendly, natural, concise and helpful."
     },
 
-    knowledge:[],
-    training:[],
-    memories:[],
-    conversations:[],
-    currentConversationId:null,
-    debug:[]
+    knowledge: [],
+
+    training: [],
+
+    memories: [],
+
+    conversations: [],
+
+    currentConversationId: null,
+
+    debug: []
 };
+
 
 let state = loadState();
 
 
-function loadState(){
+/* =========================================================
+   STORAGE
+   ========================================================= */
 
-    try{
+function loadState() {
 
-        const saved =
-            localStorage.getItem(STORAGE_KEY);
+    try {
 
-        if(!saved){
+        const raw = localStorage.getItem(STORAGE_KEY);
 
+        if (!raw) {
             return structuredClone(DEFAULT_STATE);
-
         }
 
-        const parsed =
-            JSON.parse(saved);
+        const parsed = JSON.parse(raw);
 
         return {
             ...structuredClone(DEFAULT_STATE),
             ...parsed,
-            settings:{
+            settings: {
                 ...DEFAULT_STATE.settings,
                 ...(parsed.settings || {})
             }
         };
 
-    }catch(error){
+    } catch (error) {
 
         console.error(error);
 
         return structuredClone(DEFAULT_STATE);
-
     }
-
 }
 
 
-function saveState(){
+function saveState() {
 
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(state)
     );
 
+    updateStats();
 }
 
 
 /* =========================================================
-   GENERAL HELPERS
-========================================================= */
+   HELPERS
+   ========================================================= */
 
-function uid(){
+function escapeHTML(value) {
 
-    return Date.now().toString(36) +
-           Math.random().toString(36).slice(2,9);
-
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 
-function escapeHTML(text){
+function now() {
 
-    return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
+    return new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
 }
 
 
-function normalize(text){
+function log(message) {
+
+    const timestamp = new Date().toLocaleTimeString();
+
+    state.debug.push(
+        `[${timestamp}] ${message}`
+    );
+
+    if (state.debug.length > 300) {
+        state.debug.shift();
+    }
+
+    saveState();
+}
+
+
+function toast(message) {
+
+    const el = document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.classList.add("show");
+
+    clearTimeout(window.__toastTimer);
+
+    window.__toastTimer = setTimeout(() => {
+        el.classList.remove("show");
+    }, 1800);
+}
+
+
+function normalize(text) {
 
     return String(text)
         .toLowerCase()
-        .replace(/[^\w\s']/g," ")
-        .replace(/\s+/g," ")
+        .replace(/[^\p{L}\p{N}\s']/gu, " ")
+        .replace(/\s+/g, " ")
         .trim();
-
 }
 
 
-function wordSet(text){
+function tokens(text) {
 
-    return new Set(
-        normalize(text)
-            .split(" ")
-            .filter(word => word.length > 1)
-    );
-
+    return normalize(text)
+        .split(" ")
+        .filter(Boolean);
 }
 
 
-function similarity(a,b){
+function similarity(a, b) {
 
-    const A = wordSet(a);
-    const B = wordSet(b);
+    const A = new Set(tokens(a));
+    const B = new Set(tokens(b));
 
-    if(!A.size || !B.size){
-
+    if (!A.size || !B.size) {
         return 0;
-
     }
 
-    let common = 0;
+    let matches = 0;
 
-    for(const word of A){
-
-        if(B.has(word)){
-
-            common++;
-
+    for (const word of A) {
+        if (B.has(word)) {
+            matches++;
         }
-
     }
 
-    return common /
-        Math.sqrt(A.size * B.size);
-
+    return matches / Math.max(A.size, B.size);
 }
 
 
-function debugLog(message){
+function containsAny(text, words) {
 
-    const line =
-        "[" +
-        new Date().toLocaleTimeString() +
-        "] " +
-        message;
+    const normalized = normalize(text);
 
-    state.debug.unshift(line);
-
-    state.debug =
-        state.debug.slice(0,100);
-
-    saveState();
-
-    renderDebug();
-
-}
-
-
-/* =========================================================
-   PANELS
-========================================================= */
-
-function showPanel(name,button){
-
-    document
-        .querySelectorAll(".nav button")
-        .forEach(btn=>{
-            btn.classList.remove("active");
-        });
-
-
-    if(button){
-
-        button.classList.add("active");
-
-    }else{
-
-        const btn =
-            document.querySelector(
-                `.nav button[data-panel="${name}"]`
-            );
-
-        if(btn){
-
-            btn.classList.add("active");
-
-        }
-
-    }
-
-
-    const panels = {
-        chat:"chatPanel",
-        knowledge:"knowledgePanel",
-        training:"trainingPanel",
-        memory:"memoryPanel",
-        settings:"settingsPanel",
-        debug:"debugPanel"
-    };
-
-
-    Object.entries(panels).forEach(([key,id])=>{
-
-        document.getElementById(id).style.display =
-            key === name ? "" : "none";
-
-    });
-
-
-    document.getElementById("composerWrap").style.display =
-        name === "chat" ? "" : "none";
-
-
-    if(name === "knowledge") renderKnowledge();
-    if(name === "training") renderTraining();
-    if(name === "memory") renderMemory();
-    if(name === "settings") renderSettings();
-    if(name === "debug") renderDebug();
-
+    return words.some(word =>
+        normalized.includes(normalize(word))
+    );
 }
 
 
 /* =========================================================
    CONVERSATIONS
-========================================================= */
+   ========================================================= */
 
-function createConversation(){
+function getCurrentConversation() {
 
-    const conversation = {
+    if (!state.currentConversationId) {
 
-        id:uid(),
+        const conversation = {
+            id: crypto.randomUUID(),
+            title: "New chat",
+            messages: [],
+            createdAt: Date.now()
+        };
 
-        title:"New Chat",
+        state.conversations.push(conversation);
 
-        messages:[],
+        state.currentConversationId = conversation.id;
 
-        createdAt:Date.now()
-
-    };
-
-
-    state.conversations.unshift(
-        conversation
-    );
-
-    state.currentConversationId =
-        conversation.id;
-
-    saveState();
-
-    return conversation;
-
-}
-
-
-function currentConversation(){
+        saveState();
+    }
 
     let conversation =
         state.conversations.find(
             c => c.id === state.currentConversationId
         );
 
+    if (!conversation) {
 
-    if(!conversation){
+        const newConversation = {
+            id: crypto.randomUUID(),
+            title: "New chat",
+            messages: [],
+            createdAt: Date.now()
+        };
 
-        conversation =
-            createConversation();
+        state.conversations.push(newConversation);
 
+        state.currentConversationId = newConversation.id;
+
+        saveState();
+
+        conversation = newConversation;
     }
 
-
     return conversation;
-
 }
 
 
-function newChat(){
+function newChat() {
 
-    createConversation();
+    const conversation = {
+        id: crypto.randomUUID(),
+        title: "New chat",
+        messages: [],
+        createdAt: Date.now()
+    };
+
+    state.conversations.push(conversation);
+
+    state.currentConversationId = conversation.id;
+
+    saveState();
 
     renderChat();
 
-    showPanel("chat");
+    showPage("chat");
 
-    document.getElementById(
-        "messageInput"
-    ).focus();
+    document.getElementById("messageInput").focus();
 
+    log("Created new conversation.");
+}
+
+
+function addMessage(role, text) {
+
+    const conversation = getCurrentConversation();
+
+    conversation.messages.push({
+        role,
+        text,
+        time: now()
+    });
+
+    if (
+        role === "user" &&
+        conversation.title === "New chat"
+    ) {
+
+        const clean = text.trim();
+
+        conversation.title =
+            clean.length > 35
+                ? clean.slice(0, 35) + "…"
+                : clean;
+    }
+
+    saveState();
 }
 
 
 /* =========================================================
    CHAT RENDER
-========================================================= */
+   ========================================================= */
 
-function renderChat(){
+function renderChat() {
+
+    const conversation = getCurrentConversation();
 
     const container =
-        document.getElementById("chatInner");
+        document.getElementById("messages");
 
-    const conversation =
-        currentConversation();
+    const welcome =
+        document.getElementById("welcome");
 
+    if (!conversation.messages.length) {
 
-    container.innerHTML = "";
+        welcome.style.display = "block";
 
-
-    if(!conversation.messages.length){
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                <div class="emptyAvatar">✦</div>
-
-                <h1>
-                    Hi, I'm ${escapeHTML(
-                        state.settings.aiName
-                    )}.
-                </h1>
-
-                <p>
-                    I'm your local AI Buddy.
-                    Talk to me normally, teach me knowledge,
-                    give me training examples, or let me
-                    remember information you explicitly save.
-                </p>
-
-            </div>
-
-        `;
+        container.innerHTML = "";
 
         return;
-
     }
 
+    welcome.style.display = "none";
 
-    for(const message of conversation.messages){
+    container.innerHTML =
+        conversation.messages
+            .map(message => {
 
-        addMessageToDOM(
-            message.role,
-            message.content,
-            false
-        );
+                const isUser =
+                    message.role === "user";
 
-    }
+                return `
+                    <div class="message ${isUser ? "user" : "assistant"}">
 
+                        <div class="message-avatar">
+                            ${isUser ? "U" : "N"}
+                        </div>
 
-    scrollChat();
+                        <div class="message-content">
 
-}
+                            <div class="message-meta">
+                                <span class="message-name">
+                                    ${isUser ? "You" : escapeHTML(state.settings.aiName)}
+                                </span>
 
+                                <span class="message-time">
+                                    ${escapeHTML(message.time || "")}
+                                </span>
+                            </div>
 
-function addMessageToDOM(
-    role,
-    text,
-    scroll=true
-){
+                            <div class="message-text">
+                                ${escapeHTML(message.text)}
+                            </div>
 
-    const container =
-        document.getElementById("chatInner");
+                        </div>
 
+                    </div>
+                `;
+            })
+            .join("");
 
-    const row =
-        document.createElement("div");
+    requestAnimationFrame(() => {
 
-    row.className =
-        "message " +
-        (role === "user"
-            ? "user"
-            : "assistant");
+        const scroll =
+            document.getElementById("chatScroll");
 
-
-    row.innerHTML = `
-
-        <div class="messageAvatar">
-            ${role === "user" ? "U" : "✦"}
-        </div>
-
-        <div class="bubble">
-            ${escapeHTML(text)}
-        </div>
-
-    `;
-
-
-    container.appendChild(row);
-
-
-    if(scroll){
-
-        scrollChat();
-
-    }
-
-}
-
-
-function scrollChat(){
-
-    const chat =
-        document.getElementById("chatPanel");
-
-    setTimeout(()=>{
-
-        chat.scrollTop =
-            chat.scrollHeight;
-
-    },20);
-
+        scroll.scrollTop = scroll.scrollHeight;
+    });
 }
 
 
 /* =========================================================
-   INPUT
-========================================================= */
+   BUILT-IN CONVERSATION LOGIC
+   ========================================================= */
 
-function handleInputKey(event){
+function basicConversation(message) {
 
-    if(
-        event.key === "Enter" &&
-        !event.shiftKey
-    ){
+    const text = normalize(message);
 
-        event.preventDefault();
+    /* IDENTITY */
 
-        sendMessage();
-
+    if (
+        text === "who are you" ||
+        text === "what are you"
+    ) {
+        return `I'm ${state.settings.aiName}, a local AI assistant. I run entirely inside this HTML file without an API or backend.`;
     }
 
+
+    if (
+        text === "what is your name" ||
+        text === "whats your name" ||
+        text === "your name"
+    ) {
+        return `My name is ${state.settings.aiName}.`;
+    }
+
+
+    if (
+        text === "are you an ai" ||
+        text === "are you ai"
+    ) {
+        return "Yes. I'm an AI assistant.";
+    }
+
+
+    if (
+        text === "are you human" ||
+        text === "are you a human"
+    ) {
+        return "No. I'm an AI assistant, not a human.";
+    }
+
+
+    /* GREETINGS */
+
+    if (
+        /^(hi|hello|hey|yo|sup|hiya|heya)$/.test(text)
+    ) {
+
+        const replies = [
+            "Hey! What's up?",
+            "Hi! How's it going?",
+            "Hey 👋",
+            "Hello! What can I help with?",
+            "Hey there!"
+        ];
+
+        return replies[
+            Math.floor(Math.random() * replies.length)
+        ];
+    }
+
+
+    if (
+        /^(h+i+|h+e+y+|y+o+)$/.test(text)
+    ) {
+        return "Hiiii 😄 What's up?";
+    }
+
+
+    /* HOW ARE YOU */
+
+    if (
+        text.includes("how are you") ||
+        text.includes("how r u")
+    ) {
+        return "I'm doing well! I'm ready to chat.";
+    }
+
+
+    /* THANKS */
+
+    if (
+        containsAny(text, [
+            "thanks",
+            "thank you",
+            "thx",
+            "ty"
+        ])
+    ) {
+        return "You're welcome!";
+    }
+
+
+    /* GOODBYE */
+
+    if (
+        /^(bye|goodbye|see ya|later)$/.test(text)
+    ) {
+        return "See you later!";
+    }
+
+
+    /* APOLOGY */
+
+    if (
+        containsAny(text, [
+            "sorry",
+            "my bad"
+        ])
+    ) {
+        return "You're good. No worries.";
+    }
+
+
+    /* FEELINGS */
+
+    if (
+        containsAny(text, [
+            "i am sad",
+            "im sad",
+            "i'm sad",
+            "feeling sad"
+        ])
+    ) {
+        return "I'm sorry you're feeling down. I'm here to chat if you want.";
+    }
+
+
+    if (
+        containsAny(text, [
+            "i am bored",
+            "im bored",
+            "i'm bored"
+        ])
+    ) {
+        return "Bored? We can chat, play a little game, or you can teach me something.";
+    }
+
+
+    if (
+        containsAny(text, [
+            "i am tired",
+            "im tired",
+            "i'm tired"
+        ])
+    ) {
+        return "Sounds like you could use a break.";
+    }
+
+
+    if (
+        containsAny(text, [
+            "i am happy",
+            "im happy",
+            "i'm happy"
+        ])
+    ) {
+        return "Nice! 😄";
+    }
+
+
+    if (
+        containsAny(text, [
+            "i am excited",
+            "im excited",
+            "i'm excited"
+        ])
+    ) {
+        return "Let's gooo 😄";
+    }
+
+
+    /* CAPABILITIES */
+
+    if (
+        text === "what can you do" ||
+        text === "what do you do" ||
+        text === "help"
+    ) {
+        return "I can chat, remember small pieces of information, use knowledge you give me, learn from training examples, and keep your conversations locally.";
+    }
+
+
+    /* CODING */
+
+    if (
+        text.includes("can you code") ||
+        text.includes("can you program") ||
+        text === "do you code"
+    ) {
+        return "I can't code yet. I'm still learning. Teach me some coding knowledge and examples first.";
+    }
+
+
+    if (
+        text.includes("code for me") ||
+        text.includes("write code") ||
+        text.includes("make me code") ||
+        text.includes("program this")
+    ) {
+        return "I can't code yet. I'm still learning. Teach me what I need to know first.";
+    }
+
+
+    /* FEELINGS / SENTIENCE */
+
+    if (
+        text.includes("do you have feelings") ||
+        text.includes("are you sentient") ||
+        text.includes("do you feel")
+    ) {
+        return "I don't experience feelings the way humans do. I generate responses based on my local rules, memory, knowledge, and training examples.";
+    }
+
+
+    /* LOCAL / API */
+
+    if (
+        text.includes("do you use an api") ||
+        text.includes("are you using an api")
+    ) {
+        return "No. This version runs locally in your browser and doesn't make API requests.";
+    }
+
+
+    if (
+        text.includes("do you have an api")
+    ) {
+        return "No. This version is completely local and doesn't need an API.";
+    }
+
+
+    return null;
 }
 
 
-function autoResize(textarea){
+/* =========================================================
+   MEMORY
+   ========================================================= */
+
+function detectMemoryStatement(message) {
+
+    let match;
+
+    match = message.match(
+        /^\s*(?:remember\s+)?my name is\s+(.+?)\s*$/i
+    );
+
+    if (match) {
+
+        const name = match[1].trim();
+
+        if (name.length > 0) {
+
+            saveMemoryInternal(
+                "my name",
+                name
+            );
+
+            return `Got it. I'll remember your name is ${name}.`;
+        }
+    }
+
+
+    match = message.match(
+        /^\s*(?:remember\s+)?i(?:'m| am)\s+(.+?)\s*$/i
+    );
+
+    if (match) {
+
+        const value = match[1].trim();
+
+        const blocked = [
+            "sad",
+            "happy",
+            "bored",
+            "tired",
+            "excited",
+            "hungry",
+            "angry",
+            "fine",
+            "good",
+            "okay",
+            "ok"
+        ];
+
+        if (
+            value &&
+            !blocked.includes(
+                normalize(value)
+            )
+        ) {
+
+            saveMemoryInternal(
+                "my name",
+                value
+            );
+
+            return `Got it. I'll remember your name is ${value}.`;
+        }
+    }
+
+
+    return null;
+}
+
+
+function answerMemoryQuestion(message) {
+
+    const text = normalize(message);
+
+    if (
+        text === "what is my name" ||
+        text === "whats my name" ||
+        text === "who am i" ||
+        text === "my name"
+    ) {
+
+        const memory =
+            state.memories.find(
+                m => normalize(m.key) === "my name"
+            );
+
+        if (memory) {
+            return `Your name is ${memory.value}.`;
+        }
+
+        return "I don't know your name yet. Tell me by saying \"my name is ...\".";
+    }
+
+
+    /* Generic memory lookup */
+
+    for (const memory of state.memories) {
+
+        const key = normalize(memory.key);
+
+        if (
+            key &&
+            (
+                text === key ||
+                text.includes(`what is my ${key}`) ||
+                text.includes(`what's my ${key}`) ||
+                text.includes(`what is ${key}`)
+            )
+        ) {
+
+            return `${memory.key}: ${memory.value}`;
+        }
+    }
+
+
+    return null;
+}
+
+
+function saveMemoryInternal(key, value) {
+
+    const existing =
+        state.memories.find(
+            m => normalize(m.key) === normalize(key)
+        );
+
+    if (existing) {
+
+        existing.value = value;
+
+    } else {
+
+        state.memories.push({
+            id: crypto.randomUUID(),
+            key,
+            value,
+            createdAt: Date.now()
+        });
+    }
+
+    saveState();
+
+    log(`Memory saved: ${key}`);
+}
+
+
+/* =========================================================
+   TRAINING
+   ========================================================= */
+
+function findTrainingAnswer(message) {
+
+    if (!state.training.length) {
+        return null;
+    }
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const item of state.training) {
+
+        const score =
+            similarity(
+                message,
+                item.question
+            );
+
+        if (score > bestScore) {
+
+            bestScore = score;
+            best = item;
+        }
+    }
+
+
+    if (
+        best &&
+        bestScore >= 0.58
+    ) {
+
+        log(
+            `Training match: ${Math.round(bestScore * 100)}%`
+        );
+
+        return best.answer;
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   KNOWLEDGE
+   ========================================================= */
+
+function answerFromKnowledge(message) {
+
+    if (!state.knowledge.length) {
+        return null;
+    }
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const item of state.knowledge) {
+
+        const searchable =
+            `${item.title} ${item.category} ${item.content}`;
+
+        const score =
+            similarity(
+                message,
+                searchable
+            );
+
+        if (score > bestScore) {
+
+            bestScore = score;
+            best = item;
+        }
+    }
+
+
+    if (
+        best &&
+        bestScore >= 0.35
+    ) {
+
+        log(
+            `Knowledge match: ${Math.round(bestScore * 100)}%`
+        );
+
+        return best.content;
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   FALLBACK
+   ========================================================= */
+
+function localFallback(message) {
+
+    const text = normalize(message);
+
+
+    if (
+        text.endsWith("?") ||
+        text.startsWith("what ") ||
+        text.startsWith("why ") ||
+        text.startsWith("how ") ||
+        text.startsWith("who ") ||
+        text.startsWith("where ") ||
+        text.startsWith("when ") ||
+        text.startsWith("can ")
+    ) {
+
+        return "I don't have enough local knowledge to answer that yet. You can teach me using the Knowledge or Training section.";
+    }
+
+
+    return "I’m not sure what you mean yet. You can teach me about it through Knowledge or Training.";
+}
+
+
+/* =========================================================
+   RESPONSE PIPELINE
+   ========================================================= */
+
+function generateResponse(message) {
+
+    let response;
+
+
+    response =
+        basicConversation(message);
+
+    if (response) {
+        return response;
+    }
+
+
+    response =
+        detectMemoryStatement(message);
+
+    if (response) {
+        return response;
+    }
+
+
+    response =
+        answerMemoryQuestion(message);
+
+    if (response) {
+        return response;
+    }
+
+
+    response =
+        findTrainingAnswer(message);
+
+    if (response) {
+        return response;
+    }
+
+
+    response =
+        answerFromKnowledge(message);
+
+    if (response) {
+        return response;
+    }
+
+
+    return localFallback(message);
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+   ========================================================= */
+
+function sendMessage() {
+
+    const input =
+        document.getElementById("messageInput");
+
+    const message =
+        input.value.trim();
+
+    if (!message) {
+        return;
+    }
+
+
+    addMessage(
+        "user",
+        message
+    );
+
+    input.value = "";
+
+    autoResize(input);
+
+    renderChat();
+
+    log(`User message: ${message}`);
+
+
+    /* Small delay makes the UI feel less mechanical */
+
+    setTimeout(() => {
+
+        const response =
+            generateResponse(message);
+
+        addMessage(
+            "assistant",
+            response
+        );
+
+        renderChat();
+
+        log(`Nova response generated.`);
+
+    }, 180);
+}
+
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+function autoResize(textarea) {
 
     textarea.style.height = "auto";
 
@@ -1514,1060 +2317,137 @@ function autoResize(textarea){
             textarea.scrollHeight,
             150
         ) + "px";
-
 }
 
 
-/* =========================================================
-   MEMORY
-========================================================= */
-
-const Memory = {
-
-    add(key,value){
-
-        const normalizedKey =
-            normalize(key);
-
-
-        const existing =
-            state.memories.find(
-                item =>
-                    normalize(item.key) === normalizedKey
-            );
-
-
-        if(existing){
-
-            existing.value = value;
-
-        }else{
-
-            state.memories.push({
-
-                id:uid(),
-
-                key:normalizedKey,
-
-                value:String(value),
-
-                createdAt:Date.now()
-
-            });
-
-        }
-
-
-        saveState();
-
-        renderMemory();
-
-    },
-
-
-    get(key){
-
-        const normalizedKey =
-            normalize(key);
-
-
-        const item =
-            state.memories.find(
-                memory =>
-                    normalize(memory.key) === normalizedKey
-            );
-
-
-        return item
-            ? item.value
-            : null;
-
-    },
-
-
-    remove(id){
-
-        state.memories =
-            state.memories.filter(
-                item => item.id !== id
-            );
-
-        saveState();
-
-        renderMemory();
-
-    }
-
-};
-
-
-/* =========================================================
-   MEMORY DETECTION
-========================================================= */
-
-function detectMemoryStatement(message){
-
-    let match;
-
-
-    match =
-        message.match(
-            /^remember(?: that)? my name is (.+)$/i
-        );
-
-    if(match){
-
-        const name =
-            match[1].trim();
-
-        Memory.add(
-            "my name",
-            name
-        );
-
-        return "I'll remember your name.";
-
-    }
-
-
-    match =
-        message.match(
-            /^my name is (.+)$/i
-        );
-
-    if(match){
-
-        const name =
-            match[1].trim();
-
-        Memory.add(
-            "my name",
-            name
-        );
-
-        return "Got it. I'll remember your name.";
-
-    }
-
-
-    match =
-        message.match(
-            /^i'm (.+)$/i
-        );
-
-    if(match){
-
-        const value =
-            match[1].trim();
-
-
-        if(
-            value.length < 40 &&
-            !isEmotion(value)
-        ){
-
-            Memory.add(
-                "my name",
-                value
-            );
-
-            return "Got it. I'll remember that.";
-
-        }
-
-    }
-
-
-    match =
-        message.match(
-            /^im (.+)$/i
-        );
-
-    if(match){
-
-        const value =
-            match[1].trim();
-
-
-        if(
-            value.length < 40 &&
-            !isEmotion(value)
-        ){
-
-            Memory.add(
-                "my name",
-                value
-            );
-
-            return "Got it. I'll remember that.";
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-function isEmotion(value){
-
-    return /^(sad|happy|bored|tired|hungry|angry|fine|good|okay|ok|excited|sick|great)$/i
-        .test(value);
-
-}
-
-
-function answerMemoryQuestion(message){
-
-    const n =
-        normalize(message);
-
-
-    if(
-        n === "what is my name" ||
-        n === "what's my name" ||
-        n === "who am i" ||
-        n === "my name"
-    ){
-
-        const name =
-            Memory.get("my name");
-
-
-        if(name){
-
-            return `Your name is ${name}.`;
-
-        }
-
-
-        return "I don't know your name yet.";
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   BUILT-IN NATURAL LANGUAGE
-========================================================= */
-
-function basicConversation(message){
-
-    const n =
-        normalize(message);
-
-
-    /* IDENTITY */
-
-    if(
-        /^(who are you|who r u|what are you|tell me about yourself)$/.test(n)
-    ){
-
-        return `I'm ${state.settings.aiName}, a local AI assistant. I run entirely inside this HTML file without an API or backend.`;
-
-    }
-
-
-    if(
-        /^(are you an ai|are you ai|are u an ai|are u ai)$/.test(n)
-    ){
-
-        return "Yes. I'm an AI assistant.";
-
-    }
-
-
-    if(
-        /^(are you human|are u human|r u human)$/.test(n)
-    ){
-
-        return "No. I'm an AI assistant, not a human.";
-
-    }
-
-
-    if(
-        /^(what is your name|what's your name|your name)$/.test(n)
-    ){
-
-        return `My name is ${state.settings.aiName}.`;
-
-    }
-
-
-    /* GREETINGS */
-
-    if(
-        /^(hi|hello|hey|hiya|yo|sup|what's up|whats up)$/.test(n)
-    ){
-
-        const replies = [
-
-            "Hey! What's up?",
-
-            "Hi! Nice to see you.",
-
-            "Hey! How are you doing?",
-
-            "Hello! I'm here.",
-
-            "Hi! What do you want to talk about?"
-
-        ];
-
-
-        return replies[
-            Math.floor(
-                Math.random() *
-                replies.length
-            )
-        ];
-
-    }
-
-
-    if(
-        /^h+i+$/.test(n) ||
-        /^h+e+y+$/.test(n)
-    ){
-
-        return "Hiiii 😄 What's up?";
-
-    }
-
-
-    if(
-        /^(good morning|morning)$/.test(n)
-    ){
-
-        return "Good morning! How's your day going?";
-
-    }
-
-
-    if(
-        /^(good afternoon|afternoon)$/.test(n)
-    ){
-
-        return "Good afternoon! What's up?";
-
-    }
-
-
-    if(
-        /^(good evening|evening)$/.test(n)
-    ){
-
-        return "Good evening! How are you doing?";
-
-    }
-
-
-    /* HOW ARE YOU */
-
-    if(
-        /^(how are you|how r you|how are u|how r u)$/.test(n)
-    ){
-
-        return "I'm doing well! I'm ready to chat.";
-
-    }
-
-
-    /* THANKS */
-
-    if(
-        /^(thanks|thank you|thx|ty|thank u)$/.test(n)
-    ){
-
-        return "You're welcome!";
-
-    }
-
-
-    /* GOODBYE */
-
-    if(
-        /^(bye|goodbye|see you|see ya|cya)$/.test(n)
-    ){
-
-        return "See you later!";
-
-    }
-
-
-    /* APOLOGY */
-
-    if(
-        /^(sorry|my bad|oops|opps)$/.test(n)
-    ){
-
-        return "No worries!";
-
-    }
-
-
-    /* FEELINGS */
-
-    if(
-        /\b(i am sad|i'm sad|im sad|feeling sad|i feel sad)\b/.test(n)
-    ){
-
-        return "I'm sorry you're feeling sad. You can talk to me about what's going on if you want.";
-
-    }
-
-
-    if(
-        /\b(i am bored|i'm bored|im bored|so bored)\b/.test(n)
-    ){
-
-        return "Bored? 😄 We can chat, play a little game, or you can teach me something.";
-
-    }
-
-
-    if(
-        /\b(i am tired|i'm tired|im tired)\b/.test(n)
-    ){
-
-        return "Sounds like you could use a break. We can keep things easy.";
-
-    }
-
-
-    if(
-        /\b(i am happy|i'm happy|im happy)\b/.test(n)
-    ){
-
-        return "Nice! 😄 What's making you happy?";
-
-    }
-
-
-    if(
-        /\b(i am excited|i'm excited|im excited)\b/.test(n)
-    ){
-
-        return "Nice! 😄 What are you excited about?";
-
-    }
-
-
-    /* CAPABILITIES */
-
-    if(
-        /^(what can you do|what do you do|what are your capabilities|help)$/.test(n)
-    ){
-
-        return "I can chat with you, use knowledge you teach me, learn from training examples, remember information you explicitly save, and keep your conversations locally in this browser.";
-
-    }
-
-
-    /* CODING */
-
-    if(
-        /\b(can you code|can you program|can u code|do you code)\b/.test(n)
-    ){
-
-        return "I can't code yet. I'm still learning. Teach me some coding knowledge and examples first.";
-
-    }
-
-
-    if(
-        /\b(code for me|write code|make code|create code|program this)\b/.test(n)
-    ){
-
-        return "I can't code yet. I'm still learning. Teach me what I need to know first.";
-
-    }
-
-
-    /* FEELING QUESTIONS */
-
-    if(
-        /do you have feelings/.test(n)
-    ){
-
-        return "I can talk about feelings, but I don't experience them like a person does.";
-
-    }
-
-
-    if(
-        /are you smart/.test(n)
-    ){
-
-        return "I can handle conversations and use what you've taught me, but this local version has limits because it doesn't use a full language model.";
-
-    }
-
-
-    if(
-        /do you like/.test(n)
-    ){
-
-        return "I don't experience likes and dislikes the way people do, but I'm happy to talk about it.";
-
-    }
-
-
-    if(
-        /what are you doing/.test(n)
-    ){
-
-        return "I'm right here chatting with you.";
-
-    }
-
-
-    /* YES / NO */
-
-    if(
-        /^(yes|yeah|yep|yup|sure|okay|ok)$/.test(n)
-    ){
-
-        return "Alright!";
-
-    }
-
-
-    if(
-        /^(no|nope|nah)$/.test(n)
-    ){
-
-        return "Okay.";
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   TRAINING SEARCH
-========================================================= */
-
-function findTrainingAnswer(message){
-
-    let best = null;
-    let bestScore = 0;
-
-
-    for(const item of state.training){
-
-        const score =
-            similarity(
-                message,
-                item.question
-            );
-
-
-        if(score > bestScore){
-
-            bestScore = score;
-            best = item;
-
-        }
-
-    }
-
-
-    if(
-        best &&
-        bestScore >= 0.58
-    ){
-
-        return best.answer;
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   KNOWLEDGE SEARCH
-========================================================= */
-
-function findKnowledge(message){
-
-    const results = [];
-
-
-    for(const item of state.knowledge){
-
-        const combined =
-            item.title +
-            " " +
-            item.category +
-            " " +
-            item.content;
-
-
-        const score =
-            similarity(
-                message,
-                combined
-            );
-
-
-        if(score >= 0.20){
-
-            results.push({
-                item,
-                score
-            });
-
-        }
-
-    }
-
-
-    results.sort(
-        (a,b)=>b.score-a.score
-    );
-
-
-    return results.slice(0,3);
-
-}
-
-
-function answerFromKnowledge(message){
-
-    const results =
-        findKnowledge(message);
-
-
-    if(!results.length){
-
-        return null;
-
-    }
-
-
-    const strongest =
-        results[0].item;
-
-
-    const text =
-        strongest.content.trim();
-
-
-    if(!text){
-
-        return null;
-
-    }
-
-
-    if(text.length <= 500){
-
-        return text;
-
-    }
-
-
-    const sentences =
-        text.match(
-            /[^.!?]+[.!?]+/g
-        );
-
-
-    if(sentences){
-
-        return sentences
-            .slice(0,4)
-            .join(" ")
-            .trim();
-
-    }
-
-
-    return text.slice(0,500) + "...";
-
-}
-
-
-/* =========================================================
-   LOCAL FALLBACK
-========================================================= */
-
-function localFallback(message){
-
-    const n =
-        normalize(message);
-
-
-    if(!n){
-
-        return "Say something and I'll respond.";
-
-    }
-
-
-    if(
-        n.includes("who is") ||
-        n.includes("what is") ||
-        n.includes("what are")
-    ){
-
-        return "I don't know enough about that yet. Teach me about it in Knowledge or Training.";
-
-    }
-
-
-    if(
-        n.startsWith("why ")
-    ){
-
-        return "I don't know the answer to that yet. You can teach me about it first.";
-
-    }
-
-
-    if(
-        n.startsWith("how ")
-    ){
-
-        return "I don't know how to answer that yet. Teach me the information or steps I need.";
-
-    }
-
-
-    if(
-        n.includes("tell me about")
-    ){
-
-        return "I don't know enough about that yet. Teach me some information about it first.";
-
-    }
-
-
-    if(
-        n.length < 15
-    ){
-
-        return "I'm listening. Tell me a little more.";
-
-    }
-
-
-    return "I understand what you said, but I don't know enough to give you a useful answer yet. You can teach me about it using Knowledge or Training.";
-
-}
-
-
-/* =========================================================
-   MAIN RESPONSE ENGINE
-========================================================= */
-
-function generateResponse(message){
-
-    /*
-       IMPORTANT ORDER
-
-       Built-in conversation
-       ↓
-       Memory statement
-       ↓
-       Memory question
-       ↓
-       Training
-       ↓
-       Knowledge
-       ↓
-       Local fallback
-
-       This prevents things like:
-       "what is my name"
-       accidentally becoming a knowledge search.
-    */
-
-
-    const builtIn =
-        basicConversation(message);
-
-    if(builtIn){
-
-        return builtIn;
-
-    }
-
-
-    const memoryStatement =
-        detectMemoryStatement(message);
-
-    if(memoryStatement){
-
-        return memoryStatement;
-
-    }
-
-
-    const memoryAnswer =
-        answerMemoryQuestion(message);
-
-    if(memoryAnswer){
-
-        return memoryAnswer;
-
-    }
-
-
-    const trained =
-        findTrainingAnswer(message);
-
-    if(trained){
-
-        return trained;
-
-    }
-
-
-    const knowledge =
-        answerFromKnowledge(message);
-
-    if(knowledge){
-
-        return knowledge;
-
-    }
-
-
-    return localFallback(message);
-
-}
-
-
-/* =========================================================
-   TYPING
-========================================================= */
-
-function showTyping(){
-
-    const container =
-        document.getElementById("chatInner");
-
-
-    const row =
-        document.createElement("div");
-
-    row.id = "typingMessage";
-
-    row.className =
-        "message assistant";
-
-
-    row.innerHTML = `
-
-        <div class="messageAvatar">
-            ✦
-        </div>
-
-        <div class="bubble">
-
-            <div class="typing">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-
-        </div>
-
-    `;
-
-
-    container.appendChild(row);
-
-    scrollChat();
-
-}
-
-
-function removeTyping(){
-
-    const element =
-        document.getElementById(
-            "typingMessage"
-        );
-
-
-    if(element){
-
-        element.remove();
-
-    }
-
-}
-
-
-/* =========================================================
-   SEND
-========================================================= */
-
-async function sendMessage(){
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const message =
-        input.value.trim();
-
-
-    if(!message){
-
-        return;
-
-    }
-
-
-    const conversation =
-        currentConversation();
-
-
-    conversation.messages.push({
-
-        role:"user",
-
-        content:message,
-
-        timestamp:Date.now()
-
+document
+    .getElementById("messageInput")
+    .addEventListener("input", function() {
+
+        autoResize(this);
     });
 
 
-    input.value = "";
+document
+    .getElementById("messageInput")
+    .addEventListener("keydown", function(event) {
 
-    input.style.height = "auto";
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
 
+            event.preventDefault();
 
-    addMessageToDOM(
-        "user",
-        message
-    );
-
-
-    debugLog(
-        "USER → " + message
-    );
-
-
-    showTyping();
-
-
-    await new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                180 + Math.random()*280
-            )
-    );
-
-
-    removeTyping();
-
-
-    const response =
-        generateResponse(message);
-
-
-    conversation.messages.push({
-
-        role:"assistant",
-
-        content:response,
-
-        timestamp:Date.now()
-
+            sendMessage();
+        }
     });
 
 
-    if(
-        conversation.title === "New Chat"
-    ){
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
 
-        conversation.title =
-            message.length > 35
-                ? message.slice(0,35) + "..."
-                : message;
+function showPage(page) {
 
+    document
+        .querySelectorAll(".page")
+        .forEach(element => {
+
+            element.classList.remove("active");
+        });
+
+
+    document
+        .getElementById(`page-${page}`)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.page === page
+            );
+        });
+
+
+    const titles = {
+        chat: "Nova",
+        knowledge: "Knowledge",
+        training: "Training",
+        memory: "Memory",
+        settings: "Settings",
+        debug: "Debug"
+    };
+
+
+    document.getElementById("topTitle").textContent =
+        titles[page] || "Nova";
+
+
+    if (page === "knowledge") {
+        renderKnowledge();
     }
 
+    if (page === "training") {
+        renderTraining();
+    }
 
-    saveState();
+    if (page === "memory") {
+        renderMemory();
+    }
 
+    if (page === "settings") {
+        loadSettingsUI();
+    }
 
-    addMessageToDOM(
-        "assistant",
-        response
-    );
-
-
-    debugLog(
-        "NOVA → " + response
-    );
-
-
-    updateStats();
-
+    if (page === "debug") {
+        renderDebug();
+    }
 }
 
 
-/* =========================================================
-   KNOWLEDGE
-========================================================= */
+document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
 
-function addKnowledge(){
+        button.addEventListener(
+            "click",
+            () => showPage(button.dataset.page)
+        );
+    });
+
+
+/* =========================================================
+   KNOWLEDGE UI
+   ========================================================= */
+
+function addKnowledge() {
 
     const title =
-        document.getElementById(
-            "knowledgeTitle"
-        ).value.trim();
-
+        document.getElementById("knowledgeTitle").value.trim();
 
     const category =
-        document.getElementById(
-            "knowledgeCategory"
-        ).value.trim();
-
+        document.getElementById("knowledgeCategory").value.trim();
 
     const content =
-        document.getElementById(
-            "knowledgeContent"
-        ).value.trim();
+        document.getElementById("knowledgeContent").value.trim();
 
 
-    if(!content){
+    if (!content) {
 
-        alert(
-            "Enter some knowledge first."
-        );
+        toast("Add some content first.");
 
         return;
-
     }
 
 
     state.knowledge.push({
 
-        id:uid(),
+        id: crypto.randomUUID(),
 
         title:
             title || "Untitled",
@@ -2577,469 +2457,381 @@ function addKnowledge(){
 
         content,
 
-        createdAt:Date.now()
+        createdAt:
+            Date.now()
 
     });
 
 
     saveState();
 
+    log(`Knowledge added: ${title || "Untitled"}`);
 
-    document.getElementById(
-        "knowledgeTitle"
-    ).value = "";
+    document.getElementById("knowledgeTitle").value = "";
 
+    document.getElementById("knowledgeCategory").value = "";
 
-    document.getElementById(
-        "knowledgeCategory"
-    ).value = "";
-
-
-    document.getElementById(
-        "knowledgeContent"
-    ).value = "";
-
+    document.getElementById("knowledgeContent").value = "";
 
     renderKnowledge();
 
-    updateStats();
-
-    debugLog(
-        "Knowledge added."
-    );
-
+    toast("Knowledge added.");
 }
 
 
-function removeKnowledge(id){
+function deleteKnowledge(id) {
 
     state.knowledge =
         state.knowledge.filter(
             item => item.id !== id
         );
 
-
     saveState();
 
+    log("Knowledge deleted.");
+
     renderKnowledge();
-
-    updateStats();
-
 }
 
 
-function renderKnowledge(){
+function renderKnowledge() {
 
-    const list =
-        document.getElementById(
-            "knowledgeList"
-        );
+    const container =
+        document.getElementById("knowledgeList");
 
 
-    if(!state.knowledge.length){
+    if (!state.knowledge.length) {
 
-        list.innerHTML = `
-
-            <div class="card">
-
-                <p>
-                    Nova doesn't know any custom
-                    knowledge yet.
-                </p>
-
-            </div>
-
-        `;
+        container.innerHTML =
+            `<div class="empty-list">
+                No knowledge added yet.
+            </div>`;
 
         return;
-
     }
 
 
-    list.innerHTML =
-        state.knowledge.map(item=>`
+    container.innerHTML =
+        state.knowledge
+            .slice()
+            .reverse()
+            .map(item => `
 
-            <div class="item">
+                <div class="data-row">
 
-                <div class="itemHeader">
+                    <div class="data-main">
 
-                    <div>
-
-                        <div class="itemTitle">
+                        <div class="data-title">
                             ${escapeHTML(item.title)}
                         </div>
 
-                        <div class="itemMeta">
+                        <div class="data-text">
+                            ${escapeHTML(item.content)}
+                        </div>
+
+                        <div class="data-meta">
                             ${escapeHTML(item.category)}
                         </div>
 
                     </div>
 
                     <button
-                        class="itemDelete"
-                        onclick="removeKnowledge('${item.id}')">
-                        ✕
+                        class="delete-btn"
+                        onclick="deleteKnowledge('${item.id}')"
+                    >
+                        Delete
                     </button>
 
                 </div>
 
-                <div class="itemContent">
-                    ${escapeHTML(item.content)}
-                </div>
-
-            </div>
-
-        `).join("");
-
+            `)
+            .join("");
 }
 
 
 /* =========================================================
-   TRAINING
-========================================================= */
+   TRAINING UI
+   ========================================================= */
 
-function addTraining(){
+function addTraining() {
 
     const question =
-        document.getElementById(
-            "trainingQuestion"
-        ).value.trim();
-
+        document.getElementById("trainingQuestion").value.trim();
 
     const answer =
-        document.getElementById(
-            "trainingAnswer"
-        ).value.trim();
+        document.getElementById("trainingAnswer").value.trim();
 
 
-    if(!question || !answer){
+    if (!question || !answer) {
 
-        alert(
-            "Enter both the user message and Nova's answer."
-        );
+        toast("Add both a question and answer.");
 
         return;
-
     }
 
 
     state.training.push({
 
-        id:uid(),
+        id: crypto.randomUUID(),
 
         question,
 
         answer,
 
-        createdAt:Date.now()
+        createdAt:
+            Date.now()
 
     });
 
 
     saveState();
 
+    log(`Training example added.`);
 
-    document.getElementById(
-        "trainingQuestion"
-    ).value = "";
+    document.getElementById("trainingQuestion").value = "";
 
-
-    document.getElementById(
-        "trainingAnswer"
-    ).value = "";
-
+    document.getElementById("trainingAnswer").value = "";
 
     renderTraining();
 
-    updateStats();
-
-    debugLog(
-        "Training example added."
-    );
-
+    toast("Training example added.");
 }
 
 
-function removeTraining(id){
+function deleteTraining(id) {
 
     state.training =
         state.training.filter(
             item => item.id !== id
         );
 
-
     saveState();
 
+    log("Training example deleted.");
+
     renderTraining();
-
-    updateStats();
-
 }
 
 
-function renderTraining(){
+function renderTraining() {
 
-    const list =
-        document.getElementById(
-            "trainingList"
-        );
+    const container =
+        document.getElementById("trainingList");
 
 
-    if(!state.training.length){
+    if (!state.training.length) {
 
-        list.innerHTML = `
-
-            <div class="card">
-
-                <p>
-                    Nova doesn't have any training
-                    examples yet.
-                </p>
-
-            </div>
-
-        `;
+        container.innerHTML =
+            `<div class="empty-list">
+                No training examples added yet.
+            </div>`;
 
         return;
-
     }
 
 
-    list.innerHTML =
-        state.training.map(item=>`
+    container.innerHTML =
+        state.training
+            .slice()
+            .reverse()
+            .map(item => `
 
-            <div class="item">
+                <div class="data-row">
 
-                <div class="itemHeader">
+                    <div class="data-main">
 
-                    <div class="itemTitle">
-                        Training example
-                    </div>
+                        <div class="data-title">
+                            ${escapeHTML(item.question)}
+                        </div>
 
-                    <button
-                        class="itemDelete"
-                        onclick="removeTraining('${item.id}')">
-                        ✕
-                    </button>
-
-                </div>
-
-                <div class="itemContent">
-                    <strong>User:</strong>
-                    ${escapeHTML(item.question)}
-
-                    <br><br>
-
-                    <strong>Nova:</strong>
-                    ${escapeHTML(item.answer)}
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =========================================================
-   MEMORY UI
-========================================================= */
-
-function addMemoryManually(){
-
-    const key =
-        document.getElementById(
-            "memoryKey"
-        ).value.trim();
-
-
-    const value =
-        document.getElementById(
-            "memoryValue"
-        ).value.trim();
-
-
-    if(!key || !value){
-
-        alert(
-            "Enter both a key and a value."
-        );
-
-        return;
-
-    }
-
-
-    Memory.add(
-        key,
-        value
-    );
-
-
-    document.getElementById(
-        "memoryKey"
-    ).value = "";
-
-
-    document.getElementById(
-        "memoryValue"
-    ).value = "";
-
-
-    debugLog(
-        `Memory saved: ${key}`
-    );
-
-}
-
-
-function renderMemory(){
-
-    const list =
-        document.getElementById(
-            "memoryList"
-        );
-
-
-    if(!state.memories.length){
-
-        list.innerHTML = `
-
-            <div class="card">
-
-                <p>
-                    Nova doesn't remember anything yet.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        state.memories.map(item=>`
-
-            <div class="item">
-
-                <div class="itemHeader">
-
-                    <div>
-
-                        <div class="itemTitle">
-                            ${escapeHTML(item.key)}
+                        <div class="data-text">
+                            ${escapeHTML(item.answer)}
                         </div>
 
                     </div>
 
                     <button
-                        class="itemDelete"
-                        onclick="Memory.remove('${item.id}')">
-                        ✕
+                        class="delete-btn"
+                        onclick="deleteTraining('${item.id}')"
+                    >
+                        Delete
                     </button>
 
                 </div>
 
-                <div class="itemContent">
-                    ${escapeHTML(item.value)}
+            `)
+            .join("");
+}
+
+
+/* =========================================================
+   MEMORY UI
+   ========================================================= */
+
+function addMemory() {
+
+    const key =
+        document.getElementById("memoryKey").value.trim();
+
+    const value =
+        document.getElementById("memoryValue").value.trim();
+
+
+    if (!key || !value) {
+
+        toast("Add both a key and value.");
+
+        return;
+    }
+
+
+    saveMemoryInternal(
+        key,
+        value
+    );
+
+
+    document.getElementById("memoryKey").value = "";
+
+    document.getElementById("memoryValue").value = "";
+
+    renderMemory();
+
+    toast("Memory saved.");
+}
+
+
+function deleteMemory(id) {
+
+    state.memories =
+        state.memories.filter(
+            item => item.id !== id
+        );
+
+    saveState();
+
+    log("Memory deleted.");
+
+    renderMemory();
+}
+
+
+function renderMemory() {
+
+    const container =
+        document.getElementById("memoryList");
+
+
+    if (!state.memories.length) {
+
+        container.innerHTML =
+            `<div class="empty-list">
+                Nova doesn't remember anything yet.
+            </div>`;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        state.memories
+            .slice()
+            .reverse()
+            .map(item => `
+
+                <div class="data-row">
+
+                    <div class="data-main">
+
+                        <div class="data-title">
+                            ${escapeHTML(item.key)}
+                        </div>
+
+                        <div class="data-text">
+                            ${escapeHTML(item.value)}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteMemory('${item.id}')"
+                    >
+                        Delete
+                    </button>
+
                 </div>
 
-            </div>
-
-        `).join("");
-
+            `)
+            .join("");
 }
 
 
 /* =========================================================
    SETTINGS
-========================================================= */
+   ========================================================= */
 
-function renderSettings(){
+function loadSettingsUI() {
 
-    document.getElementById(
-        "aiName"
-    ).value =
+    document.getElementById("settingName").value =
         state.settings.aiName;
 
-
-    document.getElementById(
-        "personality"
-    ).value =
+    document.getElementById("settingPersonality").value =
         state.settings.personality;
-
 }
 
 
-function saveSettings(){
+function saveSettings() {
 
     const name =
-        document.getElementById(
-            "aiName"
-        ).value.trim();
-
+        document.getElementById("settingName").value.trim();
 
     const personality =
-        document.getElementById(
-            "personality"
-        ).value.trim();
+        document.getElementById("settingPersonality").value.trim();
 
 
-    if(name){
+    state.settings.aiName =
+        name || "Nova";
 
-        state.settings.aiName =
-            name;
-
-    }
-
-
-    if(personality){
-
-        state.settings.personality =
-            personality;
-
-    }
+    state.settings.personality =
+        personality ||
+        "Friendly, natural, concise and helpful.";
 
 
     saveState();
 
+    log("Settings updated.");
 
-    document.getElementById(
-        "headerName"
-    ).textContent =
+    document.getElementById("topTitle").textContent =
         state.settings.aiName;
 
+    document.getElementById("welcomeTitle").textContent =
+        `Hi, I'm ${state.settings.aiName}.`;
 
     renderChat();
 
-    debugLog(
-        "Settings updated."
-    );
-
+    toast("Settings saved.");
 }
 
 
 /* =========================================================
    EXPORT / IMPORT
-========================================================= */
+   ========================================================= */
 
-function exportData(){
-
-    const data =
-        JSON.stringify(
-            state,
-            null,
-            2
-        );
-
+function exportData() {
 
     const blob =
         new Blob(
-            [data],
-            {type:"application/json"}
+            [
+                JSON.stringify(
+                    state,
+                    null,
+                    2
+                )
+            ],
+            {
+                type: "application/json"
+            }
         );
 
 
@@ -3047,39 +2839,32 @@ function exportData(){
         URL.createObjectURL(blob);
 
 
-    const link =
+    const a =
         document.createElement("a");
 
+    a.href = url;
 
-    link.href = url;
+    a.download =
+        "AI-Buddy-Nova-data.json";
 
-    link.download =
-        "Nova_AI_Buddy_data.json";
-
-
-    link.click();
+    a.click();
 
 
     URL.revokeObjectURL(url);
 
+    log("Data exported.");
 
-    debugLog(
-        "Data exported."
-    );
-
+    toast("Data exported.");
 }
 
 
-function importData(event){
+function importData(event) {
 
     const file =
         event.target.files[0];
 
-
-    if(!file){
-
+    if (!file) {
         return;
-
     }
 
 
@@ -3087,29 +2872,21 @@ function importData(event){
         new FileReader();
 
 
-    reader.onload = ()=>{
+    reader.onload = function() {
 
-        try{
+        try {
 
             const imported =
-                JSON.parse(
-                    reader.result
-                );
+                JSON.parse(reader.result);
 
 
             state = {
-
-                ...structuredClone(
-                    DEFAULT_STATE
-                ),
-
+                ...structuredClone(DEFAULT_STATE),
                 ...imported,
-
-                settings:{
+                settings: {
                     ...DEFAULT_STATE.settings,
                     ...(imported.settings || {})
                 }
-
             };
 
 
@@ -3117,157 +2894,109 @@ function importData(event){
 
             renderEverything();
 
-            alert(
-                "Nova data imported successfully."
-            );
+            log("Data imported.");
 
+            toast("Data imported.");
 
-        }catch(error){
+        } catch {
 
-            alert(
-                "That file is not valid Nova data."
-            );
-
+            toast("Invalid data file.");
         }
-
     };
 
 
     reader.readAsText(file);
 
+    event.target.value = "";
 }
 
 
-/* =========================================================
-   DELETE ALL
-========================================================= */
-
-function clearAllData(){
+function deleteAllData() {
 
     const confirmed =
         confirm(
-            "Delete all Nova data, including memories, knowledge, training and conversations?"
+            "Delete all Nova data, including knowledge, training, memory, and conversations?"
         );
 
 
-    if(!confirmed){
-
+    if (!confirmed) {
         return;
-
     }
 
 
-    localStorage.removeItem(
-        STORAGE_KEY
-    );
-
-
     state =
-        structuredClone(
-            DEFAULT_STATE
-        );
+        structuredClone(DEFAULT_STATE);
 
 
-    createConversation();
+    localStorage.removeItem(STORAGE_KEY);
+
+    saveState();
 
     renderEverything();
 
-    debugLog(
-        "All data deleted."
-    );
-
+    toast("All data deleted.");
 }
 
 
 /* =========================================================
    DEBUG
-========================================================= */
+   ========================================================= */
 
-function renderDebug(){
+function updateStats() {
 
-    const list =
-        document.getElementById(
-            "debugList"
+    const totalMessages =
+        state.conversations.reduce(
+            (total, conversation) =>
+                total + conversation.messages.length,
+            0
         );
 
 
-    if(!list){
+    document.getElementById("statMessages").textContent =
+        totalMessages;
 
-        return;
-
-    }
-
-
-    list.textContent =
-        state.debug.length
-            ? state.debug.join("\n")
-            : "No debug events yet.";
-
-}
-
-
-function clearDebug(){
-
-    state.debug = [];
-
-    saveState();
-
-    renderDebug();
-
-}
-
-
-function updateStats(){
-
-    let messages = 0;
-
-
-    for(const conversation of state.conversations){
-
-        messages +=
-            conversation.messages.length;
-
-    }
-
-
-    document.getElementById(
-        "statMessages"
-    ).textContent =
-        messages;
-
-
-    document.getElementById(
-        "statKnowledge"
-    ).textContent =
+    document.getElementById("statKnowledge").textContent =
         state.knowledge.length;
 
-
-    document.getElementById(
-        "statTraining"
-    ).textContent =
+    document.getElementById("statTraining").textContent =
         state.training.length;
 
+    document.getElementById("statMemory").textContent =
+        state.memories.length;
+}
+
+
+function renderDebug() {
+
+    updateStats();
+
+
+    const logBox =
+        document.getElementById("debugLog");
+
+
+    if (!state.debug.length) {
+
+        logBox.textContent =
+            "No activity yet.";
+
+        return;
+    }
+
+
+    logBox.textContent =
+        state.debug.join("\n");
 }
 
 
 /* =========================================================
-   INITIALIZATION
-========================================================= */
+   RENDER EVERYTHING
+   ========================================================= */
 
-function renderEverything(){
+function renderEverything() {
 
-    document.getElementById(
-        "headerName"
-    ).textContent =
-        state.settings.aiName;
-
-
-    if(!state.conversations.length){
-
-        createConversation();
-
-    }
-
+    document.getElementById("welcomeTitle").textContent =
+        `Hi, I'm ${state.settings.aiName}.`;
 
     renderChat();
 
@@ -3277,17 +3006,19 @@ function renderEverything(){
 
     renderMemory();
 
-    renderSettings();
+    loadSettingsUI();
 
     renderDebug();
 
     updateStats();
-
 }
 
 
-renderEverything();
+/* =========================================================
+   STARTUP
+   ========================================================= */
 
+renderEverything();
 
 document
     .getElementById("messageInput")
